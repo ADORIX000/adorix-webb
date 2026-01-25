@@ -1,14 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ... existing styles ... */
+/* 1. Base Styles */
+html {
+  scroll-behavior: smooth; /* Enables smooth scrolling for anchor links */
+  -webkit-font-smoothing: antialiased; /* Makes fonts look sharper on Mac/iOS */
+  -moz-osx-font-smoothing: grayscale;
+}
 
-@layer utilities {
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
+body {
+  background-color: #ffffff;
+  color: #0f172a; /* Matches adorix-dark */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* 2. Custom Scrollbar (Optional, makes it look cleaner) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1; 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8; 
+}
+
+/* 3. Utility for Glassmorphism cards if you want to reuse it */
+.glass-card {
+  @apply bg-white/60 backdrop-blur-xl border border-white/50 shadow-lg rounded-2xl;
 }
