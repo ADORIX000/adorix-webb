@@ -1,80 +1,195 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Eye, Mic, BarChart3, Users, Cpu, Layers } from 'lucide-react';
+import React, { useMemo } from "react";
+import { motion } from "framer-motion";
+import {
+  Mic,
+  AudioLines,
+  Cpu,
+  ScanFace,
+  Megaphone,
+  HelpCircle,
+  BarChart3,
+  User,
+  Users,
+  Code2,
+} from "lucide-react";
 
-const Node = ({ icon: Icon, label, x, y, delay }) => (
+const STAGE = { w: 1400, h: 700 };
+const CARD = { w: 120, h: 115 };
+const ICON_BOX = 38;
+const ICON_SIZE = 20;
+
+/* --------------------------
+   Nodes
+-------------------------- */
+const nodes = {
+  TTS: { x: 40, y: 100, label: "TTS", icon: AudioLines },
+  STT: { x: 220, y: 100, label: "STT", icon: Mic },
+  AI: { x: 130, y: 280, label: "AI Assistant", icon: Cpu },
+  QL: { x: 200, y: 450, label: "Questions", icon: HelpCircle },
+  AGE: { x: 400, y: 100, label: "Age detection", icon: ScanFace },
+  GENDER: { x: 600, y: 100, label: "Gender detection", icon: ScanFace },
+  KIOSK: { x: 500, y: 280, label: "KIOSK", icon: Cpu },
+  VISITOR: { x: 500, y: 450, label: "Visitor", icon: User },
+  AD: { x: 750, y: 370, label: "Advertisement", icon: Megaphone },
+  ATT: { x: 500, y: 600, label: "Attention tracking", icon: BarChart3 },
+  COMP: { x: 750, y: 220, label: "Companies", icon: Users },
+  DEV: { x: 750, y: 520, label: "Developers", icon: Code2 },
+};
+
+function anchor(key, side = "center") {
+  const n = nodes[key];
+  const cx = n.x + CARD.w / 2;
+  const cy = n.y + CARD.h / 2;
+  const pad = 10;
+
+  if (side === "left") return { x: n.x - pad, y: cy };
+  if (side === "right") return { x: n.x + CARD.w + pad, y: cy };
+  if (side === "top") return { x: cx, y: n.y - pad };
+  if (side === "bottom") return { x: cx, y: n.y + CARD.h + pad };
+  return { x: cx, y: cy };
+}
+
+/* Curved path builder */
+function curvedPath(p1, p2) {
+  const midX = (p1.x + p2.x) / 2;
+  return `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
+}
+
+const Node = ({ x, y, label, icon: Icon }) => (
   <motion.div
-    initial={{ scale: 0, opacity: 0 }}
-    whileInView={{ scale: 1, opacity: 1 }}
-    transition={{ delay, duration: 0.5, type: "spring" }}
-    className="absolute flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-xl border border-adorix-primary/20 w-32 h-32 z-10"
-    style={{ left: x, top: y }}
+    initial={{ opacity: 0, y: 10 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-60px" }}
+    whileHover={{ y: -4, scale: 1.05 }}
+    transition={{ type: "spring", stiffness: 260, damping: 18 }}
+    className="absolute group"
+    style={{ left: x, top: y, width: CARD.w, height: CARD.h }}
   >
-    <div className="bg-adorix-light p-3 rounded-full mb-2">
-      <Icon className="w-6 h-6 text-adorix-primary" />
+    <div className="w-full h-full rounded-3xl bg-white/85 backdrop-blur-xl border border-adorix-primary/15 shadow-[0_12px_36px_rgba(0,0,0,0.10)] flex flex-col items-center justify-center gap-2 hover:shadow-[0_0_12px_rgba(79,70,229,0.6)] transition">
+      <div
+        className="rounded-2xl bg-adorix-light flex items-center justify-center"
+        style={{ width: ICON_BOX, height: ICON_BOX }}
+      >
+        <Icon
+          className="text-adorix-primary"
+          style={{ width: ICON_SIZE, height: ICON_SIZE }}
+        />
+      </div>
+      <div className="text-[12px] font-semibold text-adorix-dark text-center px-2 leading-tight">
+        {label}
+      </div>
     </div>
-    <span className="text-xs font-bold text-adorix-dark text-center">{label}</span>
+
+    {/* Tooltip */}
+    <div
+      className="absolute -top-8 left-1/2 -translate-x-1/2 
+                 bg-black/80 text-white text-[11px] px-2 py-1 rounded
+                 opacity-0 group-hover:opacity-100 transition pointer-events-none"
+    >
+      {label}
+    </div>
   </motion.div>
 );
 
-const ConnectionLine = ({ start, end, delay }) => {
-  // Simple calculation to draw a line between two percentage points
-  return (
-    <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 overflow-visible">
-      <motion.path
-        d={`M ${start.x} ${start.y} C ${start.x + 100} ${start.y}, ${end.x - 100} ${end.y}, ${end.x} ${end.y}`}
-        fill="transparent"
-        stroke="#0D8A9E"
-        strokeWidth="2"
-        strokeDasharray="10 5"
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 0.5 }}
-        transition={{ delay, duration: 1.5, ease: "easeInOut" }}
-      />
-    </svg>
-  );
-};
+const AnimatedArrow = ({ d, delay = 0 }) => (
+  <>
+    <path
+      d={d}
+      fill="none"
+      stroke="rgba(13,138,158,0.20)"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      markerEnd="url(#arrowHead)"
+    />
+    <motion.path
+      d={d}
+      fill="none"
+      stroke="rgba(13,138,158,0.80)"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeDasharray="10 14"
+      initial={{ strokeDashoffset: 60, opacity: 0.25 }}
+      animate={{ strokeDashoffset: [60, 0], opacity: [0.25, 1, 0.6] }}
+      transition={{
+        duration: 2.0,
+        repeat: Infinity,
+        ease: "linear",
+        delay,
+      }}
+      markerEnd="url(#arrowHead)"
+    />
+  </>
+);
 
-const WorkflowAnimation = () => {
+export default function WorkflowAnimation() {
+  const arrows = useMemo(() => {
+    const a = (k, side) => anchor(k, side);
+
+    return [
+      { d: curvedPath(a("VISITOR", "left"), a("QL", "right")), delay: 0.0 },
+      { d: curvedPath(a("QL", "top"), a("AI", "bottom")), delay: 0.2 },
+      { d: curvedPath(a("AI", "top"), a("TTS", "bottom")), delay: 0.4 },
+      { d: curvedPath(a("AI", "top"), a("STT", "bottom")), delay: 0.6 },
+      { d: curvedPath(a("KIOSK", "top"), a("AGE", "bottom")), delay: 0.8 },
+      { d: curvedPath(a("KIOSK", "top"), a("GENDER", "bottom")), delay: 1.0 },
+      { d: curvedPath(a("VISITOR", "top"), a("KIOSK", "bottom")), delay: 1.2 },
+      { d: curvedPath(a("KIOSK", "right"), a("AD", "left")), delay: 1.4 },
+      { d: curvedPath(a("KIOSK", "right"), a("COMP", "left")), delay: 1.6 },
+      { d: curvedPath(a("VISITOR", "bottom"), a("ATT", "top")), delay: 1.8 },
+      { d: curvedPath(a("COMP", "bottom"), a("DEV", "top")), delay: 2.0 },
+    ];
+  }, []);
+
   return (
-    <div className="relative w-full h-[500px] bg-white/50 backdrop-blur-sm rounded-3xl border border-white/60 shadow-inner overflow-hidden my-20">
-      {/* Background Grid */}
-      <div className="absolute inset-0 opacity-10" 
-           style={{ backgroundImage: 'radial-gradient(#0D8A9E 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+    <div className="w-full p-8 bg-adorix-light rounded-3xl">
+      <div className="relative w-full bg-white/35 backdrop-blur-sm border border-adorix-primary/10 rounded-[2.5rem] overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.06)]">
+        {/* dotted background */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(13,138,158,0.18) 1px, transparent 1px)",
+            backgroundSize: "24px 24px",
+          }}
+        />
+
+        <div className="relative p-12">
+          <div className="relative mx-auto w-full" style={{ height: STAGE.h }}>
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox={`0 0 ${STAGE.w} ${STAGE.h}`}
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <marker
+                  id="arrowHead"
+                  markerWidth="10"
+                  markerHeight="10"
+                  refX="8"
+                  refY="5"
+                  orient="auto"
+                  markerUnits="strokeWidth"
+                >
+                  <path
+                    d="M 0 0 L 10 5 L 0 10 z"
+                    fill="rgba(13,138,158,0.8)"
+                  />
+                </marker>
+              </defs>
+
+              {arrows.map((a, i) => (
+                <AnimatedArrow key={i} d={a.d} delay={a.delay} />
+              ))}
+            </svg>
+
+            {Object.entries(nodes).map(([key, n]) => (
+              <Node key={key} {...n} />
+            ))}
+          </div>
+        </div>
       </div>
-
-      {/* Central Hub */}
-      <Node icon={Cpu} label="Adorix Core" x="50%" y="40%" delay={0} />
-
-      {/* Feature Nodes */}
-      <Node icon={Eye} label="Gaze Tracking" x="20%" y="20%" delay={0.5} />
-      <Node icon={Mic} label="Voice Recog." x="20%" y="60%" delay={0.7} />
-      
-      <Node icon={Users} label="Audience" x="80%" y="20%" delay={1.2} />
-      <Node icon={BarChart3} label="Live Analytics" x="80%" y="60%" delay={1.4} />
-
-      {/* Connecting Lines (SVG paths roughly calculated based on positions) */}
-      {/* Left to Center */}
-      <ConnectionLine start={{x: 300, y: 150}} end={{x: 600, y: 250}} delay={0.8} />
-      <ConnectionLine start={{x: 300, y: 350}} end={{x: 600, y: 250}} delay={1.0} />
-
-      {/* Center to Right */}
-      <ConnectionLine start={{x: 700, y: 250}} end={{x: 1000, y: 150}} delay={1.5} />
-      <ConnectionLine start={{x: 700, y: 250}} end={{x: 1000, y: 350}} delay={1.7} />
-      
-      {/* Floating particles specific to this diagram */}
-      <motion.div 
-        animate={{ x: [300, 600, 1000], y: [150, 250, 150] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-        className="absolute w-3 h-3 bg-adorix-accent rounded-full shadow-[0_0_10px_#12B2C1]"
-      />
-      <motion.div 
-        animate={{ x: [300, 600, 1000], y: [350, 250, 350] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 1.5 }}
-        className="absolute w-3 h-3 bg-adorix-primary rounded-full shadow-[0_0_10px_#0D8A9E]"
-      />
     </div>
   );
-};
-
-export default WorkflowAnimation;
+}
