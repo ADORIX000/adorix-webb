@@ -1,42 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* 1. Base Styles */
+/* 1. Global Reset with New Colors */
 html {
-  scroll-behavior: smooth; /* Enables smooth scrolling for anchor links */
-  -webkit-font-smoothing: antialiased; /* Makes fonts look sharper on Mac/iOS */
-  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background-color: #ffffff;
-  color: #0f172a; /* Matches adorix-dark */
+  background-color: #E5F9F8; /* adorix-light */
+  color: #1F2B2D;            /* adorix-dark */
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-/* 2. Custom Scrollbar (Optional, makes it look cleaner) */
+/* 2. Custom Scrollbar (Themed) */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9; 
+  background: #E5F9F8; /* adorix-light */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; 
-  border-radius: 4px;
+  background: #23717B; /* adorix-secondary */
+  border-radius: 5px;
+  border: 2px solid #E5F9F8; /* Creates padding effect */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; 
+  background: #0D8A9E; /* adorix-primary */
 }
 
-/* 3. Utility for Glassmorphism cards if you want to reuse it */
-.glass-card {
-  @apply bg-white/60 backdrop-blur-xl border border-white/50 shadow-lg rounded-2xl;
+/* 3. Text Selection Color */
+::selection {
+  background-color: #12B2C1; /* adorix-accent */
+  color: #ffffff;
 }

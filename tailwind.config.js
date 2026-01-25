@@ -6,34 +6,25 @@ export default {
   ],
   theme: {
     extend: {
-      // 1. Custom Color Palette (Adorix Purple)
+      // THE NEW COLOR PALETTE
       colors: {
         adorix: {
-          50: '#f5f3ff',  // Very light purple (backgrounds)
-          100: '#ede9fe', // Light purple (hover backgrounds)
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6', // Main Brand Color (Purple)
-          600: '#7c3aed', // Hover states
-          700: '#6d28d9',
-          800: '#5b21b6',
-          900: '#4c1d95', // Deep purple (Text/Buttons)
-          950: '#2e1065',
-          dark: '#0f172a', // "Slate 900" - softer alternative to pure black
+          light: '#E5F9F8',      // Backgrounds / Lightest shade
+          dark: '#1F2B2D',       // Main Text / Darkest shade
+          secondary: '#23717B',  // Deep Teal / Hover states / Subtitles
+          primary: '#0D8A9E',    // Main Brand Color / Buttons
+          accent: '#12B2C1',     // Highlights / Active states / Icons
         }
       },
-      // 2. Font Family
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
-      // 3. Animation Definitions
+      // CUSTOM ANIMATIONS
       animation: {
-        'blob': 'blob 7s infinite', // The moving background animation
+        'blob': 'blob 10s infinite',
         'fade-in': 'fadeIn 0.5s ease-out forwards',
-        'slide-up': 'slideUp 0.5s ease-out forwards',
+        'pulse-fast': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
-      // 4. Keyframes for Animations
       keyframes: {
         blob: {
           '0%': { transform: 'translate(0px, 0px) scale(1)' },
@@ -42,12 +33,8 @@ export default {
           '100%': { transform: 'translate(0px, 0px) scale(1)' },
         },
         fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       }
     },
