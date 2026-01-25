@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth scrolling for the whole app */
-html {
-  scroll-behavior: smooth;
-}
+/* ... existing styles ... */
 
-body {
-  background-color: #ffffff;
-  color: #0f172a;
+@layer utilities {
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
 }
