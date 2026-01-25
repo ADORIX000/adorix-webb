@@ -3,17 +3,23 @@ import Navbar from './components/layout/navbar';
 import GradientWrapper from './components/layout/GradientWrapper';
 
 // Pages
-import Home from './pages/public/Home';
-import Contact from './pages/public/Contact';
+import Home from './pages/pagesonNav/Home';
+import Contact from './pages/pagesonNav/Contact';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Verification from './pages/auth/Verification';
-import AudienceInsights from './pages/dashboard/AudienceInsights';
-import CampaignStudio from './pages/dashboard/CampaignStudio';
-import VirtualPage from './pages/dashboard/VirtualPage';
-import Profile from './pages/dashboard/Profile';
-import Pricing from './pages/payment/Pricing';
-import PaymentMethod from './pages/payment/PaymentMethod';
+import Dashboard from './pages/pagesonNav/Dashboard';
+import CampaignStudio from './pages/pagesonNav/CampaignStudio';
+import Profile from './pages/pagesonNav/Profile';
+import Pricing from './pages/pagesonNav/payment/Pricing';
+import PaymentMethod from './pages/pagesonNav/payment/PaymentMethod';
+
+// New Settings Pages (Ensure these files exist in src/pages/settings/)
+import AccountInfo from './pages/settings/AccountInfo';
+import Security from './pages/settings/Security';
+import Policies from './pages/settings/Policies';
+import Help from './pages/settings/Help';
+import Feedback from './pages/settings/Feedback';
 
 function App() {
   return (
@@ -32,13 +38,20 @@ function App() {
           <Route path="/verify" element={<Verification />} />
 
           {/* Protected Dashboard Routes */}
-          <Route path="/dashboard" element={<AudienceInsights />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/studio" element={<CampaignStudio />} />
-          <Route path="/dashboard/virtual" element={<VirtualPage />} />
           <Route path="/profile" element={<Profile />} />
           
           {/* Payment */}
           <Route path="/payment-method" element={<PaymentMethod />} />
+
+          {/* Settings Module Routes */}
+          <Route path="/settings/account" element={<AccountInfo />} />
+          <Route path="/settings/security" element={<Security />} />
+          <Route path="/settings/policies" element={<Policies />} />
+          <Route path="/settings/help" element={<Help />} />
+          <Route path="/settings/feedback" element={<Feedback />} />
+          
         </Routes>
       </GradientWrapper>
     </Router>

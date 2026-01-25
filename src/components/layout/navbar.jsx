@@ -11,8 +11,11 @@ const Navbar = () => {
 
       {/* Links */}
       <div className="hidden md:flex items-center gap-8 font-medium text-gray-600">
-        <Link to="/dashboard" className="hover:text-adorix-600 transition">Products</Link>
+        <Link to="/" className="hover:text-adorix-600 transition">Home</Link>
+        <Link to="/dashboard" className="hover:text-adorix-600 transition">Dashboard</Link>
+        <Link to="/dashboard/studio" className="hover:text-adorix-600 transition">Campaign Studio</Link>
         <Link to="/pricing" className="hover:text-adorix-600 transition">Pricing</Link>
+        <Link to="/profile" className="hover:text-adorix-600 transition">Profile</Link>
         <Link to="/contact" className="hover:text-adorix-600 transition">Contact</Link>
       </div>
 
