@@ -6,66 +6,119 @@ const MouseParticles = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    let width, height;
     let particles = [];
-    let animationFrameId;
 
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    // CONFIGURATION
+    const PARTICLE_COUNT = 150; // Number of dust specks
+    const MOUSE_RADIUS = 120;   // How far away they react to mouse
+    const REPEL_FORCE = 5;      // How fast they run away
+
+    // Setup Canvas
+    const resize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     };
+    window.addEventListener('resize', resize);
+    resize();
 
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    // Mouse State
+    const mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.x;
+      mouse.y = e.y;
+    });
+    // Reset mouse when leaving window so particles drift back
+    window.addEventListener('mouseout', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
 
     class Particle {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = Math.random() * 2 - 1;
-        this.speedY = Math.random() * 2 - 1;
-        this.life = 100;
-        this.color = `rgba(13, 138, 158, ${Math.random() * 0.5})`; // Adorix Primary Color
+      constructor() {
+        // Random initial position
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        // Remember original position to return to
+        this.baseX = this.x;
+        this.baseY = this.y;
+        // Random size and speed
+        this.size = Math.random() * 2 + 1;
+        this.density = (Math.random() * 30) + 1;
+        // Random colors from your palette
+        const colors = ['#0D8A9E', '#23717B', '#12B2C1', '#1F2B2D'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
       }
 
       update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.life -= 1.5;
-        if (this.life > 0) {
-          ctx.fillStyle = this.color;
-          ctx.globalAlpha = this.life / 100;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fill();
+        // Physics Calculations
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        
+        // Calculate Repel Force (Stronger when closer)
+        let maxDistance = MOUSE_RADIUS;
+        let force = (maxDistance - distance) / maxDistance;
+        let directionX = forceDirectionX * force * this.density;
+        let directionY = forceDirectionY * force * this.density;
+
+        if (distance < MOUSE_RADIUS && mouse.x !== null) {
+          // Move away from mouse
+          this.x -= directionX * REPEL_FORCE;
+          this.y -= directionY * REPEL_FORCE;
+        } else {
+          // Return to original position (drift back)
+          if (this.x !== this.baseX) {
+            let dx = this.x - this.baseX;
+            this.x -= dx / 20; // Ease back factor
+          }
+          if (this.y !== this.baseY) {
+            let dy = this.y - this.baseY;
+            this.y -= dy / 20;
+          }
         }
+        this.draw();
       }
     }
 
-    const handleMouseMove = (e) => {
-      for (let i = 0; i < 3; i++) {
-        particles.push(new Particle(e.clientX, e.clientY));
+    // Initialize Particles
+    const init = () => {
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Particle());
       }
     };
+    init();
 
+    // Animation Loop
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles = particles.filter(p => p.life > 0);
-      particles.forEach(p => p.update());
-      animationFrameId = requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+      }
+      requestAnimationFrame(animate);
     };
-
-    window.addEventListener('mousemove', handleMouseMove);
     animate();
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', resize);
+      // Clean up other listeners if strictly necessary, 
+      // but simpler to just let component unmount handle it.
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full pointer-events-none z-0" />;
+  return <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-40" />;
 };
 
 export default MouseParticles;
