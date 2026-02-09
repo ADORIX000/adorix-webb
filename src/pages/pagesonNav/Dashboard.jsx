@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, 
-  BarChart, Bar, CartesianGrid 
+import {
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
+  BarChart, Bar, CartesianGrid
 } from 'recharts';
 import { Activity, Users, Clock, Eye, Zap, TrendingUp, ArrowUpRight } from 'lucide-react';
 
@@ -39,8 +39,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="pt-28 px-6 pb-20 min-h-screen bg-adorix-light">
-      
+    <div className="pt-28 px-6 pb-20 min-h-screen">
+
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
@@ -82,13 +82,13 @@ const Dashboard = () => {
 
       {/* Main Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* Live Traffic Chart */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-adorix-primary/10">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold text-adorix-dark">Live Audience Traffic</h3>
             <button className="text-adorix-primary text-sm font-semibold hover:underline flex items-center gap-1">
-              View Report <ArrowUpRight className="w-4 h-4"/>
+              View Report <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
           <div className="h-80 w-full">
@@ -96,24 +96,24 @@ const Dashboard = () => {
               <AreaChart data={data}>
                 <defs>
                   <linearGradient id="colorViewers" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0D8A9E" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#0D8A9E" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#0D8A9E" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#0D8A9E" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5F9F8" />
                 <XAxis dataKey="time" stroke="#23717B" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#23717B" fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1F2B2D', color: '#fff', borderRadius: '8px', border: 'none' }}
                   itemStyle={{ color: '#12B2C1' }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="viewers" 
-                  stroke="#0D8A9E" 
+                <Area
+                  type="monotone"
+                  dataKey="viewers"
+                  stroke="#0D8A9E"
                   strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorViewers)" 
+                  fillOpacity={1}
+                  fill="url(#colorViewers)"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -128,22 +128,13 @@ const Dashboard = () => {
               <BarChart data={data.slice(-5)}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5F9F8" />
                 <XAxis dataKey="time" stroke="#23717B" fontSize={10} tickLine={false} axisLine={false} />
-                <Tooltip 
-                   cursor={{fill: '#E5F9F8'}}
-                   contentStyle={{ backgroundColor: '#1F2B2D', color: '#fff', borderRadius: '8px', border: 'none' }}
+                <Tooltip
+                  cursor={{ fill: '#E5F9F8' }}
+                  contentStyle={{ backgroundColor: '#1F2B2D', color: '#fff', borderRadius: '8px', border: 'none' }}
                 />
                 <Bar dataKey="interactions" fill="#12B2C1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-          <div className="mt-4 space-y-3">
-             <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Gestures</span>
-                <span className="font-bold text-adorix-primary">65%</span>
-             </div>
-             <div className="w-full bg-adorix-light h-2 rounded-full overflow-hidden">
-                <div className="bg-adorix-primary h-full w-[65%]"></div>
-             </div>
           </div>
         </div>
       </div>

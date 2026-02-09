@@ -1,195 +1,260 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
-  Mic,
-  AudioLines,
-  Cpu,
-  ScanFace,
-  Megaphone,
-  HelpCircle,
-  BarChart3,
   User,
-  Users,
-  Code2,
+  Smartphone,
+  Cpu,
+  Megaphone,
+  BarChart3,
+  ScanFace,
+  Mic,
+  Zap,
+  Eye,
+  Globe,
+  Database,
+  Wifi,
+  Lock,
+  Share2
 } from "lucide-react";
 
-const STAGE = { w: 1400, h: 700 };
-const CARD = { w: 120, h: 115 };
-const ICON_BOX = 38;
-const ICON_SIZE = 20;
+/**
+ * Configuration for the diagram
+ */
+const CARD_SIZE = 80; // Size of the square cards
+const GAP = 20; // Gap between cards
 
-/* --------------------------
-   Nodes
--------------------------- */
-const nodes = {
-  TTS: { x: 40, y: 100, label: "TTS", icon: AudioLines },
-  STT: { x: 220, y: 100, label: "STT", icon: Mic },
-  AI: { x: 130, y: 280, label: "AI Assistant", icon: Cpu },
-  QL: { x: 200, y: 450, label: "Questions", icon: HelpCircle },
-  AGE: { x: 400, y: 100, label: "Age detection", icon: ScanFace },
-  GENDER: { x: 600, y: 100, label: "Gender detection", icon: ScanFace },
-  KIOSK: { x: 500, y: 280, label: "KIOSK", icon: Cpu },
-  VISITOR: { x: 500, y: 450, label: "Visitor", icon: User },
-  AD: { x: 750, y: 370, label: "Advertisement", icon: Megaphone },
-  ATT: { x: 500, y: 600, label: "Attention tracking", icon: BarChart3 },
-  COMP: { x: 750, y: 220, label: "Companies", icon: Users },
-  DEV: { x: 750, y: 520, label: "Developers", icon: Code2 },
+// Grid positions (row, col) - 0-indexed
+// 5 rows, 4 cols
+const GRID_ROWS = 5;
+const GRID_COLS = 4;
+
+// Active Nodes Configuration (The colored ones)
+const ACTIVE_NODES = {
+  VISITOR: { r: 2, c: 0, label: "Visitor", icon: User, color: "#64748b" }, // Slate
+  KIOSK: { r: 2, c: 1, label: "Kiosk", icon: Smartphone, color: "#0D8A9E" }, // Adorix Teal
+  AI: { r: 0, c: 2, label: "AI Engine", icon: Cpu, color: "#8b5cf6" }, // Violet
+  AD: { r: 2, c: 3, label: "Smart Ad", icon: Megaphone, color: "#f43f5e" }, // Rose
+  ANALYTICS: { r: 4, c: 2, label: "Analytics", icon: BarChart3, color: "#0ea5e9" }, // Sky
 };
 
-function anchor(key, side = "center") {
-  const n = nodes[key];
-  const cx = n.x + CARD.w / 2;
-  const cy = n.y + CARD.h / 2;
-  const pad = 10;
+// Ghost Nodes (Background decoration)
+const GHOST_NODES = [
+  { r: 0, c: 0, icon: Globe },
+  { r: 0, c: 3, icon: Share2 },
 
-  if (side === "left") return { x: n.x - pad, y: cy };
-  if (side === "right") return { x: n.x + CARD.w + pad, y: cy };
-  if (side === "top") return { x: cx, y: n.y - pad };
-  if (side === "bottom") return { x: cx, y: n.y + CARD.h + pad };
-  return { x: cx, y: cy };
-}
+  { r: 1, c: 1, icon: ScanFace },
+  { r: 1, c: 2, icon: Mic }, // Between Kiosk and AI/Ad
 
-/* Curved path builder */
-function curvedPath(p1, p2) {
-  const midX = (p1.x + p2.x) / 2;
-  return `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
-}
+  { r: 2, c: 2, icon: Zap }, // Between Kiosk and Ad
 
-const Node = ({ x, y, label, icon: Icon }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 10 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-60px" }}
-    whileHover={{ y: -4, scale: 1.05 }}
-    transition={{ type: "spring", stiffness: 260, damping: 18 }}
-    className="absolute group"
-    style={{ left: x, top: y, width: CARD.w, height: CARD.h }}
-  >
-    <div className="w-full h-full rounded-3xl bg-white/85 backdrop-blur-xl border border-adorix-primary/15 shadow-[0_12px_36px_rgba(0,0,0,0.10)] flex flex-col items-center justify-center gap-2 hover:shadow-[0_0_12px_rgba(79,70,229,0.6)] transition">
+  { r: 3, c: 1, icon: Database },
+  { r: 3, c: 3, icon: Wifi },
+
+  { r: 4, c: 0, icon: Lock },
+  { r: 4, c: 3, icon: Eye },
+];
+
+// Helper to get pixel coordinates for a grid position
+const getPos = (r, c) => ({
+  x: c * (CARD_SIZE + GAP),
+  y: r * (CARD_SIZE + GAP),
+});
+
+// Card Component
+const Card = ({ r, c, label, icon: Icon, color, isActive = false, delay = 0 }) => {
+  const { x, y } = getPos(r, c);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.5, type: "spring" }}
+      className={`absolute flex flex-col items-center justify-center rounded-2xl transition-all duration-300
+        ${isActive
+          ? "bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-10 scale-110"
+          : "bg-transparent border border-gray-100 z-0 opacity-40 hover:opacity-60"
+        }
+      `}
+      style={{
+        left: x,
+        top: y,
+        width: CARD_SIZE,
+        height: CARD_SIZE,
+      }}
+    >
+      {/* Icon */}
       <div
-        className="rounded-2xl bg-adorix-light flex items-center justify-center"
-        style={{ width: ICON_BOX, height: ICON_BOX }}
+        className={`flex items-center justify-center rounded-xl mb-1
+          ${isActive ? "w-10 h-10" : "w-8 h-8"}
+        `}
+        style={{ backgroundColor: isActive ? `${color}20` : "transparent" }}
       >
         <Icon
-          className="text-adorix-primary"
-          style={{ width: ICON_SIZE, height: ICON_SIZE }}
+          className={isActive ? "w-6 h-6" : "w-5 h-5 text-gray-300"}
+          style={{ color: isActive ? color : undefined }}
+          strokeWidth={isActive ? 2.5 : 1.5}
         />
       </div>
-      <div className="text-[12px] font-semibold text-adorix-dark text-center px-2 leading-tight">
-        {label}
-      </div>
-    </div>
 
-    {/* Tooltip */}
-    <div
-      className="absolute -top-8 left-1/2 -translate-x-1/2 
-                 bg-black/80 text-white text-[11px] px-2 py-1 rounded
-                 opacity-0 group-hover:opacity-100 transition pointer-events-none"
-    >
-      {label}
-    </div>
-  </motion.div>
-);
+      {/* Label (Only for Active) */}
+      {isActive && (
+        <div className="absolute -bottom-8 bg-white px-3 py-1 rounded-lg shadow-md text-xs font-bold text-gray-700 whitespace-nowrap">
+          {label}
+        </div>
+      )}
+    </motion.div>
+  );
+};
 
-const AnimatedArrow = ({ d, delay = 0 }) => (
-  <>
-    <path
-      d={d}
-      fill="none"
-      stroke="rgba(13,138,158,0.20)"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      markerEnd="url(#arrowHead)"
-    />
+// Connecting Line Component
+const Connection = ({ start, end, color = "#94a3b8", delay = 0.5 }) => {
+  const p1 = getPos(start.r, start.c);
+  const p2 = getPos(end.r, end.c);
+
+  // Adjust to center of cards
+  const startX = p1.x + CARD_SIZE / 2;
+  const startY = p1.y + CARD_SIZE / 2;
+  const endX = p2.x + CARD_SIZE / 2;
+  const endY = p2.y + CARD_SIZE / 2;
+
+  const pathVariants = {
+    hidden: { pathLength: 0, opacity: 0.2 },
+    visible: {
+      pathLength: 1,
+      opacity: 1,
+      transition: { duration: 1.5, delay, ease: "easeInOut" }
+    }
+  };
+
+  let d = "";
+  const radius = 20;
+
+  if (start.r === end.r) {
+    // Horizontal straight line
+    d = `M ${startX + CARD_SIZE / 2} ${startY} L ${endX - CARD_SIZE / 2} ${endY}`;
+  } else if (start.c === end.c) {
+    // Vertical straight line
+    d = `M ${startX} ${startY + CARD_SIZE / 2} L ${endX} ${endY - CARD_SIZE / 2}`;
+  } else {
+    // L-shape or S-shape
+    // We want to avoid crossing through centers of other cards if possible, 
+    // but given the grid constraints, orthogonal paths often overlap.
+
+    // Simple L-shape: Horizontal then Vertical
+    // d = `M ${startX + CARD_SIZE/2} ${startY} H ${endX} V ${endY - CARD_SIZE/2}`; -- No, corners need radius
+
+    // Let's do: Exit Horizontal -> Turn -> Enter Vertical
+    // This looks good for Kiosk -> AI/Analytics
+
+    if (end.c > start.c) {
+      // Going Right
+      if (end.r < start.r) {
+        // Going Up (Kiosk -> AI)
+        // Go right, then up
+        const midX = endX;
+        d = `M ${startX + CARD_SIZE / 2} ${startY} 
+                  H ${midX - radius} 
+                  Q ${midX} ${startY} ${midX} ${startY - radius}
+                  V ${endY + CARD_SIZE / 2}`;
+      } else {
+        // Going Down (Kiosk -> Analytics)
+        const midX = endX;
+        d = `M ${startX + CARD_SIZE / 2} ${startY} 
+                   H ${midX - radius} 
+                   Q ${midX} ${startY} ${midX} ${startY + radius}
+                   V ${endY - CARD_SIZE / 2}`;
+      }
+    }
+  }
+
+  return (
     <motion.path
       d={d}
       fill="none"
-      stroke="rgba(13,138,158,0.80)"
+      stroke={color}
       strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeDasharray="10 14"
-      initial={{ strokeDashoffset: 60, opacity: 0.25 }}
-      animate={{ strokeDashoffset: [60, 0], opacity: [0.25, 1, 0.6] }}
-      transition={{
-        duration: 2.0,
-        repeat: Infinity,
-        ease: "linear",
-        delay,
-      }}
-      markerEnd="url(#arrowHead)"
+      variants={pathVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
     />
-  </>
-);
+  );
+};
 
-export default function WorkflowAnimation() {
-  const arrows = useMemo(() => {
-    const a = (k, side) => anchor(k, side);
 
-    return [
-      { d: curvedPath(a("VISITOR", "left"), a("QL", "right")), delay: 0.0 },
-      { d: curvedPath(a("QL", "top"), a("AI", "bottom")), delay: 0.2 },
-      { d: curvedPath(a("AI", "top"), a("TTS", "bottom")), delay: 0.4 },
-      { d: curvedPath(a("AI", "top"), a("STT", "bottom")), delay: 0.6 },
-      { d: curvedPath(a("KIOSK", "top"), a("AGE", "bottom")), delay: 0.8 },
-      { d: curvedPath(a("KIOSK", "top"), a("GENDER", "bottom")), delay: 1.0 },
-      { d: curvedPath(a("VISITOR", "top"), a("KIOSK", "bottom")), delay: 1.2 },
-      { d: curvedPath(a("KIOSK", "right"), a("AD", "left")), delay: 1.4 },
-      { d: curvedPath(a("KIOSK", "right"), a("COMP", "left")), delay: 1.6 },
-      { d: curvedPath(a("VISITOR", "bottom"), a("ATT", "top")), delay: 1.8 },
-      { d: curvedPath(a("COMP", "bottom"), a("DEV", "top")), delay: 2.0 },
-    ];
-  }, []);
-
+const WorkflowAnimation = () => {
   return (
-    <div className="w-full p-8 bg-adorix-light rounded-3xl">
-      <div className="relative w-full bg-white/35 backdrop-blur-sm border border-adorix-primary/10 rounded-[2.5rem] overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.06)]">
-        {/* dotted background */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(13,138,158,0.18) 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
+    <div className="w-full flex justify-center py-10 bg-adorix-light/50 rounded-3xl overflow-hidden">
+      <div className="relative" style={{ width: 450, height: 550 }}>
 
-        <div className="relative p-12">
-          <div className="relative mx-auto w-full" style={{ height: STAGE.h }}>
-            <svg
-              className="absolute inset-0 w-full h-full"
-              viewBox={`0 0 ${STAGE.w} ${STAGE.h}`}
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <marker
-                  id="arrowHead"
-                  markerWidth="10"
-                  markerHeight="10"
-                  refX="8"
-                  refY="5"
-                  orient="auto"
-                  markerUnits="strokeWidth"
-                >
-                  <path
-                    d="M 0 0 L 10 5 L 0 10 z"
-                    fill="rgba(13,138,158,0.8)"
-                  />
-                </marker>
-              </defs>
+        {/* Background Grid/Lines (Optional) */}
+        <div className="absolute inset-0 border-l border-dashed border-gray-200 left-1/2 -z-10 h-full w-[1px]"></div>
 
-              {arrows.map((a, i) => (
-                <AnimatedArrow key={i} d={a.d} delay={a.delay} />
-              ))}
-            </svg>
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
 
-            {Object.entries(nodes).map(([key, n]) => (
-              <Node key={key} {...n} />
-            ))}
-          </div>
-        </div>
+          {/* Visitor -> Kiosk */}
+          <Connection
+            start={ACTIVE_NODES.VISITOR}
+            end={ACTIVE_NODES.KIOSK}
+            color="#cbd5e1" // Faint connection
+            delay={0.6}
+          />
+
+          {/* Kiosk -> AI */}
+          <Connection
+            start={ACTIVE_NODES.KIOSK}
+            end={ACTIVE_NODES.AI}
+            color="#8b5cf6" // Violet
+            delay={0.9}
+          />
+
+          {/* Kiosk -> Ad (Through the ghost node) */}
+          <motion.path
+            d={`M ${getPos(2, 1).x + CARD_SIZE + CARD_SIZE / 2} ${getPos(2, 1).y + CARD_SIZE / 2} L ${getPos(2, 3).x + CARD_SIZE / 2 - CARD_SIZE} ${getPos(2, 3).y + CARD_SIZE / 2}`}
+          // Manual straight line correcting for card width? 
+          // Actually let's just draw connection between KIOSK and AD. 
+          // Since they are on same row (r=2), the Connection component handles it.
+          // But it passes through (2,2).
+          />
+          <Connection
+            start={ACTIVE_NODES.KIOSK}
+            end={ACTIVE_NODES.AD}
+            color="#f43f5e" // Rose
+            delay={1.1}
+          />
+
+          {/* Kiosk -> Analytics */}
+          <Connection
+            start={ACTIVE_NODES.KIOSK}
+            end={ACTIVE_NODES.ANALYTICS}
+            color="#0ea5e9" // Sky
+            delay={1.3}
+          />
+
+        </svg>
+
+        {/* Ghost Nodes */}
+        {GHOST_NODES.map((node, i) => (
+          <Card
+            key={`ghost-${i}`}
+            {...node}
+            delay={i * 0.05}
+          />
+        ))}
+
+        {/* Active Nodes */}
+        <Card {...ACTIVE_NODES.VISITOR} isActive delay={0.5} />
+        <Card {...ACTIVE_NODES.KIOSK} isActive delay={0.7} />
+        <Card {...ACTIVE_NODES.AI} isActive delay={1.0} />
+        <Card {...ACTIVE_NODES.AD} isActive delay={1.2} />
+        <Card {...ACTIVE_NODES.ANALYTICS} isActive delay={1.4} />
+
       </div>
     </div>
   );
-}
+};
+
+export default WorkflowAnimation;

@@ -3,11 +3,11 @@ import { Save } from 'lucide-react';
 
 const AccountInfo = () => {
   return (
-    <div className="pt-28 px-6 pb-20 min-h-screen bg-adorix-light">
+    <div className="pt-28 px-6 pb-20 min-h-screen">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-adorix-dark mb-2">Personal Information</h1>
         <p className="text-adorix-secondary mb-8">Manage your personal details and company info.</p>
-        
+
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-adorix-primary/10">
           <form className="space-y-6">
             <div className="grid grid-cols-2 gap-6">
