@@ -1,260 +1,247 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  User,
-  Smartphone,
-  Cpu,
-  Megaphone,
-  BarChart3,
-  ScanFace,
   Mic,
-  Zap,
-  Eye,
-  Globe,
-  Database,
-  Wifi,
-  Lock,
-  Share2
+  AudioLines,
+  Cpu,
+  ScanFace,
+  Megaphone,
+  HelpCircle,
+  BarChart3,
+  User,
+  Users,
+  Code2,
 } from "lucide-react";
 
-/**
- * Configuration for the diagram
- */
-const CARD_SIZE = 80; // Size of the square cards
-const GAP = 20; // Gap between cards
+// Canvas Size 
+const STAGE = { w: 750, h: 500 };
+const CARD = { w: 60, h: 60 };
 
-// Grid positions (row, col) - 0-indexed
-// 5 rows, 4 cols
-const GRID_ROWS = 5;
-const GRID_COLS = 4;
+/* --------------------------
+   Nodes Configuration
+   Shifted Right by +40px (Total +70px from base) to fix cutoff
+-------------------------- */
+const nodes = {
+  // Top Left Group
+  // TTS: 75 -> 115
+  // STT: 165 -> 205
+  TTS: { x: 115, y: 30, label: "TTS", icon: AudioLines, color: "#10B981" },
+  STT: { x: 205, y: 30, label: "STT", icon: Mic, color: "#0EA5E9" },
 
-// Active Nodes Configuration (The colored ones)
-const ACTIVE_NODES = {
-  VISITOR: { r: 2, c: 0, label: "Visitor", icon: User, color: "#64748b" }, // Slate
-  KIOSK: { r: 2, c: 1, label: "Kiosk", icon: Smartphone, color: "#0D8A9E" }, // Adorix Teal
-  AI: { r: 0, c: 2, label: "AI Engine", icon: Cpu, color: "#8b5cf6" }, // Violet
-  AD: { r: 2, c: 3, label: "Smart Ad", icon: Megaphone, color: "#f43f5e" }, // Rose
-  ANALYTICS: { r: 4, c: 2, label: "Analytics", icon: BarChart3, color: "#0ea5e9" }, // Sky
+  // Top Right Group
+  // AGE: 345 -> 385
+  // GENDER: 465 -> 505
+  AGE: { x: 385, y: 30, label: "Age Detection", icon: ScanFace, color: "#EC4899" },
+  GENDER: { x: 505, y: 30, label: "Gender Detection", icon: ScanFace, color: "#EC4899" },
+
+  // Middle Row
+  // AI: 120 -> 160
+  // KIOSK: 375 -> 415
+  AI: { x: 160, y: 160, label: "AI Assistant", icon: Cpu, color: "#8B5CF6" },
+  KIOSK: { x: 415, y: 160, label: "KIOSK", icon: Cpu, color: "#0D8A9E" },
+
+  // Right Column
+  // COMP/AD/DEV: 540 -> 580
+  COMP: { x: 580, y: 120, label: "Companies", icon: Users, color: "#3B82F6" },
+  AD: { x: 580, y: 210, label: "Advertisement", icon: Megaphone, color: "#F43F5E" },
+  DEV: { x: 580, y: 380, label: "Developers", icon: Code2, color: "#6366F1" },
+
+  // Bottom Area
+  // VISITOR: 375 -> 415
+  // QL: 180 -> 220
+  // ATT: 375 -> 415
+  VISITOR: { x: 415, y: 300, label: "Visitor", icon: User, color: "#64748B" },
+  QL: { x: 220, y: 300, label: "Questions", icon: HelpCircle, color: "#F59E0B" },
+  ATT: { x: 415, y: 410, label: "Attention Tracking", icon: BarChart3, color: "#14B8A6" },
 };
 
-// Ghost Nodes (Background decoration)
-const GHOST_NODES = [
-  { r: 0, c: 0, icon: Globe },
-  { r: 0, c: 3, icon: Share2 },
+/* --------------------------
+   Helper Functions
+-------------------------- */
+function anchor(key, side = "center") {
+  const n = nodes[key];
+  const cx = n.x + CARD.w / 2;
+  const cy = n.y + CARD.h / 2;
+  const pad = 0;
 
-  { r: 1, c: 1, icon: ScanFace },
-  { r: 1, c: 2, icon: Mic }, // Between Kiosk and AI/Ad
+  if (side === "left") return { x: n.x - pad, y: cy };
+  if (side === "right") return { x: n.x + CARD.w + pad, y: cy };
+  if (side === "top") return { x: cx, y: n.y - pad };
+  if (side === "bottom") return { x: cx, y: n.y + CARD.h + pad };
+  return { x: cx, y: cy };
+}
 
-  { r: 2, c: 2, icon: Zap }, // Between Kiosk and Ad
+/* Branch Path Builder */
+function branchPath(start, ends, type) {
+  let d = `M ${start.x} ${start.y}`;
 
-  { r: 3, c: 1, icon: Database },
-  { r: 3, c: 3, icon: Wifi },
+  if (type === "fork-up") {
+    const midY = (start.y + Math.max(...ends.map(e => e.y))) / 2;
+    const minX = Math.min(...ends.map(e => e.x));
+    const maxX = Math.max(...ends.map(e => e.x));
 
-  { r: 4, c: 0, icon: Lock },
-  { r: 4, c: 3, icon: Eye },
-];
-
-// Helper to get pixel coordinates for a grid position
-const getPos = (r, c) => ({
-  x: c * (CARD_SIZE + GAP),
-  y: r * (CARD_SIZE + GAP),
-});
-
-// Card Component
-const Card = ({ r, c, label, icon: Icon, color, isActive = false, delay = 0 }) => {
-  const { x, y } = getPos(r, c);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8, y: 20 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.5, type: "spring" }}
-      className={`absolute flex flex-col items-center justify-center rounded-2xl transition-all duration-300
-        ${isActive
-          ? "bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-10 scale-110"
-          : "bg-transparent border border-gray-100 z-0 opacity-40 hover:opacity-60"
-        }
-      `}
-      style={{
-        left: x,
-        top: y,
-        width: CARD_SIZE,
-        height: CARD_SIZE,
-      }}
-    >
-      {/* Icon */}
-      <div
-        className={`flex items-center justify-center rounded-xl mb-1
-          ${isActive ? "w-10 h-10" : "w-8 h-8"}
-        `}
-        style={{ backgroundColor: isActive ? `${color}20` : "transparent" }}
-      >
-        <Icon
-          className={isActive ? "w-6 h-6" : "w-5 h-5 text-gray-300"}
-          style={{ color: isActive ? color : undefined }}
-          strokeWidth={isActive ? 2.5 : 1.5}
-        />
-      </div>
-
-      {/* Label (Only for Active) */}
-      {isActive && (
-        <div className="absolute -bottom-8 bg-white px-3 py-1 rounded-lg shadow-md text-xs font-bold text-gray-700 whitespace-nowrap">
-          {label}
-        </div>
-      )}
-    </motion.div>
-  );
-};
-
-// Connecting Line Component
-const Connection = ({ start, end, color = "#94a3b8", delay = 0.5 }) => {
-  const p1 = getPos(start.r, start.c);
-  const p2 = getPos(end.r, end.c);
-
-  // Adjust to center of cards
-  const startX = p1.x + CARD_SIZE / 2;
-  const startY = p1.y + CARD_SIZE / 2;
-  const endX = p2.x + CARD_SIZE / 2;
-  const endY = p2.y + CARD_SIZE / 2;
-
-  const pathVariants = {
-    hidden: { pathLength: 0, opacity: 0.2 },
-    visible: {
-      pathLength: 1,
-      opacity: 1,
-      transition: { duration: 1.5, delay, ease: "easeInOut" }
-    }
-  };
-
-  let d = "";
-  const radius = 20;
-
-  if (start.r === end.r) {
-    // Horizontal straight line
-    d = `M ${startX + CARD_SIZE / 2} ${startY} L ${endX - CARD_SIZE / 2} ${endY}`;
-  } else if (start.c === end.c) {
-    // Vertical straight line
-    d = `M ${startX} ${startY + CARD_SIZE / 2} L ${endX} ${endY - CARD_SIZE / 2}`;
-  } else {
-    // L-shape or S-shape
-    // We want to avoid crossing through centers of other cards if possible, 
-    // but given the grid constraints, orthogonal paths often overlap.
-
-    // Simple L-shape: Horizontal then Vertical
-    // d = `M ${startX + CARD_SIZE/2} ${startY} H ${endX} V ${endY - CARD_SIZE/2}`; -- No, corners need radius
-
-    // Let's do: Exit Horizontal -> Turn -> Enter Vertical
-    // This looks good for Kiosk -> AI/Analytics
-
-    if (end.c > start.c) {
-      // Going Right
-      if (end.r < start.r) {
-        // Going Up (Kiosk -> AI)
-        // Go right, then up
-        const midX = endX;
-        d = `M ${startX + CARD_SIZE / 2} ${startY} 
-                  H ${midX - radius} 
-                  Q ${midX} ${startY} ${midX} ${startY - radius}
-                  V ${endY + CARD_SIZE / 2}`;
-      } else {
-        // Going Down (Kiosk -> Analytics)
-        const midX = endX;
-        d = `M ${startX + CARD_SIZE / 2} ${startY} 
-                   H ${midX - radius} 
-                   Q ${midX} ${startY} ${midX} ${startY + radius}
-                   V ${endY - CARD_SIZE / 2}`;
-      }
-    }
+    d += ` V ${midY}`;
+    d += ` M ${minX} ${midY} H ${maxX}`;
+    ends.forEach(end => {
+      d += ` M ${end.x} ${midY} V ${end.y}`;
+    });
   }
+  else if (type === "fork-right") {
+    const midX = (start.x + Math.min(...ends.map(e => e.x))) / 2;
+    const minY = Math.min(...ends.map(e => e.y));
+    const maxY = Math.max(...ends.map(e => e.y));
 
-  return (
+    d += ` H ${midX}`;
+    d += ` M ${midX} ${minY} V ${maxY}`;
+    ends.forEach(end => {
+      d += ` M ${midX} ${end.y} H ${end.x}`;
+    });
+  }
+  return d;
+}
+
+/* --------------------------
+   Components
+-------------------------- */
+
+const Card = ({ x, y, label, icon: Icon, color, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+    viewport={{ once: true }}
+    whileHover={{ y: -5, scale: 1.05, shadow: "0px 25px 50px -12px rgba(0,0,0,0.25)" }}
+    transition={{ delay, duration: 0.5, type: "spring", stiffness: 200 }}
+    className="absolute flex flex-col items-center justify-center bg-white rounded-xl shadow-md border border-gray-100 z-10 group cursor-pointer"
+    style={{ left: x, top: y, width: CARD.w, height: CARD.h }}
+  >
+    <div
+      className="flex items-center justify-center w-7 h-7 rounded-md mb-1 transition-transform group-hover:scale-110"
+      style={{ backgroundColor: `${color}15` }}
+    >
+      <Icon className="w-4 h-4" style={{ color: color }} strokeWidth={2} />
+    </div>
+    <div className="text-[8px] font-bold text-gray-600 text-center leading-tight px-0.5 group-hover:text-gray-900 transition-colors">
+      {label}
+    </div>
+  </motion.div>
+);
+
+const AnimatedConnection = ({ d, color = "#CBD5E1", delay = 0 }) => (
+  <>
+    <path
+      d={d}
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="square"
+      strokeLinejoin="miter"
+      opacity="0.2"
+    />
     <motion.path
       d={d}
       fill="none"
       stroke={color}
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      variants={pathVariants}
-      initial="hidden"
-      whileInView="visible"
+      strokeWidth="2"
+      strokeLinecap="square"
+      strokeLinejoin="miter"
+      initial={{ pathLength: 0, opacity: 0 }}
+      whileInView={{ pathLength: 1, opacity: 1 }}
       viewport={{ once: true }}
+      transition={{ duration: 1.5, ease: "easeInOut", delay }}
     />
-  );
-};
+  </>
+);
 
+export default function WorkflowAnimation() {
+  const arrows = useMemo(() => {
+    const a = (k, side) => anchor(k, side);
 
-const WorkflowAnimation = () => {
+    return [
+      // 1. AI -> TTS / STT (Fork Up)
+      {
+        d: branchPath(a("AI", "top"), [a("TTS", "bottom"), a("STT", "bottom")], "fork-up"),
+        delay: 0.5,
+        color: "#0EA5E9"
+      },
+
+      // 2. Kiosk -> Age / Gender (Fork Up)
+      {
+        d: branchPath(a("KIOSK", "top"), [a("AGE", "bottom"), a("GENDER", "bottom")], "fork-up"),
+        delay: 0.7,
+        color: "#EC4899"
+      },
+
+      // 3. Kiosk -> Companies / Ads (Fork Right)
+      {
+        d: branchPath(a("KIOSK", "right"), [a("COMP", "left"), a("AD", "left")], "fork-right"),
+        delay: 0.9,
+        color: "#F43F5E"
+      },
+
+      // 4. Companies -> Developers (Blue Bracket)
+      {
+        d: `M ${a("COMP", "right").x} ${a("COMP", "right").y} H ${a("COMP", "right").x + 20} V ${a("DEV", "right").y} H ${a("DEV", "right").x}`,
+        delay: 1.1,
+        color: "#3B82F6"
+      },
+      // 5. Ad Connector
+      {
+        d: `M ${a("AD", "right").x} ${a("AD", "right").y} H ${a("AD", "right").x + 20}`,
+        delay: 1.2,
+        color: "#3B82F6"
+      },
+
+      // 6. Visitor -> Questions (Left)
+      { d: `M ${a("VISITOR", "left").x} ${a("VISITOR", "left").y} H ${a("QL", "right").x}`, delay: 1.3, color: "#F59E0B" },
+
+      // 7. Visitor -> Attention (Down)
+      { d: `M ${a("VISITOR", "bottom").x} ${a("VISITOR", "bottom").y} V ${a("ATT", "top").y}`, delay: 1.4, color: "#14B8A6" },
+
+      // 8. Visitor -> Kiosk (Up)
+      { d: `M ${a("VISITOR", "top").x} ${a("VISITOR", "top").y} V ${a("KIOSK", "bottom").y}`, delay: 1.5, color: "#64748B" },
+
+      // 9. AI -> Questions (Purple Path)
+      {
+        d: `M ${a("AI", "bottom").x} ${a("AI", "bottom").y} V ${a("QL", "top").y - 20} H ${a("QL", "top").x} V ${a("QL", "top").y}`,
+        delay: 1.6,
+        color: "#8B5CF6"
+      }
+
+    ];
+  }, []);
+
   return (
-    <div className="w-full flex justify-center py-10 bg-adorix-light/50 rounded-3xl overflow-hidden">
-      <div className="relative" style={{ width: 450, height: 550 }}>
+    <div className="w-full flex justify-center py-10 overflow-x-auto bg-transparent rounded-3xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="relative flex-shrink-0"
+        style={{ width: STAGE.w, height: STAGE.h }}>
 
-        {/* Background Grid/Lines (Optional) */}
-        <div className="absolute inset-0 border-l border-dashed border-gray-200 left-1/2 -z-10 h-full w-[1px]"></div>
+        {/* Subtle Grid Background */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: "radial-gradient(#CBD5E1 1.5px, transparent 1.5px)",
+            backgroundSize: "20px 20px",
+          }}
+        />
 
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
-
-          {/* Visitor -> Kiosk */}
-          <Connection
-            start={ACTIVE_NODES.VISITOR}
-            end={ACTIVE_NODES.KIOSK}
-            color="#cbd5e1" // Faint connection
-            delay={0.6}
-          />
-
-          {/* Kiosk -> AI */}
-          <Connection
-            start={ACTIVE_NODES.KIOSK}
-            end={ACTIVE_NODES.AI}
-            color="#8b5cf6" // Violet
-            delay={0.9}
-          />
-
-          {/* Kiosk -> Ad (Through the ghost node) */}
-          <motion.path
-            d={`M ${getPos(2, 1).x + CARD_SIZE + CARD_SIZE / 2} ${getPos(2, 1).y + CARD_SIZE / 2} L ${getPos(2, 3).x + CARD_SIZE / 2 - CARD_SIZE} ${getPos(2, 3).y + CARD_SIZE / 2}`}
-          // Manual straight line correcting for card width? 
-          // Actually let's just draw connection between KIOSK and AD. 
-          // Since they are on same row (r=2), the Connection component handles it.
-          // But it passes through (2,2).
-          />
-          <Connection
-            start={ACTIVE_NODES.KIOSK}
-            end={ACTIVE_NODES.AD}
-            color="#f43f5e" // Rose
-            delay={1.1}
-          />
-
-          {/* Kiosk -> Analytics */}
-          <Connection
-            start={ACTIVE_NODES.KIOSK}
-            end={ACTIVE_NODES.ANALYTICS}
-            color="#0ea5e9" // Sky
-            delay={1.3}
-          />
-
+        {/* SVG Layer */}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none z-0"
+          viewBox={`0 0 ${STAGE.w} ${STAGE.h}`}
+        >
+          {arrows.map((arr, i) => (
+            <AnimatedConnection key={i} d={arr.d} color={arr.color} delay={arr.delay} />
+          ))}
         </svg>
 
-        {/* Ghost Nodes */}
-        {GHOST_NODES.map((node, i) => (
-          <Card
-            key={`ghost-${i}`}
-            {...node}
-            delay={i * 0.05}
-          />
-        ))}
-
-        {/* Active Nodes */}
-        <Card {...ACTIVE_NODES.VISITOR} isActive delay={0.5} />
-        <Card {...ACTIVE_NODES.KIOSK} isActive delay={0.7} />
-        <Card {...ACTIVE_NODES.AI} isActive delay={1.0} />
-        <Card {...ACTIVE_NODES.AD} isActive delay={1.2} />
-        <Card {...ACTIVE_NODES.ANALYTICS} isActive delay={1.4} />
+        {/* Nodes Layer */}
+        <div className="relative w-full h-full">
+          {Object.entries(nodes).map(([key, n], i) => (
+            <Card key={key} {...n} delay={i * 0.1} />
+          ))}
+        </div>
 
       </div>
     </div>
   );
-};
-
-export default WorkflowAnimation;
+}

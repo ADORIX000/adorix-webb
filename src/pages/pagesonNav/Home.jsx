@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Eye, Mic, Activity, Zap, Cpu, ScanFace, BarChart3 } from 'lucide-react';
 import WorkflowAnimation from '../../components/home/WorkflowAnimation';
+import TechStack from '../../components/home/TechStack';
 
 
 // Reusable Feature Card
@@ -66,14 +67,33 @@ const Home = () => {
         </motion.div>
       </section>
 
+      {/* TECH STACK MARQUEE */}
+      <TechStack />
+
+      {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
       <section className="px-6 max-w-7xl mx-auto mb-40 z-10 relative">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-adorix-dark mb-4">The Adorix Ecosystem</h2>
-          <p className="text-adorix-secondary font-medium">From sensor data to actionable revenue.</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+          {/* LEFT COLUMN: Diagram */}
+          <div className="flex justify-center lg:justify-start">
+            <WorkflowAnimation />
+          </div>
+
+          {/* RIGHT COLUMN: Description */}
+          <div className="text-left space-y-6 bg-white p-10 rounded-[2rem] shadow-xl border border-gray-100">
+            <h2 className="text-3xl md:text-4xl font-bold text-adorix-dark">The Intelligent Flow</h2>
+            <p className="text-lg text-gray-600 leading-loose">
+              Adorix transforms passive digital signage into an active, intelligent communication channel.
+              The process begins the moment a visitor is detected; our local AI instantly analyzes demographics
+              and engagement signals without compromising privacy. This real-time data powers a seamless
+              interaction loop—triggering personalized content, enabling voice-activated assistance, and
+              capturing deep analytics on viewer attention. It's not just a display; it's a responsive
+              environment that adapts to every person who looks at it.
+            </p>
+          </div>
+
         </div>
-        {/* This component (WorkflowAnimation) remains the same as I gave you previously */}
-        <WorkflowAnimation />
       </section>
 
       {/* 4. CORE FEATURES GRID (Requested Content) */}
