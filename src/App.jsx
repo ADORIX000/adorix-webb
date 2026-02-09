@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/navbar';
 import GradientWrapper from './components/layout/GradientWrapper';
+import Footer from './components/common/Footer';
 
 // Pages
 import Home from './pages/pagesonNav/Home';
@@ -31,7 +32,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/pricing" element={<Pricing />} />
-          
+
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -41,7 +42,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/studio" element={<CampaignStudio />} />
           <Route path="/profile" element={<Profile />} />
-          
+
           {/* Payment */}
           <Route path="/payment-method" element={<PaymentMethod />} />
 
@@ -51,8 +52,9 @@ function App() {
           <Route path="/settings/policies" element={<Policies />} />
           <Route path="/settings/help" element={<Help />} />
           <Route path="/settings/feedback" element={<Feedback />} />
-          
+
         </Routes>
+        <Footer />
       </GradientWrapper>
     </Router>
   );
