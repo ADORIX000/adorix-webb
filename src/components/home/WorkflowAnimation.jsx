@@ -13,46 +13,39 @@ import {
   Code2,
 } from "lucide-react";
 
-// Canvas Size 
-const STAGE = { w: 750, h: 500 };
-const CARD = { w: 60, h: 60 };
+// Canvas Size - Increased for readability
+const STAGE = { w: 850, h: 550 };
+// Card Size - Increased from 60 to 72
+const CARD = { w: 72, h: 72 };
 
 /* --------------------------
    Nodes Configuration
-   Shifted Right by +40px (Total +70px from base) to fix cutoff
+   Shifted Right by +40px (Total +70px from base)
+   Note: Since we increased CARD size, we might need slightly more breathing room, 
+   but the current grid should hold thanks to large stage.
 -------------------------- */
 const nodes = {
   // Top Left Group
-  // TTS: 75 -> 115
-  // STT: 165 -> 205
   TTS: { x: 115, y: 30, label: "TTS", icon: AudioLines, color: "#10B981" },
-  STT: { x: 205, y: 30, label: "STT", icon: Mic, color: "#0EA5E9" },
+  STT: { x: 215, y: 30, label: "STT", icon: Mic, color: "#0EA5E9" }, // slightly moved STT right +10
 
   // Top Right Group
-  // AGE: 345 -> 385
-  // GENDER: 465 -> 505
-  AGE: { x: 385, y: 30, label: "Age Detection", icon: ScanFace, color: "#EC4899" },
-  GENDER: { x: 505, y: 30, label: "Gender Detection", icon: ScanFace, color: "#EC4899" },
+  AGE: { x: 400, y: 30, label: "Age Detection", icon: ScanFace, color: "#EC4899" }, // +15
+  GENDER: { x: 530, y: 30, label: "Gender Detection", icon: ScanFace, color: "#EC4899" }, // +25
 
   // Middle Row
-  // AI: 120 -> 160
-  // KIOSK: 375 -> 415
-  AI: { x: 160, y: 160, label: "AI Assistant", icon: Cpu, color: "#8B5CF6" },
-  KIOSK: { x: 415, y: 160, label: "KIOSK", icon: Cpu, color: "#0D8A9E" },
+  AI: { x: 160, y: 180, label: "AI Assistant", icon: Cpu, color: "#8B5CF6" }, // y+20
+  KIOSK: { x: 440, y: 180, label: "KIOSK", icon: Cpu, color: "#0D8A9E" }, // x+25, y+20
 
   // Right Column
-  // COMP/AD/DEV: 540 -> 580
-  COMP: { x: 580, y: 120, label: "Companies", icon: Users, color: "#3B82F6" },
-  AD: { x: 580, y: 210, label: "Advertisement", icon: Megaphone, color: "#F43F5E" },
-  DEV: { x: 580, y: 380, label: "Developers", icon: Code2, color: "#6366F1" },
+  COMP: { x: 620, y: 120, label: "Companies", icon: Users, color: "#3B82F6" }, // x+40
+  AD: { x: 620, y: 220, label: "Advertisement", icon: Megaphone, color: "#F43F5E" }, // x+40
+  DEV: { x: 620, y: 400, label: "Developers", icon: Code2, color: "#6366F1" }, // x+40
 
   // Bottom Area
-  // VISITOR: 375 -> 415
-  // QL: 180 -> 220
-  // ATT: 375 -> 415
-  VISITOR: { x: 415, y: 300, label: "Visitor", icon: User, color: "#64748B" },
-  QL: { x: 220, y: 300, label: "Questions", icon: HelpCircle, color: "#F59E0B" },
-  ATT: { x: 415, y: 410, label: "Attention Tracking", icon: BarChart3, color: "#14B8A6" },
+  VISITOR: { x: 440, y: 330, label: "Visitor", icon: User, color: "#64748B" }, // x+25, y+30
+  QL: { x: 230, y: 330, label: "Questions", icon: HelpCircle, color: "#F59E0B" }, // x+10, y+30
+  ATT: { x: 440, y: 450, label: "Attention Tracking", icon: BarChart3, color: "#14B8A6" }, // x+25, y+40
 };
 
 /* --------------------------
@@ -111,16 +104,16 @@ const Card = ({ x, y, label, icon: Icon, color, delay = 0 }) => (
     viewport={{ once: true }}
     whileHover={{ y: -5, scale: 1.05, shadow: "0px 25px 50px -12px rgba(0,0,0,0.25)" }}
     transition={{ delay, duration: 0.5, type: "spring", stiffness: 200 }}
-    className="absolute flex flex-col items-center justify-center bg-white rounded-xl shadow-md border border-gray-100 z-10 group cursor-pointer"
+    className="absolute flex flex-col items-center justify-center bg-white rounded-2xl shadow-lg border border-gray-100 z-10 group cursor-pointer"
     style={{ left: x, top: y, width: CARD.w, height: CARD.h }}
   >
     <div
-      className="flex items-center justify-center w-7 h-7 rounded-md mb-1 transition-transform group-hover:scale-110"
+      className="flex items-center justify-center w-8 h-8 rounded-lg mb-1.5 transition-transform group-hover:scale-110"
       style={{ backgroundColor: `${color}15` }}
     >
-      <Icon className="w-4 h-4" style={{ color: color }} strokeWidth={2} />
+      <Icon className="w-5 h-5" style={{ color: color }} strokeWidth={2.5} />
     </div>
-    <div className="text-[8px] font-bold text-gray-600 text-center leading-tight px-0.5 group-hover:text-gray-900 transition-colors">
+    <div className="text-[10px] font-bold text-gray-600 text-center leading-tight px-1 group-hover:text-gray-900 transition-colors">
       {label}
     </div>
   </motion.div>
@@ -132,18 +125,18 @@ const AnimatedConnection = ({ d, color = "#CBD5E1", delay = 0 }) => (
       d={d}
       fill="none"
       stroke={color}
-      strokeWidth="2"
-      strokeLinecap="square"
-      strokeLinejoin="miter"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       opacity="0.2"
     />
     <motion.path
       d={d}
       fill="none"
       stroke={color}
-      strokeWidth="2"
-      strokeLinecap="square"
-      strokeLinejoin="miter"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       initial={{ pathLength: 0, opacity: 0 }}
       whileInView={{ pathLength: 1, opacity: 1 }}
       viewport={{ once: true }}
@@ -178,7 +171,7 @@ export default function WorkflowAnimation() {
         color: "#F43F5E"
       },
 
-      // 4. Companies -> Developers (Blue Bracket)
+      // 4. Companies -> Developers 
       {
         d: `M ${a("COMP", "right").x} ${a("COMP", "right").y} H ${a("COMP", "right").x + 20} V ${a("DEV", "right").y} H ${a("DEV", "right").x}`,
         delay: 1.1,
@@ -211,7 +204,7 @@ export default function WorkflowAnimation() {
   }, []);
 
   return (
-    <div className="w-full flex justify-center py-10 overflow-x-auto bg-transparent rounded-3xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="w-full flex justify-center py-6 overflow-x-auto bg-transparent rounded-3xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="relative flex-shrink-0"
         style={{ width: STAGE.w, height: STAGE.h }}>
 
@@ -220,7 +213,7 @@ export default function WorkflowAnimation() {
           className="absolute inset-0 opacity-30"
           style={{
             backgroundImage: "radial-gradient(#CBD5E1 1.5px, transparent 1.5px)",
-            backgroundSize: "20px 20px",
+            backgroundSize: "24px 24px",
           }}
         />
 

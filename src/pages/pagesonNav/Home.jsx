@@ -30,7 +30,7 @@ const Home = () => {
 
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-48 pb-32 px-6 max-w-7xl mx-auto z-10 text-center">
+      <section className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto z-10 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -72,24 +72,22 @@ const Home = () => {
 
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
-      <section className="px-6 max-w-7xl mx-auto mb-40 z-10 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="px-6 max-w-7xl mx-auto mb-40 mt-32 z-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
 
-          {/* LEFT COLUMN: Diagram */}
-          <div className="flex justify-center lg:justify-start">
+          {/* LEFT COLUMN: Diagram (Larger: 3 cols) */}
+          <div className="flex justify-center lg:justify-start lg:col-span-3">
             <WorkflowAnimation />
           </div>
 
-          {/* RIGHT COLUMN: Description */}
-          <div className="text-left space-y-6 bg-white p-10 rounded-[2rem] shadow-xl border border-gray-100">
-            <h2 className="text-3xl md:text-4xl font-bold text-adorix-dark">The Intelligent Flow</h2>
-            <p className="text-lg text-gray-600 leading-loose">
-              Adorix transforms passive digital signage into an active, intelligent communication channel.
-              The process begins the moment a visitor is detected; our local AI instantly analyzes demographics
-              and engagement signals without compromising privacy. This real-time data powers a seamless
-              interaction loop—triggering personalized content, enabling voice-activated assistance, and
-              capturing deep analytics on viewer attention. It's not just a display; it's a responsive
-              environment that adapts to every person who looks at it.
+          {/* RIGHT COLUMN: Description (Smaller: 2 cols) */}
+          <div className="text-left space-y-6 bg-white p-8 rounded-[2rem] shadow-xl border border-gray-100 lg:col-span-2">
+            <h2 className="text-3xl font-bold text-adorix-dark">The Intelligent Flow</h2>
+            <p className="text-xl text-gray-600 leading-loose">
+              Adorix turns passive screens into active, intelligent agents.
+              Detect visitors, analyze demographics, and serve personalized content
+              in milliseconds—all without compromising privacy. It's not just a display;
+              it's a responsive environment that adapts to everyone.
             </p>
           </div>
 

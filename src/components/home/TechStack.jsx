@@ -59,40 +59,29 @@ const MARQUEE_ITEMS = [...TECH_STACK, ...TECH_STACK, ...TECH_STACK];
 
 const TechStack = () => {
     return (
-        <div className="w-full py-12 bg-gray-50/50 border-y border-gray-100 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6 mb-6 text-center">
+        <div className="w-full py-20 bg-white overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
                 <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
                     Powered by Industry Standard Tech
                 </p>
             </div>
 
             <div className="relative flex overflow-x-hidden group">
-                {/* Gradient Masks */}
-                <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10"></div>
-                <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10"></div>
-
-                {/* Marquee Track */}
-                <div className="flex animate-marquee gap-16 items-center whitespace-nowrap py-2 hover:[animation-play-state:paused]">
+                {/* Marquee Track - Increased size and spacing */}
+                <div className="flex animate-marquee gap-24 items-center whitespace-nowrap py-4 hover:[animation-play-state:paused]">
                     {MARQUEE_ITEMS.map((tech, index) => (
-                        <div key={index} className="flex items-center gap-3 text-gray-400 hover:text-adorix-primary transition-colors cursor-default group/item">
-                            <div className="w-8 h-8 opacity-60 group-hover/item:opacity-100 transition-opacity">
+                        <div key={index} className="flex items-center gap-4 text-gray-400 hover:text-adorix-primary transition-colors cursor-default group/item">
+                            <div className="w-12 h-12 opacity-60 group-hover/item:opacity-100 transition-opacity">
                                 <tech.icon />
                             </div>
-                            <span className="text-lg font-bold opacity-60 group-hover/item:opacity-100 transition-opacity">
+                            <span className="text-2xl font-bold opacity-60 group-hover/item:opacity-100 transition-opacity">
                                 {tech.name}
                             </span>
                         </div>
                     ))}
                 </div>
-
-                {/* Second Copy for Smooth Loop (in case CSS animate-marquee isn't configured for infinite scroll yet, we can simple double up)
-                     Actually, standard marquee implementation moves the whole track. 
-                     If using Tailwind `animate-marquee`, it expects the track to move. 
-                     We need to ensure `animate-marquee` is defined in tailwind.config or inline style.
-                  */}
             </div>
 
-            {/* Inline Style for Marquee Animation if not in Tailwind cfg */}
             <style>{`
                 @keyframes marquee {
                     0% { transform: translateX(0); }
