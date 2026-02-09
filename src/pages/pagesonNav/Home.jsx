@@ -67,8 +67,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* TECH STACK MARQUEE */}
-      <TechStack />
+
 
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
@@ -93,6 +92,9 @@ const Home = () => {
 
         </div>
       </section>
+
+      {/* TECH STACK MARQUEE (Moved here) */}
+      <TechStack />
 
       {/* 4. CORE FEATURES GRID (Requested Content) */}
       <section className="py-20 px-6 z-10 relative bg-gradient-to-b from-transparent via-white/40 to-transparent">
