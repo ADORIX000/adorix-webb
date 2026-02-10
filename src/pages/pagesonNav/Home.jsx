@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Eye, Mic, Activity, Zap, Cpu, ScanFace, BarChart3 } from 'lucide-react';
 import WorkflowAnimation from '../../components/home/WorkflowAnimation';
 import TechStack from '../../components/home/TechStack';
+import FeatureCards from '../../components/home/FeatureCards';
 
 
 // Reusable Feature Card
@@ -96,67 +97,8 @@ const Home = () => {
       {/* TECH STACK MARQUEE (Moved here) */}
       <TechStack />
 
-      {/* 4. CORE FEATURES GRID (Requested Content) */}
-      <section className="py-20 px-6 z-10 relative bg-gradient-to-b from-transparent via-white/40 to-transparent">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-adorix-dark mb-6">Intelligence Built-In</h2>
-            <p className="max-w-2xl mx-auto text-gray-600">Our AI core processes video and audio locally to deliver these powerful capabilities.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-            {/* Attention Tracking */}
-            <FeatureCard
-              icon={Eye}
-              title="Attention Tracking"
-              desc="Forget 'impressions'. We measure true attention time. Know exactly how many seconds a user locked eyes with your product."
-              delay={0.1}
-            />
-
-            {/* Voice Recognition */}
-            <FeatureCard
-              icon={Mic}
-              title="Voice Recognition"
-              desc="Turn kiosks into concierges. Users can ask 'Where is the food court?' and the ad switches to a map instantly."
-              delay={0.2}
-            />
-
-            {/* Personalized Delivery */}
-            <FeatureCard
-              icon={ScanFace}
-              title="Personalized Delivery"
-              desc="Computer vision detects demographics (Age, Gender) to swap the ad creative dynamically in milliseconds."
-              delay={0.3}
-            />
-
-            {/* Live Dashboard */}
-            <FeatureCard
-              icon={Activity}
-              title="Live Dashboard"
-              desc="Watch your network pulse in real-time. See active viewers, current ad playback, and revenue ticks as they happen."
-              delay={0.4}
-            />
-
-            {/* Real-time Engagement */}
-            <FeatureCard
-              icon={Zap}
-              title="Real-time Engagement"
-              desc="Detect smiles, frowns, and dwell time. Understand the emotional impact of your campaign immediately."
-              delay={0.5}
-            />
-
-            {/* AI Insights */}
-            <FeatureCard
-              icon={BarChart3}
-              title="AI Revenue Optimization"
-              desc="Our predictive engine suggests the best time slots and bid caps to maximize your ROI automatically."
-              delay={0.6}
-            />
-
-          </div>
-        </div>
-      </section>
+      {/* ANIMATED FEATURE CARDS */}
+      <FeatureCards />
 
       {/* 5. FINAL CTA */}
       <section className="py-32 px-6 max-w-7xl mx-auto z-10 relative">
