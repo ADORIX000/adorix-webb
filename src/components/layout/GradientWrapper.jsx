@@ -1,12 +1,11 @@
-import React from 'react';
-import MouseParticles from '../ui/MouseParticles';
+import AntigravityBackground from '../ui/AntigravityBackground';
 
 const GradientWrapper = ({ children }) => {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-adorix-light selection:bg-adorix-accent selection:text-white">
+    <div className="relative min-h-screen w-full overflow-hidden selection:bg-adorix-accent selection:text-white">
 
       {/* ANIMATED BACKGROUND BLOBS (Updated to your colors) */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-20 pointer-events-none">
 
         {/* Blob 1: Primary Teal */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-adorix-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -19,8 +18,8 @@ const GradientWrapper = ({ children }) => {
 
       </div>
 
-      {/* INTERACTIVE MOUSE DUST (Global) */}
-      <MouseParticles />
+      {/* ANTIGRAVITY PARTICLE CLOUD (Global) */}
+      <AntigravityBackground />
 
       {/* Page Content */}
       <div className="relative z-10">
