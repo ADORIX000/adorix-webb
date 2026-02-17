@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // Brand Logos (Full Color Inline SVGs)
 const Logos = {
     RaspberryPi: (props) => (
-        <svg viewBox="0 0 30 40" {...props}>
-            <path fill="#BC1142" d="M29.6 13.9c.3-2.6-1.8-4.9-4.3-5.3-2.3-.4-6-5.8-9.1-8.6-.5-.4-1.2.2-1.2 1.1 0 0 .5 3.9.5 4.3 0 1.6-1.5 2.5-3 1.8-1.5-1-4.3-1.8-4.3-1.8-1 0-1.8-.4-1.8-1.5 0-.4 0-4.3 0-4.3 0-.9-.7-1.5-1.2-1.1C2 5.8 2 5.8 2 5.8c-2.3.4-4.5 2.6-4.3 5.3.2 2.7 2.1 4.7 4.7 4.9.4 0 .9 0 1.2 0 1.3 0 2.6-.2 3.8-.7.7-.3 1.5 0 1.9.6.5.9 1 2.2 1.3 3.6.1.4.6.6 1 .4.5-.1 1.1-.3 1.6-.4.4-.1.6-.6.5-1-.3-1.4-.7-2.7-1.3-3.6-.4-.7.4-1.1 1.9-.6 1.3.5 2.6.7 3.8.7.4 0 .8 0 1.2 0 2.7-.2 4.6-2.2 4.8-4.9z" />
-            <path fill="#C7244F" d="M23.1 39.5c.6-.9 1.1-1.8 1.6-2.8 1.3-3.1.6-7.8-2.6-11.4-1.9-2.1-4.5-4-7-5.1-.6-.2-1.1-.1-1.3.5-.2.6.1 1.1.6 1.3 1.3.4 2.5 1 3.7 1.7 1.6.9 3.1 2 4.3 3.4 3 3.4 3.7 7.9 2.5 10.8-.4.9-.9 1.8-1.7 2.6-1 .9-2.1 1.6-3.3 1.9-1.9.4-4.3-2.8-5.3-6.6-.1-.5-.6-.7-1.1-.7s-1 .2-1.1.7c-1 3.8-3.4 6.9-5.3 6.6-1.2-.3-2.4-.9-3.3-1.9-.8-.8-1.3-1.7-1.7-2.6-1.3-2.9-.5-7.4 2.5-10.8 1.2-1.3 2.7-2.5 4.3-3.4 1.1-.7 2.4-1.2 3.7-1.7.5-.2.8-.8.6-1.3-.2-.5-.8-.7-1.3-.5-2.5 1.1-5.1 3-7 5.1-3.2 3.6-3.9 8.3-2.6 11.4.5 1 1 1.9 1.6 2.8.9 1.4 2 2.6 3.4 3.4 2.5 1.4 6 1.1 8.7-2 2.7 3.1 6.2 3.4 8.7 2 1.4-.8 2.6-2 3.4-3.4z" />
-            <path fill="#6CC04A" d="M22.8 7.3c-.6-.7-1.3-1.3-2-1.8-.7-.5-1.5-.9-2.3-1.1-.7-.2-1.4-.2-2-.1-.5.1-.9.3-1.2.6-.3.3-.5.7-.6 1.1-.1.4-.1.9.1 1.3.2.4.5.8.9 1 .4.2.9.4 1.4.4.5.1 1 .1 1.5 0 .5-.1 1-.3 1.4-.6.3-.3.6-.6.8-1 .1-.4.1-.9 0-1.3zM7.2 7.3c.7-.7 1.5-1.2 2.4-1.5.8-.3 1.7-.4 2.5-.2.5.1 1 .4 1.4.8.3.4.5.9.5 1.4 0 .5-.2 1-.5 1.4-.3.4-.8.7-1.3.9-.5.2-1.1.3-1.6.2-.5-.1-1.1-.3-1.5-.7-.4-.3-.7-.8-.9-1.2-.1-.4-.2-.9-.1-1.4.1-.5.4-1 1.1-1.7z" />
+        <svg viewBox="0 0 100 120" {...props}>
+            <path stroke="#BF1042" strokeWidth="2" fill="#C51A4A" d="M16 112c.5-5.5-2.2-7.5-6.5-12.2-2.3-2.6-3.7-5.4-3.5-7.7 0-.5.6-.2 1.2.6.4.7.7 1.2 2.1 2.2 4.4 3 6.6 4.6 13.9 10.9 9.3 8 20.3 8.3 27 8.3 6.7 0 17.6-.3 27-8.3 7.3-6.3 9.5-7.9 13.9-10.9 1.4-1 1.7-1.5 2.1-2.2.6-.8 1.2-1.1 1.2-.6.2 2.3-1.2 5.1-3.5 7.7-4.3 4.7-7 6.7-6.5 12.2 1 9.9 8.7 15.6 9.4 16.1 1.5.9 2.5.3 2.1-1.3-.8-3.4-1.3-3.6-1.5-4.1-1.5-3.3-1.8-8 .4-12.7 1.9-4 3.7-10.9 4-19 .5-13.6-7.8-21.6-11.8-25.2-1.7-1.5-2-2.1-1.7-4.8.2-1.2 1.3-4.1 2.4-7.8 1.1-3.6 1.8-5.3 1.8-5.8 0-.4-.3-1.4-.9-2.7-1.8-3.5-5.6-5.7-9.5-5.7-4.2 0-8.6 3.4-11 8.5l-.9 1.9c-.3.7-.7.9-1.3.4C63.2 47.7 57.7 45.4 50 45.4c-7.7 0-13.2 2.3-16.5 6.3-.6.5-1 .3-1.3-.4l-.9-1.9c-2.4-5.1-6.8-8.5-11-8.5-3.9 0-7.7 2.2-9.5 5.7-.6 1.3-.9 2.3-.9 2.7 0 .5.7 2.2 1.8 5.8 1.1 3.7 2.2 6.6 2.4 7.8.3 2.7 0 3.3-1.7 4.8-4 3.6-12.3 11.6-11.8 25.2.3 8.1 2.1 15 4 19 2.2 4.7 1.9 9.4.4 12.7-.2.5-.7.7-1.5 4.1-.4 1.6.6 2.2 2.1 1.3.7-.5 8.4-6.2 9.4-16.1z" />
+            <path stroke="#6DB33F" strokeWidth="2" fill="#7CBD42" d="M78 18.2c-.4 5.9-4.8 15.3-10.4 17.6-1.5.6-2.5 1.1-3.6 2 4.2 17.5 1.1 28.5-8.4 29.5-9.3.9-19.1-8.7-19.1-8.7-2.6-3-5.2-3-7.8 0 0 0-9.8 9.6-19.1 8.7-9.5-1-12.6-12-8.4-29.5-1.1-.9-2.1-1.4-3.6-2-5.6-2.3-10-11.7-10.4-17.6-.8-11.4 7.9-15.7 7.9-15.7 3.3-1.5 7.4-1 10.4.9l.4.2c3.1 1.9 5.8 1.8 7.3.3.4-.4 1.1-1.1 2.2-2.3 3.6-3.8 10-3.3 12.1-.9l1.6 1.9c2 2.3 5 2.3 7 0l1.6-1.9c2.1-2.4 8.5-2.9 12.1.9 1.1 1.2 1.8 1.9 2.2 2.3 1.5 1.5 4.2 1.6 7.3-.3l.4-.2c3-1.9 7.1-2.4 10.4-.9 0 0 8.7 4.3 7.9 15.7z" />
         </svg>
     ),
     Python: (props) => (
@@ -59,59 +58,114 @@ const Logos = {
             <path fill="#F7DF1E" d="M0 0h24v24H0V0z" />
             <path fill="#000" d="M22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.24-.156-.375l-1.785.885c.16.435.42.81.69 1.11 1.05 1.035 3.06 1.14 4.38.195 1.41-1.035 1.635-2.61 1.635-4.41V11.03z" />
         </svg>
+    ),
+    Vite: (props) => (
+        <svg viewBox="0 0 410 404" {...props}>
+            <path fill="#FFC920" d="M370.6 8.7l30.2 24.3-199 371.1-2.4-1.2L0 33 30.2 8.7h340.4z" />
+            <path fill="#BD34FE" d="M228.4 345.1L188.2 3.8l164.6 150.8-124.4 190.5z" />
+            <path fill="#4DB6AC" d="M199.6 374.9L.1 31.8l158.4 150.3 41.1 192.8z" />
+        </svg>
+    ),
+    Tailwind: (props) => (
+        <svg viewBox="0 0 24 24" {...props}>
+            <path fill="#38BDF8" d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C7.666 17.818 9.027 19.2 12.001 19.2c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z" />
+        </svg>
+    ),
+    Framer: (props) => (
+        <svg viewBox="0 0 24 24" {...props}>
+            <path fill="#000" d="M4 0h16v8h-8zM4 12h8v8h-8zM4 24h8v-8h8v-8h-8v-8h-8z" />
+        </svg>
+    ),
+    Recharts: (props) => (
+        <svg viewBox="0 0 24 24" {...props}>
+            <path fill="#22d3ee" d="M3 3v18h18v-2H5V3H3zm4 14h2v-7H7v7zm4 0h2V8h-2v9zm4 0h2v-5h-2v5z" />
+        </svg>
+    ),
+    Picovoice: (props) => (
+        <svg viewBox="0 0 24 24" {...props}>
+            <path fill="#377DFF" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
+        </svg>
     )
+
 };
 
 const TECH_STACK = [
-    { name: "Raspberry Pi", icon: Logos.RaspberryPi },
-    { name: "Python", icon: Logos.Python },
-    { name: "TensorFlow", icon: Logos.TensorFlow },
-    { name: "OpenCV", icon: Logos.OpenCV },
-    { name: "Node.js", icon: Logos.Node },
-    { name: "React", icon: Logos.React },
-    { name: "JavaScript", icon: Logos.JS },
+    { name: "Raspberry Pi", icon: Logos.RaspberryPi, url: "https://www.raspberrypi.org/" },
+    { name: "Python", icon: Logos.Python, url: "https://www.python.org/" },
+    { name: "TensorFlow", icon: Logos.TensorFlow, url: "https://www.tensorflow.org/" },
+    { name: "OpenCV", icon: Logos.OpenCV, url: "https://opencv.org/" },
+    { name: "Node.js", icon: Logos.Node, url: "https://nodejs.org/" },
+    { name: "React", icon: Logos.React, url: "https://react.dev/" },
+    { name: "JavaScript", icon: Logos.JS, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { name: "Vite", icon: Logos.Vite, url: "https://vitejs.dev/" },
+    { name: "Tailwind CSS", icon: Logos.Tailwind, url: "https://tailwindcss.com/" },
+    { name: "Framer Motion", icon: Logos.Framer, url: "https://www.framer.com/motion/" },
+    { name: "Recharts", icon: Logos.Recharts, url: "https://recharts.org/" },
+    { name: "Picovoice", icon: Logos.Picovoice, url: "https://picovoice.ai/" },
 ];
 
-// Duplicate for marquee effect
-const MARQUEE_ITEMS = [...TECH_STACK, ...TECH_STACK, ...TECH_STACK];
+
 
 const TechStack = () => {
-    return (
-        <div className="w-full py-20 bg-white overflow-hidden">
-            <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
-                <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">
-                    Powered by Industry Standard Tech
-                </p>
-            </div>
+    const containerRef = useRef(null);
+    const [scrollY, setScrollY] = useState(0);
 
-            <div className="relative flex overflow-x-hidden group">
-                {/* Marquee Track */}
-                <div className="flex animate-marquee gap-24 items-center whitespace-nowrap py-4 hover:[animation-play-state:paused]">
-                    {MARQUEE_ITEMS.map((tech, index) => (
-                        <div key={index} className="flex items-center gap-4 cursor-default group/item grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100">
-                            <div className="w-12 h-12">
-                                <tech.icon />
+    useEffect(() => {
+        const handleScroll = () => {
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                const scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / window.innerHeight));
+                setScrollY(scrollProgress);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial call
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    return (
+        <div ref={containerRef} className="w-full pt-0 pb-20 overflow-hidden relative">
+            <h2 className="text-4xl font-bold text-center mb-24 text-gray-800 animate-fade-in-up">
+                Tech Stack
+            </h2>
+
+            <div className="flex flex-wrap justify-center items-center gap-6 px-4 max-w-7xl mx-auto">
+                {TECH_STACK.map((tech, index) => {
+                    // Calculate wave offset for each item
+                    const waveOffset = Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+
+                    return (
+                        <a
+                            key={index}
+                            href={tech.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 hover:scale-110 relative"
+                            style={{
+                                transform: `translateY(${waveOffset}px)`,
+                                transition: 'transform 0.3s ease-out'
+                            }}
+                        >
+                            {/* Logo with white circular background */}
+                            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center p-4 shadow-lg">
+                                <tech.icon className="w-full h-full" />
                             </div>
-                            <span className="text-2xl font-bold text-gray-500 group-hover:text-gray-900 transition-colors">
+
+                            {/* Tooltip on hover */}
+                            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/item:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                 {tech.name}
                             </span>
-                        </div>
-                    ))}
-                </div>
+                        </a>
+                    );
+                })}
             </div>
 
-            <style>{`
-                @keyframes marquee {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
-                }
-                .animate-marquee {
-                    animation: marquee 40s linear infinite;
-                    min-width: 100%;
-                }
-            `}</style>
+
         </div>
     );
 };
 
 export default TechStack;
+

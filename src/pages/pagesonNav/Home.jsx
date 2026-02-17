@@ -72,7 +72,7 @@ const Home = () => {
 
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
-      <section className="px-6 max-w-7xl mx-auto mb-40 mt-32 z-10 relative">
+      <section className="px-6 max-w-7xl mx-auto mb-10 mt-32 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
 
           {/* LEFT COLUMN: Diagram (Larger: 3 cols) */}
