@@ -9,16 +9,16 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay, duration: 0.5 }}
-            className="group relative"
+            className="group relative h-full"
         >
-            <div className={`relative flex flex-col md:flex-row items-start md:items-center gap-6 rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-gray-100`}>
+            <div className={`relative flex flex-col md:flex-row items-center gap-6 rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 border border-gray-100 h-full`}>
 
                 {/* Icon Container - Clean Gray */}
                 <div className={`flex-shrink-0 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-gray-50 text-adorix-primary`}>
                     <Icon className="h-7 w-7" strokeWidth={1.5} />
                 </div>
 
-                <div className="flex-1">
+                <div className="flex-1 text-center md:text-left">
                     <h3 className="mb-2 text-xl font-bold text-gray-900">
                         {title}
                     </h3>

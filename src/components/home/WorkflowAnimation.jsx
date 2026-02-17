@@ -203,10 +203,39 @@ export default function WorkflowAnimation() {
     ];
   }, []);
 
+  // Dynamic height calculation based on scale to prevent whitespace
+  // Standard height 550px. 
+  // Mobile scale 0.6 -> Height ~330px
+  // Tablet scale 0.8 -> Height ~440px
+
   return (
-    <div className="w-full flex justify-center py-6 overflow-x-auto bg-transparent rounded-3xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <div className="relative flex-shrink-0"
-        style={{ width: STAGE.w, height: STAGE.h }}>
+    <div className="w-full flex justify-center py-0 md:py-6 overflow-hidden">
+      <div
+        className="relative flex-shrink-0 origin-top transform transition-transform duration-300"
+        style={{
+          width: STAGE.w,
+          height: STAGE.h,
+          // We use a CSS variable for scale, and we MUST adjust the container height 
+          // via a wrapper or simple max-height approach in CSS to crop the empty space 
+          // left by the scale() transform.
+          transform: 'scale(var(--scale-factor, 1))',
+          marginBottom: 'var(--margin-adjust, 0px)'
+        }}
+      >
+        <style jsx>{`
+            @media (max-width: 640px) {
+                .transform { 
+                    --scale-factor: 0.6; 
+                    --margin-adjust: -220px; /* Pull bottom content up: 550 * (1-0.6) approx */
+                }
+            }
+            @media (min-width: 641px) and (max-width: 1024px) {
+                .transform { 
+                    --scale-factor: 0.8; 
+                    --margin-adjust: -110px; /* Pull bottom content up */
+                }
+            }
+        `}</style>
 
         {/* Subtle Grid Background */}
         <div

@@ -109,8 +109,16 @@ const TECH_STACK = [
 const TechStack = () => {
     const containerRef = useRef(null);
     const [scrollY, setScrollY] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024); // lg breakpoint
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
         const handleScroll = () => {
             if (containerRef.current) {
                 const rect = containerRef.current.getBoundingClientRect();
@@ -122,19 +130,27 @@ const TechStack = () => {
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Initial call
 
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', checkMobile);
+        };
     }, []);
 
     return (
-        <div ref={containerRef} className="w-full pt-0 pb-20 overflow-hidden relative">
-            <h2 className="text-4xl font-bold text-center mb-24 text-gray-800 animate-fade-in-up">
+        <div ref={containerRef} className="w-full pt-10 pb-20 overflow-hidden relative">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-24 text-gray-800 animate-fade-in-up px-4">
                 Tech Stack
             </h2>
 
-            <div className="flex flex-wrap justify-center items-center gap-6 px-4 max-w-7xl mx-auto">
+            <div className={`
+                max-w-7xl mx-auto px-4
+                ${isMobile
+                    ? 'grid grid-cols-3 sm:grid-cols-4 gap-6 md:gap-8 justify-items-center'
+                    : 'flex flex-wrap justify-center items-center gap-6'}
+            `}>
                 {TECH_STACK.map((tech, index) => {
-                    // Calculate wave offset for each item
-                    const waveOffset = Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    // Calculate wave offset for each item - ONLY on desktop
+                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
 
                     return (
                         <a
@@ -149,20 +165,18 @@ const TechStack = () => {
                             }}
                         >
                             {/* Logo with white circular background */}
-                            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center p-4 shadow-lg">
+                            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center p-3 md:p-4 shadow-lg border border-gray-100">
                                 <tech.icon className="w-full h-full" />
                             </div>
 
                             {/* Tooltip on hover */}
-                            <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/item:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                            <span className="hidden md:block absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/item:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                 {tech.name}
                             </span>
                         </a>
                     );
                 })}
             </div>
-
-
         </div>
     );
 };

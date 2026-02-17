@@ -114,9 +114,8 @@ const Home = () => {
 
 
       {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
-      {/* 3. STRIPE-STYLE ANIMATION (The Connecting Lines) */}
-      <section className="px-6 max-w-7xl mx-auto mb-10 mt-32 z-10 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-center">
+      <section className="px-6 max-w-7xl mx-auto mb-10 mt-10 md:mt-32 z-10 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16 items-center">
 
           {/* LEFT COLUMN: Diagram (Larger: 3 cols) */}
           <div className="flex justify-center lg:justify-start lg:col-span-3">
