@@ -31,40 +31,83 @@ const Home = () => {
 
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-32 pb-20 px-6 max-w-7xl mx-auto z-10 text-center">
+      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+
+        {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <div className="inline-flex items-center gap-2 px-5 py-2 mb-8 text-sm font-bold text-adorix-secondary bg-white/60 backdrop-blur-md rounded-full border border-adorix-primary/20 shadow-sm hover:shadow-md transition-shadow cursor-default">
+          <div className="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-gray-600 bg-white/80 backdrop-blur-md rounded-full border border-gray-200 shadow-sm">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-adorix-accent opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-adorix-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
             </span>
             v2.0 Live: AI Gaze Tracking Active
           </div>
+        </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-bold text-adorix-dark leading-[1.1] mb-8 tracking-tight">
-            Ads that <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent animate-pulse">
-              look back at you.
-            </span>
-          </h1>
+        {/* Heading - Clean text, no gradient */}
+        {/* Heading - Typewriter Effect & Gradient Restored */}
+        {/* Heading - Full Typewriter Effect with Gradient Cursor */}
+        <motion.h1
+          className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight"
+          initial={{ opacity: 1 }}
+        >
+          {/* Line 1: Ads that */}
+          <span className="inline-block">
+            {"Ads that".split("").map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.05, delay: 0.1 + index * 0.05 }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+          <br />
+          {/* Line 2: look back at you. */}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
+            {"look back at you.".split("").map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.05, delay: 0.6 + index * 0.05 }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+        </motion.h1>
 
-          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-            Adorix transforms static screens into intelligent agents.
-            Track real attention, interact with voice, and serve personalized content in real-time.
-          </p>
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium"
+        >
+          Adorix transforms static screens into intelligent agents.
+          Track real attention, interact with voice, and serve personalized content in real-time.
+        </motion.p>
 
-          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-            <Link to="/signup" className="px-10 py-4 bg-adorix-dark text-white rounded-full font-bold hover:bg-gray-800 transition flex items-center gap-2 group shadow-xl shadow-adorix-dark/20 hover:scale-105 transform duration-200">
-              Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
-            </Link>
-            <Link to="/dashboard" className="px-10 py-4 bg-white text-adorix-dark border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-adorix-primary/30">
-              View Live Demo
-            </Link>
-          </div>
+        {/* Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-col sm:flex-row gap-5 justify-center items-center mt-4"
+        >
+          <Link to="/signup" className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
+            Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+          </Link>
+          <Link to="/dashboard" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
+            View Live Demo
+          </Link>
         </motion.div>
       </section>
 
