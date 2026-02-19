@@ -10,131 +10,120 @@ const AntigravityBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
 
-        // Set canvas size
+        // Constants for "Charm" feel
+        const PARTICLE_COUNT = 150;
+        const MOUSE_RADIUS = 200;
+        const FLOAT_SPEED = -0.3; // Gentle upward drift
+        const REPELLENT_STRENGTH = 0.4;
+
+        const mouse = { x: null, y: null };
+        let particles = [];
+        let width, height;
+
         const setCanvasSize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-        setCanvasSize();
-
-        // Mouse position
-        const mouse = {
-            x: null,
-            y: null,
-            radius: 150
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
         };
 
-        // Particle array
-        const particlesArray = [];
-        const numberOfParticles = 100;
-
-        // Particle class
         class Particle {
             constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 10) + 1;
-                this.distance = 0;
-                // Random color from blue palette
-                const colors = [
-                    'rgba(14, 165, 233, 0.8)',
-                    'rgba(56, 189, 248, 0.8)',
-                    'rgba(125, 211, 252, 0.8)',
-                ];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.init();
             }
 
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 3 + 1.5; // Slightly larger charms
+                this.vx = (Math.random() - 0.5) * 0.2;
+                this.vy = FLOAT_SPEED + (Math.random() - 0.5) * 0.1;
+
+                // Original subtle blue palette
+                const colors = [
+                    'rgba(14, 165, 233, 0.4)', // Sky-500
+                    'rgba(56, 189, 248, 0.4)', // Sky-400
+                    'rgba(125, 211, 252, 0.4)', // Sky-300
+                ];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+
+                // Twinkle properties
+                this.opacity = Math.random();
+                this.twinkleSpeed = 0.01 + Math.random() * 0.02;
+                this.maxOpacity = 0.3 + Math.random() * 0.5;
             }
 
             update() {
-                // Calculate distance from mouse
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                this.distance = distance;
+                // Subtle Mouse Interaction (Airy Repulsion)
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-                // Move particles TOWARDS mouse (attraction)
-                if (distance < mouse.radius && mouse.x !== null) {
-                    const forceDirectionX = dx / distance;
-                    const forceDirectionY = dy / distance;
-                    const maxDistance = mouse.radius;
-                    const force = (maxDistance - distance) / maxDistance;
-                    const directionX = forceDirectionX * force * this.density * 0.6;
-                    const directionY = forceDirectionY * force * this.density * 0.6;
-
-                    this.x += directionX;
-                    this.y += directionY;
-                } else {
-                    // Return to base position
-                    if (this.x !== this.baseX) {
-                        const dx = this.x - this.baseX;
-                        this.x -= dx / 10;
-                    }
-                    if (this.y !== this.baseY) {
-                        const dy = this.y - this.baseY;
-                        this.y -= dy / 10;
+                    if (distance < MOUSE_RADIUS) {
+                        const force = (MOUSE_RADIUS - distance) / MOUSE_RADIUS;
+                        this.vx += (dx / distance) * force * REPELLENT_STRENGTH;
+                        this.vy += (dy / distance) * force * REPELLENT_STRENGTH;
                     }
                 }
+
+                // Apply velocity and friction
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= 0.95;
+                this.vy = FLOAT_SPEED + (this.vy - FLOAT_SPEED) * 0.95;
+
+                // Twinkle Logic
+                this.opacity += this.twinkleSpeed;
+                if (this.opacity > this.maxOpacity || this.opacity < 0) {
+                    this.twinkleSpeed *= -1;
+                }
+
+                // Screen Wrap / Reset (Upward)
+                if (this.y < -10) {
+                    this.y = height + 10;
+                    this.x = Math.random() * width;
+                }
+                if (this.x < -10) this.x = width + 10;
+                if (this.x > width + 10) this.x = -10;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
             }
         }
 
-        // Initialize particles
-        const init = () => {
-            particlesArray.length = 0;
-            for (let i = 0; i < numberOfParticles; i++) {
-                particlesArray.push(new Particle());
-            }
-        };
-        init();
-
-        // Connect particles with lines
-        const connect = () => {
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    const dx = particlesArray[a].x - particlesArray[b].x;
-                    const dy = particlesArray[a].y - particlesArray[b].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 100) {
-                        const opacity = 1 - (distance / 100);
-                        ctx.strokeStyle = `rgba(14, 165, 233, ${opacity * 0.3})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
+        const initParticles = () => {
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Particle());
             }
         };
 
-        // Animation loop
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, width, height);
 
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].draw();
-                particlesArray[i].update();
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
             }
 
-            connect();
             animationFrameId = requestAnimationFrame(animate);
         };
+
+        setCanvasSize();
+        initParticles();
         animate();
 
-        // Event listeners
-        const handleMouseMove = (event) => {
-            mouse.x = event.x;
-            mouse.y = event.y;
+        const handleMouseMove = (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         };
 
         const handleMouseOut = () => {
@@ -144,14 +133,13 @@ const AntigravityBackground = () => {
 
         const handleResize = () => {
             setCanvasSize();
-            init();
+            initParticles();
         };
 
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseout', handleMouseOut);
         window.addEventListener('resize', handleResize);
 
-        // Cleanup
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseout', handleMouseOut);
@@ -167,10 +155,11 @@ const AntigravityBackground = () => {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 0,
-                pointerEvents: 'none'
+                width: '100vw',
+                height: '100vh',
+                zIndex: -1,
+                pointerEvents: 'none',
+                background: 'transparent'
             }}
         />
     );

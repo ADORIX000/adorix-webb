@@ -5,6 +5,8 @@ import { ArrowRight, Eye, Mic, Activity, Zap, Cpu, ScanFace, BarChart3 } from 'l
 import WorkflowAnimation from '../../components/home/WorkflowAnimation';
 import TechStack from '../../components/home/TechStack';
 import FeatureCards from '../../components/home/FeatureCards';
+import VisionMission from '../../components/home/VisionMission';
+import MeetTeam from '../../components/home/MeetTeam';
 
 
 // Reusable Feature Card
@@ -141,6 +143,12 @@ const Home = () => {
 
       {/* ANIMATED FEATURE CARDS */}
       <FeatureCards />
+
+      {/* VISION & MISSION SECTION */}
+      <VisionMission />
+
+      {/* MEET OUR TEAM SECTION */}
+      <MeetTeam />
 
       {/* 5. FINAL CTA */}
       <section className="py-32 px-6 max-w-7xl mx-auto z-10 relative">
