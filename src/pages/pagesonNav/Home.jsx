@@ -78,14 +78,16 @@ const Home = () => {
             <WorkflowAnimation />
           </div>
 
-          {/* RIGHT COLUMN: Description (Smaller: 2 cols) */}
-          <div className="text-left space-y-6 bg-white p-8 rounded-[2rem] shadow-xl border border-gray-100 lg:col-span-2">
-            <h2 className="text-3xl font-bold text-adorix-dark">The Intelligent Flow</h2>
-            <p className="text-xl text-gray-600 leading-loose">
+          {/* RIGHT COLUMN: Description (Extremely Simple) */}
+          <div className="text-left space-y-6 lg:col-span-2 flex flex-col justify-center">
+            <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+              The Intelligent Flow
+            </h2>
+            <p className="text-xl text-gray-600 leading-relaxed font-medium">
               Adorix turns passive screens into active, intelligent agents.
               Detect visitors, analyze demographics, and serve personalized content
-              in milliseconds—all without compromising privacy. It's not just a display;
-              it's a responsive environment that adapts to everyone.
+              in milliseconds—all while maintaining absolute privacy.
+              It’s not just a display; it’s a responsive environment that adapts to everyone.
             </p>
           </div>
 
@@ -95,11 +97,11 @@ const Home = () => {
       {/* TECH STACK MARQUEE (Moved here) */}
       <TechStack />
 
-      {/* ANIMATED FEATURE CARDS */}
-      <FeatureCards />
-
       {/* VISION & MISSION SECTION */}
       <VisionMission />
+
+      {/* ANIMATED FEATURE CARDS */}
+      <FeatureCards />
 
       {/* MEET OUR TEAM SECTION */}
       <MeetTeam />
