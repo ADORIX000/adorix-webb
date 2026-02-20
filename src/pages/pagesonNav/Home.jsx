@@ -1,36 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Eye, Mic, Activity, Zap, Cpu, ScanFace, BarChart3 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import TypingText from '../../components/home/TypingText';
 import WorkflowAnimation from '../../components/home/WorkflowAnimation';
 import TechStack from '../../components/home/TechStack';
 import FeatureCards from '../../components/home/FeatureCards';
 import VisionMission from '../../components/home/VisionMission';
 import MeetTeam from '../../components/home/MeetTeam';
 
-
-// Reusable Feature Card
-const FeatureCard = ({ icon: Icon, title, desc, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ delay, duration: 0.5 }}
-    className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-adorix-primary/10 hover:border-adorix-primary/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
-  >
-    <div className="w-14 h-14 bg-adorix-light rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-      <Icon className="w-7 h-7 text-adorix-primary group-hover:text-adorix-secondary transition-colors" />
-    </div>
-    <h3 className="text-xl font-bold text-adorix-dark mb-3 group-hover:text-adorix-primary transition-colors">{title}</h3>
-    <p className="text-gray-600 leading-relaxed text-sm">{desc}</p>
-  </motion.div>
-);
-
 const Home = () => {
   return (
     <div className="relative w-full overflow-hidden">
-
-
 
       {/* 2. HERO SECTION */}
       <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
@@ -50,41 +31,14 @@ const Home = () => {
           </div>
         </motion.div>
 
-        {/* Heading - Clean text, no gradient */}
-        {/* Heading - Typewriter Effect & Gradient Restored */}
-        {/* Heading - Full Typewriter Effect with Gradient Cursor */}
-        <motion.h1
-          className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight"
-          initial={{ opacity: 1 }}
-        >
-          {/* Line 1: Ads that */}
-          <span className="inline-block">
-            {"Ads that".split("").map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.05, delay: 0.1 + index * 0.05 }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </span>
+        {/* Heading */}
+        <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
+          <TypingText text="Ads that" speed={0.05} />
           <br />
-          {/* Line 2: look back at you. */}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-            {"look back at you.".split("").map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.05, delay: 0.6 + index * 0.05 }}
-              >
-                {char}
-              </motion.span>
-            ))}
+            <TypingText text="look back at you." startDelay={0.5} speed={0.05} />
           </span>
-        </motion.h1>
+        </h1>
 
         {/* Description */}
         <motion.p

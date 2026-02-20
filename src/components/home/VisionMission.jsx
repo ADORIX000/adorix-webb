@@ -3,42 +3,42 @@ import { motion } from 'framer-motion';
 import { Eye, Target } from 'lucide-react';
 
 const VisionMission = () => {
+    const cardData = [
+        {
+            title: "Our Vision",
+            content: "To breathe life into the digital frontier, creating a world where every screen is a sentient partner that understands, anticipates, and respects the human gaze."
+        },
+        {
+            title: "Our Mission",
+            content: "To pioneer the next generation of interactive intelligence—transforming raw physiological data into meaningful brand dialogues through ethical, high-fidelity AI vision."
+        }
+    ];
+
     return (
         <section className="py-24 px-6 max-w-4xl mx-auto z-10 relative">
-            <div className="grid grid-cols-1 gap-12 text-center">
-                {/* Vision Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="bg-white/60 backdrop-blur-lg p-10 md:p-16 rounded-[3rem] border border-adorix-primary/10 shadow-xl hover:shadow-2xl transition-all duration-500 group flex flex-col items-center"
-                >
-                    <div className="w-20 h-20 bg-adorix-light rounded-2xl flex items-center justify-center mb-8 group-hover:bg-adorix-primary transition-colors duration-500">
-                        <Eye className="w-10 h-10 text-adorix-primary group-hover:text-white transition-colors duration-500" />
-                    </div>
-                    <h2 className="text-4xl font-bold text-adorix-dark mb-6">Our Vision</h2>
-                    <p className="text-gray-600 text-xl leading-relaxed max-w-2xl">
-                        To create a world where technology doesn't just display information—it understands and responds to human presence. We envision a future where digital interactions are as natural and intuitive as face-to-face conversations.
-                    </p>
-                </motion.div>
-
-                {/* Mission Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    className="bg-white/60 backdrop-blur-lg p-10 md:p-16 rounded-[3rem] border border-adorix-primary/10 shadow-xl hover:shadow-2xl transition-all duration-500 group flex flex-col items-center"
-                >
-                    <div className="w-20 h-20 bg-adorix-light rounded-2xl flex items-center justify-center mb-8 group-hover:bg-adorix-accent transition-colors duration-500">
-                        <Target className="w-10 h-10 text-adorix-accent group-hover:text-white transition-colors duration-500" />
-                    </div>
-                    <h2 className="text-4xl font-bold text-adorix-dark mb-6">Our Mission</h2>
-                    <p className="text-gray-600 text-xl leading-relaxed max-w-2xl">
-                        To empower businesses with ethical AI vision and voice technologies that capture real-world attention, deliver personalized experiences, and provide hyper-accurate data insights—all while maintaining the highest standards of privacy.
-                    </p>
-                </motion.div>
+            <div className="flex flex-col gap-10">
+                {cardData.map((item, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="bg-white/10 backdrop-blur-md p-10 md:p-14 rounded-[2.5rem] border border-white/20 shadow-sm transition-shadow duration-300 flex flex-col items-center text-center gap-6 group"
+                    >
+                        {/* Content */}
+                        <div className="flex flex-col items-center w-full">
+                            <div className="relative inline-block mb-6">
+                                <h2 className="text-4xl font-bold text-adorix-dark cursor-default">
+                                    {item.title}
+                                </h2>
+                            </div>
+                            <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
+                                {item.content}
+                            </p>
+                        </div>
+                    </motion.div>
+                ))}
             </div>
         </section>
     );
