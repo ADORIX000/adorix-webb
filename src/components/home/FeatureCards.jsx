@@ -15,148 +15,140 @@ const BioMesh = ({ isPaused }) => (
                     </feMerge>
                 </filter>
                 <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="transparent" />
-                    <stop offset="50%" stopColor="var(--adorix-accent)" />
-                    <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-            </defs>
+                        <stop offset="0%" stopColor="transparent" />
+                        <stop offset="50%" stopColor="var(--adorix-accent)" />
+                        <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                    <radialGradient id="planetGradient" cx="50%" cy="35%">
+                        <stop offset="0%" stopColor="#9EECEC" />
+                        <stop offset="60%" stopColor="#08A6B0" />
+                        <stop offset="100%" stopColor="#056E74" />
+                    </radialGradient>
+                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="transparent" />
+                        <stop offset="40%" stopColor="var(--adorix-accent)" stopOpacity="0.5" />
+                        <stop offset="60%" stopColor="var(--adorix-primary)" stopOpacity="0.25" />
+                        <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                </defs>
 
             {/* Synaptic Core - Background Neural Web */}
             {[0, 1, 2, 3, 4].map((i) => (
                 <g key={`synapse-${i}`}>
+                    {/* structural path (now more visible by default) */}
                     <motion.path
                         d={`M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`}
                         stroke="var(--adorix-primary)"
-                        strokeWidth="1"
-                        strokeOpacity="0.15"
+                        strokeWidth={1}
+                        strokeOpacity={isPaused ? 0.32 : 0.22}
                         fill="none"
-                        animate={isPaused ? {} : {
+                        animate={isPaused ? {
                             d: [
                                 `M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`,
-                                `M${50 + i * 25} 150 Q 100 50 ${150 - i * 25} 50`,
+                                `M${45 + i * 28} 140 Q 100 60 ${155 - i * 28} 60`,
+                                `M${25 + i * 22} 30 Q 100 ${120 - i * 8} ${160 - i * 20} 90`,
+                                `M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`
+                            ],
+                            strokeOpacity: [0.32, 0.55, 0.32]
+                        } : {
+                            d: [
+                                `M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`,
+                                `M${55 + i * 20} 150 Q 100 40 ${145 - i * 20} 40`,
                                 `M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`
                             ]
                         }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: i * 1.5 }}
+                        transition={{ duration: isPaused ? 5.2 : 14, repeat: Infinity, ease: "easeInOut", delay: i * (isPaused ? 0.12 : 0.9) }}
                     />
-                    {/* Active Signal Pulses traveling along paths */}
-                    {!isPaused && (
-                        <motion.path
-                            d={`M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`}
-                            stroke="url(#signalGradient)"
-                            strokeWidth="3"
-                            strokeDasharray="40 160"
-                            fill="none"
-                            animate={{ strokeDashoffset: [-200, 200] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: i * 0.8 }}
-                        />
-                    )}
+
+                    {/* continuous fast signal (always present, accelerates on hover) */}
+                    <motion.path
+                        d={`M${30 + i * 35} 20 Q 100 100 ${170 - i * 35} 180`}
+                        stroke="url(#signalGradient)"
+                        strokeWidth={isPaused ? 6 : 4}
+                        strokeDasharray={isPaused ? "20 100" : "28 120"}
+                        fill="none"
+                        animate={{ strokeDashoffset: isPaused ? [-500, 500] : [-260, 260], opacity: [0.95, 0.6, 0.95] }}
+                        transition={{ duration: isPaused ? 1.8 : 3.6, repeat: Infinity, ease: "linear", delay: i * (isPaused ? 0.12 : 0.6) }}
+                    />
                 </g>
             ))}
 
             {/* Central Intelligence Glow */}
-            <motion.circle
-                cx="100" cy="100" r="15"
-                fill="var(--adorix-accent)"
-                fillOpacity="0.2"
-                filter="url(#neuralGlow)"
-                animate={isPaused ? { scale: 1 } : { scale: [1, 1.4, 1], opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 4, repeat: Infinity }}
-            />
-
-            {/* Synaptic Nodes */}
-            {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+            <motion.g
+                style={{ originX: '100px', originY: '100px' }}
+                animate={isPaused ? { rotate: [0, 18, -12, 0], scale: [1.05, 1.35, 1.05] } : { rotate: [0, 8, -5, 0], scale: [1, 1.08, 1] }}
+                transition={{ duration: isPaused ? 2.6 : 9, repeat: Infinity, ease: 'easeInOut' }}
+            >
                 <motion.circle
-                    key={i}
-                    r="4"
-                    fill="var(--adorix-primary)"
+                    cx="100" cy="100" r="15"
+                    fill="var(--adorix-accent)"
+                    fillOpacity={isPaused ? 0.28 : 0.22}
                     filter="url(#neuralGlow)"
-                    animate={isPaused ? { scale: 1, opacity: 0.6 } : {
-                        cx: [50 + Math.sin(i) * 70, 150 - Math.cos(i) * 50, 100 + Math.sin(i * 2) * 60, 50 + Math.sin(i) * 70],
-                        cy: [40 + Math.cos(i) * 60, 160 - Math.sin(i * 1.5) * 70, 90 + Math.cos(i * 1.2) * 50, 40 + Math.cos(i) * 60],
-                        opacity: [0.5, 1, 0.5],
-                        scale: [1, 1.3, 1]
-                    }}
-                    transition={{ duration: 10 + i * 2, repeat: Infinity, ease: "linear" }}
+                    animate={isPaused ? { scale: [1, 1.9, 1], opacity: [0.25, 0.85, 0.25] } : { scale: [1, 1.35, 1], opacity: [0.18, 0.45, 0.18] }}
+                    transition={{ duration: isPaused ? 1.8 : 3.6, repeat: Infinity }}
                 />
-            ))}
+
+                {/* orbiting micro-nodes removed to reduce visual clutter */}
+            </motion.g>
+
+            {/* Planet / Globe with rotating ring and micro-moons */}
+            <motion.g style={{ originX: '100px', originY: '100px' }}
+                animate={isPaused ? { rotate: [0, 12, -8, 0], scale: [1, 1.14, 1] } : { rotate: [0, 4, -2, 0] }}
+                transition={{ duration: isPaused ? 2 : 9, repeat: Infinity, ease: 'easeInOut' }}>
+                {/* Planet core (enlarged) */}
+                <motion.circle
+                    cx="100" cy="100" r="30"
+                    fill="url(#planetGradient)"
+                    filter="url(#neuralGlow)"
+                    animate={isPaused ? { scale: [1, 1.18, 1], opacity: [1, 0.95, 1] } : { scale: [1, 1.06, 1], opacity: [0.98, 0.85, 0.98] }}
+                    transition={{ duration: isPaused ? 1.6 : 3.2, repeat: Infinity }}
+                />
+
+                {/* Ring */}
+                <motion.ellipse
+                    cx="100" cy="100" rx="70" ry="18"
+                    fill="none"
+                    stroke="url(#ringGradient)"
+                    strokeWidth="2"
+                    strokeOpacity={0.55}
+                    style={{ transformOrigin: '100px 100px' }}
+                    animate={isPaused ? { rotate: [0, 360, 0], strokeOpacity: [0.6, 0.2, 0.6] } : { rotate: [0, 220] }}
+                    transition={{ duration: isPaused ? 1.6 : 12, repeat: Infinity, ease: 'linear' }}
+                />
+
+                {/* micro-moons removed per request to simplify globe */}
+            </motion.g>
+
+            {/* Synaptic Nodes removed to declutter globe */}
         </svg>
     </div>
 );
 
 const SupersonicStream = ({ isPaused }) => (
-    <div className="relative w-full h-full flex flex-col justify-center gap-8 overflow-hidden px-12">
-        <defs>
-            <filter id="motionBlur">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="4 0" />
-            </filter>
-        </defs>
-
-        {/* Sonic Boom Ripple (Pulse Background) */}
-        {!isPaused && [0, 1].map((i) => (
-            <motion.div
-                key={`sonic-${i}`}
-                className="absolute inset-0 border-2 border-adorix-accent/20 rounded-full"
-                animate={{ scale: [1, 2], opacity: [0.3, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 1 }}
-                style={{ top: '50%', left: '0', y: '-50%' }}
-            />
-        ))}
-
-        {[0, 1, 2, 3, 4].map((i) => (
-            <div key={i} className="relative h-px w-full bg-adorix-primary/5">
-                {/* Motion Blur Trail */}
-                <motion.div
-                    className="absolute h-[2px] w-48 bg-gradient-to-r from-transparent via-adorix-accent/40 to-transparent"
-                    filter="url(#motionBlur)"
-                    animate={isPaused ? { opacity: 0 } : {
-                        x: ['-100%', '200%'],
-                    }}
-                    transition={{
-                        duration: 0.8 + i * 0.2,
-                        repeat: Infinity,
-                        delay: i * 0.3,
-                        ease: "linear"
-                    }}
-                />
-
-                {/* Main Data Packet */}
-                <motion.div
-                    className="absolute -top-1 w-4 h-2 rounded-full bg-adorix-primary shadow-[0_0_15px_var(--adorix-accent)]"
-                    animate={isPaused ? { x: '50%', opacity: 0.4 } : {
-                        x: ['-20%', '150%'],
-                        scaleX: [1, 1.5, 1],
-                        opacity: [0, 1, 0]
-                    }}
-                    transition={{
-                        duration: 1.2 + i * 0.3,
-                        repeat: Infinity,
-                        delay: i * 0.4,
-                        ease: "anticipate"
-                    }}
-                />
-
-                {/* Trailing Particles */}
-                {!isPaused && [0, 1, 2].map((p) => (
-                    <motion.div
-                        key={`particle-${p}`}
-                        className="absolute h-1 w-1 bg-adorix-accent rounded-full"
-                        animate={{
-                            x: ['-20%', '150%'],
-                            y: [0, (p - 1) * 8, 0],
-                            opacity: [0, 0.8, 0],
-                            scale: [0, 1, 0]
-                        }}
-                        transition={{
-                            duration: 1.5 + i * 0.3,
-                            repeat: Infinity,
-                            delay: i * 0.4 + p * 0.1,
-                            ease: "linear"
-                        }}
-                    />
-                ))}
-            </div>
-        ))}
+    <div className="relative w-full h-full flex items-center justify-center">
+        <motion.svg viewBox="0 0 48 60" className="w-48 h-52"
+            animate={isPaused ? { scale: [1, 1.06, 1], opacity: [0.98, 0.7, 0.98] } : { scale: [1, 1.08, 1], opacity: [1, 0.6, 1] }}
+            transition={{ duration: isPaused ? 0.9 : 1.2, repeat: Infinity, ease: 'easeInOut' }}>
+            <defs>
+                <radialGradient id="bulbGlowLight">
+                    <stop offset="0%" stopColor="var(--adorix-accent)" stopOpacity="0.95" />
+                    <stop offset="55%" stopColor="var(--adorix-primary)" stopOpacity="0.45" />
+                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                </radialGradient>
+                <filter id="bulbFilter">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+            <g>
+                <ellipse cx="24" cy="18" rx="16" ry="18" fill="url(#bulbGlowLight)" filter="url(#bulbFilter)" />
+                <path d="M14 22 C14 30,34 30,34 22 C34 16,30 14,24 14 C18 14,14 16,14 22 Z" fill="#FFFFFF" opacity="0.98" stroke="var(--adorix-primary)" strokeOpacity="0.18" strokeWidth="0.6" />
+                <rect x="16.5" y="30" width="15" height="6" rx="1" fill="#FFFFFF" opacity="0.9" stroke="var(--adorix-primary)" strokeOpacity="0.12" />
+            </g>
+        </motion.svg>
     </div>
 );
 
