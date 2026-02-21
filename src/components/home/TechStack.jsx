@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 
 // Brand Logos (Full Color Inline SVGs)
@@ -150,7 +151,8 @@ const TechStack = () => {
             `}>
                 {TECH_STACK.map((tech, index) => {
                     // Calculate wave offset for each item - ONLY on desktop
-                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    // Fix applied: Added Number(...).toFixed(4) to ensure floating point output matches between Node and Browser SSR perfectly.
+                    const waveOffset = isMobile ? 0 : Number((Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40).toFixed(4));
 
                     return (
                         <a
@@ -158,10 +160,9 @@ const TechStack = () => {
                             href={tech.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 hover:scale-110 relative"
+                            className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 ease-out hover:scale-110 relative"
                             style={{
-                                transform: `translateY(${waveOffset}px)`,
-                                transition: 'transform 0.3s ease-out'
+                                transform: `translateY(${waveOffset}px)`
                             }}
                         >
                             {/* Logo with white circular background */}

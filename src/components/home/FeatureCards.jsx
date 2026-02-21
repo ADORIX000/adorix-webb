@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -15,22 +16,22 @@ const BioMesh = ({ isPaused }) => (
                     </feMerge>
                 </filter>
                 <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="transparent" />
-                        <stop offset="50%" stopColor="var(--adorix-accent)" />
-                        <stop offset="100%" stopColor="transparent" />
-                    </linearGradient>
-                    <radialGradient id="planetGradient" cx="50%" cy="35%">
-                        <stop offset="0%" stopColor="#9EECEC" />
-                        <stop offset="60%" stopColor="#08A6B0" />
-                        <stop offset="100%" stopColor="#056E74" />
-                    </radialGradient>
-                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="transparent" />
-                        <stop offset="40%" stopColor="var(--adorix-accent)" stopOpacity="0.5" />
-                        <stop offset="60%" stopColor="var(--adorix-primary)" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="transparent" />
-                    </linearGradient>
-                </defs>
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="50%" stopColor="var(--adorix-accent)" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+                <radialGradient id="planetGradient" cx="50%" cy="35%">
+                    <stop offset="0%" stopColor="#9EECEC" />
+                    <stop offset="60%" stopColor="#08A6B0" />
+                    <stop offset="100%" stopColor="#056E74" />
+                </radialGradient>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="40%" stopColor="var(--adorix-accent)" stopOpacity="0.5" />
+                    <stop offset="60%" stopColor="var(--adorix-primary)" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+            </defs>
 
             {/* Synaptic Core - Background Neural Web */}
             {[0, 1, 2, 3, 4].map((i) => (
@@ -188,11 +189,13 @@ const QuantumVault = ({ isPaused }) => (
             {/* Encryption Nodes (Sectors) */}
             {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
                 const angle = (i * 45) * (Math.PI / 180);
+                const cx = (50 + Math.cos(angle) * 35).toFixed(4);
+                const cy = (50 + Math.sin(angle) * 35).toFixed(4);
                 return (
                     <motion.circle
                         key={i}
-                        cx={50 + Math.cos(angle) * 35}
-                        cy={50 + Math.sin(angle) * 35}
+                        cx={cx}
+                        cy={cy}
                         r="2"
                         fill="var(--adorix-accent)"
                         initial={{ opacity: 0.3 }}
@@ -261,7 +264,7 @@ const SpectralField = ({ isPaused }) => (
                         className="absolute bottom-0 w-full bg-gradient-to-t from-adorix-primary/40 via-adorix-accent to-adorix-accent/80 rounded-t-sm"
                         style={{ filter: 'drop-shadow(0 0 8px rgba(18,178,193,0.4))' }}
                         animate={isPaused ? { height: '35%' } : {
-                            height: [`${30 + Math.random() * 20}%`, `${60 + Math.random() * 40}%`, `${30 + Math.random() * 20}%`]
+                            height: [`${30 + (((i * 3.14) % 1) * 20).toFixed(1)}%`, `${60 + (((i * 2.71) % 1) * 40).toFixed(1)}%`, `${30 + (((i * 1.61) % 1) * 20).toFixed(1)}%`]
                         }}
                         transition={{
                             duration: 2 + i * 0.2,
@@ -282,10 +285,10 @@ const SpectralField = ({ isPaused }) => (
                             animate={{
                                 y: [-20, -120],
                                 opacity: [0, 1, 0],
-                                x: ['-50%', `${(Math.random() - 0.5) * 40}%`]
+                                x: ['-50%', `${((((i + p) * 0.43) % 1 - 0.5) * 40).toFixed(1)}%`]
                             }}
                             transition={{
-                                duration: 2 + Math.random(),
+                                duration: 2 + (((i + p) * 0.7) % 1),
                                 repeat: Infinity,
                                 delay: i * 0.3 + p * 0.5,
                                 ease: "linear"
@@ -346,8 +349,8 @@ const TargetingPulse = ({ isPaused }) => (
             {[0, 1, 2, 3, 4].map((i) => {
                 const angle = (i * 72) * (Math.PI / 180);
                 const radius = 28; // Tighter professional orbit
-                const x = 50 + Math.cos(angle) * radius;
-                const y = 50 + Math.sin(angle) * radius;
+                const x = (50 + Math.cos(angle) * radius).toFixed(4);
+                const y = (50 + Math.sin(angle) * radius).toFixed(4);
                 return (
                     <motion.g
                         key={i}

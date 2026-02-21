@@ -1,5 +1,7 @@
+"use client";
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
     BarChart2,
@@ -12,7 +14,7 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
-    const location = useLocation();
+    const pathname = usePathname();
 
     const menuItems = [
         { icon: LayoutDashboard, label: 'Overview', path: '/dashboard' },
@@ -32,7 +34,7 @@ const Sidebar = () => {
 
             {/* Brand */}
             <div className="p-8">
-                <Link to="/" className="flex items-center gap-3 group">
+                <Link href="/" className="flex items-center gap-3 group">
                     <div className="w-8 h-8 bg-adorix-dark rounded-lg flex items-center justify-center text-white font-bold group-hover:bg-adorix-primary transition-colors">
                         A
                     </div>
@@ -45,11 +47,10 @@ const Sidebar = () => {
                 <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Menu</p>
 
                 {menuItems.map((item) => {
-                    const isActive = location.pathname === item.path;
+                    const isActive = pathname === item.path;
                     return (
-                        <Link
-                            key={item.path}
-                            to={item.path}
+                        <Link key={item.path}
+                            href={item.path}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
                                     ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20'
                                     : 'text-gray-500 hover:bg-gray-50 hover:text-adorix-dark'
@@ -66,9 +67,8 @@ const Sidebar = () => {
             <div className="p-4 border-t border-gray-100">
                 <div className="space-y-2">
                     {bottomItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
+                        <Link key={item.path}
+                            href={item.path}
                             className="flex items-center gap-3 px-4 py-2 text-gray-500 hover:text-adorix-dark hover:bg-gray-50 rounded-lg transition-colors"
                         >
                             <item.icon className="w-5 h-5" />

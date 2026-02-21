@@ -1,11 +1,13 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   // Handle scroll effect
   useEffect(() => {
@@ -19,7 +21,7 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
-  }, [location]);
+  }, [pathname]);
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -34,14 +36,14 @@ const Navbar = () => {
     <>
       <nav
         className={`w-full fixed top-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'h-16 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm'
-            : 'h-24 bg-transparent border-b border-transparent'
+          ? 'h-16 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm'
+          : 'h-24 bg-transparent border-b border-transparent'
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
+          <Link href="/" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
             <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
             ADORIX
           </Link>
@@ -49,24 +51,22 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
             {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === link.path ? 'text-adorix-primary font-bold' : ''}`}
+              <Link key={link.path}
+                href={link.path}
+                className={`transition-colors hover:text-adorix-primary relative group ${pathname === link.path ? 'text-adorix-primary font-bold' : ''}`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === link.path ? 'scale-x-100' : ''}`} />
+                <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === link.path ? 'scale-x-100' : ''}`} />
               </Link>
             ))}
           </div>
 
           {/* Auth Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link to="/login" className="text-sm font-bold text-gray-600 hover:text-adorix-dark transition-colors">
+            <Link href="/login" className="text-sm font-bold text-gray-600 hover:text-adorix-dark transition-colors">
               Sign in
             </Link>
-            <Link
-              to="/signup"
+            <Link href="/signup"
               className="px-6 py-2.5 bg-adorix-dark text-white rounded-full text-sm font-bold hover:bg-adorix-primary hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-adorix-dark/20"
             >
               Sign up
@@ -87,19 +87,18 @@ const Navbar = () => {
       <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
           {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
+            <Link key={link.path}
+              href={link.path}
               className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
             >
               {link.name}
             </Link>
           ))}
           <div className="flex flex-col gap-4 mt-8 w-full max-w-xs">
-            <Link to="/login" className="w-full py-4 text-center font-bold text-gray-600 border border-gray-200 rounded-xl">
+            <Link href="/login" className="w-full py-4 text-center font-bold text-gray-600 border border-gray-200 rounded-xl">
               Sign in
             </Link>
-            <Link to="/signup" className="w-full py-4 text-center font-bold text-white bg-adorix-primary rounded-xl">
+            <Link href="/signup" className="w-full py-4 text-center font-bold text-white bg-adorix-primary rounded-xl">
               Sign up
             </Link>
           </div>
