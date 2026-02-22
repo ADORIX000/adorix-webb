@@ -1,40 +1,125 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import './Auth.css';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignup = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, you would send data to backend here
-    navigate('/verify'); // Redirect to verification after signup
+    if (fullName && email && password && password === confirmPassword) {
+      navigate('/verify');
+    }
+  };
+
+  const handleGoogleSignUp = () => {
+    // In a real app, this triggers Google OAuth
+    // Google will handle showing the user's own accounts
+    console.log('Redirecting to Google OAuth...');
+    // window.location.href = `${process.env.REACT_APP_API_URL}/auth/google/signup`;
+    
+    // For demo purposes, redirect to verification
+    navigate('/verify');
   };
 
   return (
-    <div className="pt-28 flex justify-center items-center min-h-[80vh]">
-      <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-adorix-dark mb-2">Create account</h2>
-        <p className="text-gray-500 mb-8">Join the ad revolution today.</p>
+    <div className="auth-container">
+      <motion.div
+        className="auth-card"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="auth-header">
+          <h1 className="auth-title">Create account</h1>
+          <p className="auth-subtitle">
+            or{' '}
+            <Link to="/login" className="auth-link">
+              sign in to your account
+            </Link>
+          </p>
+        </div>
 
-        <form onSubmit={handleSignup} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-            <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-adorix-500 focus:outline-none transition" />
+        {/* Sign Up Form */}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="form-input"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-adorix-500 focus:outline-none transition" />
+
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-adorix-500 focus:outline-none transition" />
+
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-input"
+              required
+            />
           </div>
-          
-          <button type="submit" className="w-full bg-adorix-600 hover:bg-adorix-700 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-adorix-500/30">
+
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="form-input"
+              required
+            />
+          </div>
+
+          <motion.button
+            type="submit"
+            className="btn-primary"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
             Create Account
-          </button>
+          </motion.button>
         </form>
-      </div>
+
+        {/* Google Sign Up */}
+        <div className="divider">
+          or
+        </div>
+
+        <motion.button
+          type="button"
+          className="btn-google"
+          onClick={handleGoogleSignUp}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <svg viewBox="0 0 24 24" className="google-icon">
+            <text x="12" y="16" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#4285F4">G</text>
+          </svg>
+          Sign up with Google
+        </motion.button>
+      </motion.div>
     </div>
   );
 };

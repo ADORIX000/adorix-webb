@@ -15,6 +15,8 @@ import CampaignStudio from './pages/pagesonNav/CampaignStudio';
 import Profile from './pages/pagesonNav/Profile';
 import Pricing from './pages/pagesonNav/payment/Pricing';
 import PaymentMethod from './pages/pagesonNav/payment/PaymentMethod';
+import UpgradePlan from './pages/pagesonNav/payment/UpgradePlan';
+import Checkout from './pages/pagesonNav/payment/Checkout';
 
 // New Settings Pages (Ensure these files exist in src/pages/settings/)
 import AccountInfo from './pages/settings/AccountInfo';
@@ -47,6 +49,8 @@ function App() {
 
           {/* Payment */}
           <Route path="/payment-method" element={<PaymentMethod />} />
+          <Route path="/upgrade/:plan" element={<UpgradePlan />} />
+          <Route path="/checkout/:plan/:method" element={<Checkout />} />
 
           {/* Settings Module Routes */}
           <Route path="/settings/account" element={<AccountInfo />} />
