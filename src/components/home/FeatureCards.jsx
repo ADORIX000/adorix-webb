@@ -15,22 +15,22 @@ const BioMesh = ({ isPaused }) => (
                     </feMerge>
                 </filter>
                 <linearGradient id="signalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="transparent" />
-                        <stop offset="50%" stopColor="var(--adorix-accent)" />
-                        <stop offset="100%" stopColor="transparent" />
-                    </linearGradient>
-                    <radialGradient id="planetGradient" cx="50%" cy="35%">
-                        <stop offset="0%" stopColor="#9EECEC" />
-                        <stop offset="60%" stopColor="#08A6B0" />
-                        <stop offset="100%" stopColor="#056E74" />
-                    </radialGradient>
-                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="transparent" />
-                        <stop offset="40%" stopColor="var(--adorix-accent)" stopOpacity="0.5" />
-                        <stop offset="60%" stopColor="var(--adorix-primary)" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="transparent" />
-                    </linearGradient>
-                </defs>
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="50%" stopColor="var(--adorix-accent)" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+                <radialGradient id="planetGradient" cx="50%" cy="35%">
+                    <stop offset="0%" stopColor="#9EECEC" />
+                    <stop offset="60%" stopColor="#08A6B0" />
+                    <stop offset="100%" stopColor="#056E74" />
+                </radialGradient>
+                <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="transparent" />
+                    <stop offset="40%" stopColor="var(--adorix-accent)" stopOpacity="0.5" />
+                    <stop offset="60%" stopColor="var(--adorix-primary)" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="transparent" />
+                </linearGradient>
+            </defs>
 
             {/* Synaptic Core - Background Neural Web */}
             {[0, 1, 2, 3, 4].map((i) => (
