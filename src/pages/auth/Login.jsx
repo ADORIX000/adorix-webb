@@ -1,32 +1,119 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import './Auth.css';
 
 const Login = () => {
-  return (
-    <div className="pt-28 flex justify-center items-center min-h-[80vh]">
-      <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-adorix-dark mb-2">Welcome back</h2>
-        <p className="text-gray-500 mb-8">Sign in to your Adorix dashboard</p>
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
 
-        <form className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-adorix-500 focus:outline-none transition" />
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email && password) {
+      navigate('/dashboard');
+    }
+  };
+
+  const handleGoogleSignIn = () => {
+    // In a real app, this triggers Google OAuth
+    // Google will handle showing the user's own accounts
+    console.log('Redirecting to Google OAuth...');
+    // window.location.href = `${process.env.REACT_APP_API_URL}/auth/google`;
+    
+    // For demo purposes, redirect to dashboard
+    navigate('/dashboard');
+  };
+
+  return (
+    <div className="auth-container">
+      <motion.div
+        className="auth-card"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Header */}
+        <div className="auth-header">
+          <h1 className="auth-title">Sign in</h1>
+          <p className="auth-subtitle">
+            or{' '}
+            <Link to="/signup" className="auth-link">
+              create an account
+            </Link>
+          </p>
+        </div>
+
+        {/* Sign In Form */}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-adorix-500 focus:outline-none transition" />
+
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-input"
+              required
+            />
           </div>
-          
-          <button className="w-full bg-adorix-600 hover:bg-adorix-700 text-white font-bold py-3 rounded-lg transition shadow-lg shadow-adorix-500/30">
-            Sign In
-          </button>
+
+          <div className="form-checkbox">
+            <input
+              type="checkbox"
+              id="remember"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label htmlFor="remember">Remember me</label>
+          </div>
+
+          <motion.button
+            type="submit"
+            className="btn-primary"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Sign in
+          </motion.button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
-          Don't have an account? <Link to="/signup" className="text-adorix-600 font-semibold hover:underline">Sign up</Link>
+        {/* Google Sign In */}
+        <div className="divider">
+          or
         </div>
-      </div>
+
+        <motion.button
+          type="button"
+          className="btn-google"
+          onClick={handleGoogleSignIn}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <svg viewBox="0 0 24 24" className="google-icon">
+            <text x="12" y="16" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#4285F4">G</text>
+          </svg>
+          Sign in with Google
+        </motion.button>
+
+        {/* Footer Links */}
+        <div className="auth-footer">
+          <Link to="#" className="footer-link">
+            Forgotten your password?
+          </Link>
+        </div>
+      </motion.div>
     </div>
   );
 };
