@@ -4,7 +4,7 @@ import {
   User, Settings, CreditCard, Shield, Bell, Eye, Camera, Mail, Phone,
   MapPin, Briefcase, Calendar, TrendingUp, Activity, Zap, Download,
   Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-  LogOut, ShieldCheck, FileKey, Trash2, RefreshCcw, Upload, Plus
+  LogOut, ShieldCheck, FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, EyeOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -15,6 +15,8 @@ const Profile = () => {
   const [copied, setCopied] = useState(false);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const [showCoverOptions, setShowCoverOptions] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isResetMode, setIsResetMode] = useState(false);
 
   // File Refs
   const profileInputRef = useRef(null);
@@ -80,6 +82,10 @@ const Profile = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    setIsResetMode(!isResetMode);
+  };
+
   const handleCopyApiKey = () => {
     navigator.clipboard.writeText('adorix_sk_live_1234567890abcdef');
     setCopied(true);
@@ -89,7 +95,7 @@ const Profile = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Activity },
     { id: 'account', label: 'Account Info', icon: User },
-    { id: 'security', label: 'Security', icon: Shield },
+    { id: 'password', label: 'Password', icon: Lock },
     { id: 'billing', label: 'Billing', icon: CreditCard },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
@@ -133,7 +139,7 @@ const Profile = () => {
             <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
               <Check className="w-4 h-4" />
             </div>
-            Profile updated successfully!
+            {isSaving ? 'Processing request...' : 'Action completed successfully!'}
           </motion.div>
         )}
       </AnimatePresence>
@@ -636,155 +642,250 @@ const Profile = () => {
               </div>
             )}
 
-            {/* Other tabs remain sleek and consistent */}
-            {activeTab === 'security' && (
+            {/* Password - Access Key Authentication */}
+            {activeTab === 'password' && (
               <div className="max-w-4xl mx-auto space-y-8">
                 <div className="bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12 group-hover:rotate-0 transition-transform duration-700">
-                    <Shield className="w-32 h-32" />
+                    <Lock className="w-32 h-32" />
                   </div>
-                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight">Security Protocol</h2>
-                  <div className="space-y-6 max-w-xl">
+                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
+                    <div className="w-12 h-12 bg-adorix-primary/10 rounded-2xl flex items-center justify-center text-adorix-primary">
+                      <Lock className="w-6 h-6" />
+                    </div>
+                    Access Key Authentication
+                  </h2>
+                  <div className="space-y-8 max-w-xl">
+                    {!isResetMode ? (
+                      <div className="space-y-2">
+                        <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center justify-between">
+                          <span className="flex items-center gap-2">
+                            <FileKey className="w-3 h-3 text-adorix-primary" /> Current Password
+                          </span>
+                        </label>
+                        <div className="relative group">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••••••"
+                            className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                          >
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
+                        <div className="flex justify-end mt-2 px-2">
+                          <button
+                            onClick={handleForgotPassword}
+                            className="text-xs font-black text-adorix-secondary hover:text-adorix-primary transition-colors flex items-center gap-1 uppercase tracking-widest"
+                          >
+                            <Sparkles className="w-3 h-3" /> Forgot your password?
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6 bg-adorix-primary/5 rounded-[2rem] border-2 border-dashed border-adorix-primary/20 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-adorix-primary shadow-sm">
+                              <Sparkles className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-black text-adorix-dark">Recovery Mode Active</p>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Set a new password directly</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setIsResetMode(false)}
+                            className="text-xs font-black text-adorix-primary hover:underline uppercase tracking-widest"
+                          >
+                            Cancel Reset
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2">Current Key</label>
-                      <input type="password" placeholder="••••••••••••" className="w-full bg-gray-50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary transition-all font-bold" />
+                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                        <ShieldCheck className="w-3 h-3 text-adorix-secondary" /> New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create strong password"
+                          className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2">New Secret Key</label>
-                      <input type="password" placeholder="Enter new password" className="w-full bg-gray-50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary transition-all font-bold" />
+                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                        <Check className="w-3 h-3 text-emerald-500" /> Confirm New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Repeat new password"
+                          className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
-                    <button className="px-10 py-4 bg-adorix-primary text-white rounded-[1.5rem] font-black tracking-tight shadow-xl hover:bg-adorix-dark transition-all">Update Key</button>
+
+                    <div className="pt-4">
+                      <button className="w-full py-5 bg-adorix-dark text-white rounded-[2rem] font-black shadow-xl shadow-adorix-dark/20 hover:bg-adorix-primary transition-all flex items-center justify-center gap-3 group active:scale-95">
+                        <Save className="w-5 h-5 group-hover:animate-pulse" /> Update Authentication Key
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Billing - Sleek Card Layout */}
-            {activeTab === 'billing' && (
-              <div className="max-w-5xl mx-auto space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 className="text-xl font-black mb-8 flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-adorix-primary" /> Active Card
-                    </h3>
-                    <div className="bg-gradient-to-br from-adorix-dark to-gray-800 p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden group">
-                      <div className="relative z-10">
-                        <div className="flex justify-between items-start mb-12">
-                          <div className="w-12 h-8 bg-amber-400/20 rounded-md backdrop-blur-md border border-amber-400/30"></div>
-                          <Globe className="w-8 h-8 opacity-20" />
-                        </div>
-                        <p className="text-2xl font-mono tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <p className="text-[10px] uppercase font-black opacity-40 mb-1">Holder</p>
-                            <p className="font-bold tracking-widest">{profileData.fullName.toUpperCase()}</p>
+            {
+              activeTab === 'billing' && (
+                <div className="max-w-5xl mx-auto space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                      <h3 className="text-xl font-black mb-8 flex items-center gap-2">
+                        <CreditCard className="w-5 h-5 text-adorix-primary" /> Active Card
+                      </h3>
+                      <div className="bg-gradient-to-br from-adorix-dark to-gray-800 p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden group">
+                        <div className="relative z-10">
+                          <div className="flex justify-between items-start mb-12">
+                            <div className="w-12 h-8 bg-amber-400/20 rounded-md backdrop-blur-md border border-amber-400/30"></div>
+                            <Globe className="w-8 h-8 opacity-20" />
                           </div>
-                          <div>
-                            <p className="text-[10px] uppercase font-black opacity-40 mb-1">Expiry</p>
-                            <p className="font-bold">12 / 26</p>
+                          <p className="text-2xl font-mono tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-[10px] uppercase font-black opacity-40 mb-1">Holder</p>
+                              <p className="font-bold tracking-widest">{profileData.fullName.toUpperCase()}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] uppercase font-black opacity-40 mb-1">Expiry</p>
+                              <p className="font-bold">12 / 26</p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 className="text-xl font-black mb-8 flex items-center gap-2">
-                      <History className="w-5 h-5 text-adorix-secondary" /> History
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        { date: 'Jan 15, 2026', amt: 'LKR 575', status: 'PAID' },
-                        { date: 'Dec 15, 2025', amt: 'LKR 575', status: 'PAID' },
-                        { date: 'Nov 15, 2025', amt: 'LKR 575', status: 'PAID' },
-                      ].map((inv, i) => (
-                        <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-adorix-light transition-colors">
-                          <div>
-                            <p className="font-black text-adorix-dark">{inv.date}</p>
-                            <p className="text-xs font-bold text-gray-400">{inv.amt}</p>
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                      <h3 className="text-xl font-black mb-8 flex items-center gap-2">
+                        <History className="w-5 h-5 text-adorix-secondary" /> History
+                      </h3>
+                      <div className="space-y-4">
+                        {[
+                          { date: 'Jan 15, 2026', amt: 'LKR 575', status: 'PAID' },
+                          { date: 'Dec 15, 2025', amt: 'LKR 575', status: 'PAID' },
+                          { date: 'Nov 15, 2025', amt: 'LKR 575', status: 'PAID' },
+                        ].map((inv, i) => (
+                          <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-adorix-light transition-colors">
+                            <div>
+                              <p className="font-black text-adorix-dark">{inv.date}</p>
+                              <p className="text-xs font-bold text-gray-400">{inv.amt}</p>
+                            </div>
+                            <button className="p-3 bg-white text-adorix-primary rounded-xl hover:scale-110 transition-transform shadow-sm">
+                              <Download className="w-4 h-4" />
+                            </button>
                           </div>
-                          <button className="p-3 bg-white text-adorix-primary rounded-xl hover:scale-110 transition-transform shadow-sm">
-                            <Download className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )
+            }
 
             {/* Settings - Modern Toggles */}
-            {activeTab === 'settings' && (
-              <div className="max-w-4xl mx-auto bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm">
-                <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
-                  <Bell className="w-8 h-8 text-adorix-accent animate-pulse" /> Notification Engine
-                </h2>
-                <div className="space-y-6">
-                  {[
-                    { title: 'Global Newsletters', desc: 'Updates on new AI models & kiosk features', checked: true },
-                    { title: 'Smart Campaign Alerts', desc: 'Automated insights when patterns change', checked: true },
-                    { title: 'Security Heartbeat', desc: 'Real-time login & device status pings', checked: false },
-                    { title: 'Billing Artifacts', desc: 'Invoices and usage limit reports', checked: true },
-                  ].map((pref, i) => (
-                    <div key={i} className="flex items-center justify-between p-6 bg-gray-50/50 rounded-[2rem] border-2 border-transparent hover:border-adorix-primary/10 transition-all group">
-                      <div>
-                        <p className="text-lg font-black text-adorix-dark mb-1 group-hover:text-adorix-primary transition-colors">{pref.title}</p>
-                        <p className="text-sm text-gray-500 font-medium italic">{pref.desc}</p>
+            {
+              activeTab === 'settings' && (
+                <div className="max-w-4xl mx-auto bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm">
+                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
+                    <Bell className="w-8 h-8 text-adorix-accent animate-pulse" /> Notification Engine
+                  </h2>
+                  <div className="space-y-6">
+                    {[
+                      { title: 'Global Newsletters', desc: 'Updates on new AI models & kiosk features', checked: true },
+                      { title: 'Smart Campaign Alerts', desc: 'Automated insights when patterns change', checked: true },
+                      { title: 'Security Heartbeat', desc: 'Real-time login & device status pings', checked: false },
+                      { title: 'Billing Artifacts', desc: 'Invoices and usage limit reports', checked: true },
+                    ].map((pref, i) => (
+                      <div key={i} className="flex items-center justify-between p-6 bg-gray-50/50 rounded-[2rem] border-2 border-transparent hover:border-adorix-primary/10 transition-all group">
+                        <div>
+                          <p className="text-lg font-black text-adorix-dark mb-1 group-hover:text-adorix-primary transition-colors">{pref.title}</p>
+                          <p className="text-sm text-gray-500 font-medium italic">{pref.desc}</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" defaultChecked={pref.checked} className="sr-only peer" />
+                          <div className="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-adorix-primary"></div>
+                        </label>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" defaultChecked={pref.checked} className="sr-only peer" />
-                        <div className="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-adorix-primary"></div>
-                      </label>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Privacy & Logout Sections */}
-                <div className="mt-12 pt-12 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 group hover:border-adorix-primary/20 transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-adorix-primary shadow-sm group-hover:scale-110 transition-transform">
-                        <ShieldCheck className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-adorix-dark">Privacy Policy</h3>
-                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Legal Compliance</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-500 font-medium italic mb-6">Review how we protect your data and handle information across the ADORIX mesh network.</p>
-                    <button className="text-adorix-primary font-black text-sm hover:underline flex items-center gap-2">
-                      <FileKey className="w-4 h-4" /> View Full Policy
-                    </button>
+                    ))}
                   </div>
 
-                  <div className="p-8 bg-red-50/30 rounded-[2.5rem] border border-red-100 group hover:border-red-200 transition-all flex flex-col justify-between">
-                    <div>
+                  {/* Privacy & Logout Sections */}
+                  <div className="mt-12 pt-12 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 group hover:border-adorix-primary/20 transition-all">
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:rotate-12 transition-transform">
-                          <LogOut className="w-6 h-6" />
+                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-adorix-primary shadow-sm group-hover:scale-110 transition-transform">
+                          <ShieldCheck className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-black text-adorix-dark">Session Management</h3>
-                          <p className="text-xs text-red-400 font-bold uppercase tracking-wider">Account Access</p>
+                          <h3 className="font-black text-adorix-dark">Privacy Policy</h3>
+                          <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Legal Compliance</p>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-500 font-medium italic mb-6">Instantly terminate your current session and exit the workspace dashboard.</p>
+                      <p className="text-sm text-gray-500 font-medium italic mb-6">Review how we protect your data and handle information across the ADORIX mesh network.</p>
+                      <button className="text-adorix-primary font-black text-sm hover:underline flex items-center gap-2">
+                        <FileKey className="w-4 h-4" /> View Full Policy
+                      </button>
                     </div>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2"
-                    >
-                      <LogOut className="w-4 h-4" /> Log Out
-                    </button>
+
+                    <div className="p-8 bg-red-50/30 rounded-[2.5rem] border border-red-100 group hover:border-red-200 transition-all flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:rotate-12 transition-transform">
+                            <LogOut className="w-6 h-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-black text-adorix-dark">Session Management</h3>
+                            <p className="text-xs text-red-400 font-bold uppercase tracking-wider">Account Access</p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-500 font-medium italic mb-6">Instantly terminate your current session and exit the workspace dashboard.</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" /> Log Out
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
+              )
+            }
+          </motion.div >
+        </AnimatePresence >
+      </div >
+    </div >
   );
 };
 
