@@ -4,7 +4,7 @@ import {
   User, Settings, CreditCard, Shield, Bell, Eye, Camera, Mail, Phone,
   MapPin, Briefcase, Calendar, TrendingUp, Activity, Zap, Download,
   Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-  LogOut, ShieldCheck, FileKey
+  LogOut, ShieldCheck, FileKey, Trash2, RefreshCcw, Upload, Plus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,6 +13,8 @@ const Profile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  const [showCoverOptions, setShowCoverOptions] = useState(false);
 
   // File Refs
   const profileInputRef = useRef(null);
@@ -42,15 +44,28 @@ const Profile = () => {
   const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (file) {
+      setIsSaving(true);
       const url = URL.createObjectURL(file);
-      if (type === 'avatar') setAvatarUrl(url);
-      else setCoverUrl(url);
+
+      // Simulate/Trigger immediate UI update and success toast
+      setTimeout(() => {
+        if (type === 'avatar') {
+          if (avatarUrl && avatarUrl.startsWith('blob:')) URL.revokeObjectURL(avatarUrl);
+          setAvatarUrl(url);
+        } else {
+          if (coverUrl && coverUrl.startsWith('blob:')) URL.revokeObjectURL(coverUrl);
+          setCoverUrl(url);
+        }
+        setIsSaving(false);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      }, 800);
     }
   };
 
   const handleSave = () => {
     setIsSaving(true);
-    // Simulate API call
+    // Simulate API call for form data
     setTimeout(() => {
       setIsSaving(false);
       setShowToast(true);
@@ -76,7 +91,7 @@ const Profile = () => {
     { id: 'account', label: 'Account Info', icon: User },
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'billing', label: 'Billing', icon: CreditCard },
-    { id: 'preferences', label: 'Preferences', icon: Settings },
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   const stats = [
@@ -93,6 +108,7 @@ const Profile = () => {
         type="file"
         ref={profileInputRef}
         onChange={(e) => handleFileChange(e, 'avatar')}
+        onClick={(e) => { e.target.value = null; }}
         className="hidden"
         accept="image/*"
       />
@@ -100,6 +116,7 @@ const Profile = () => {
         type="file"
         ref={coverInputRef}
         onChange={(e) => handleFileChange(e, 'cover')}
+        onClick={(e) => { e.target.value = null; }}
         className="hidden"
         accept="image/*"
       />
@@ -126,12 +143,19 @@ const Profile = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative bg-white rounded-[2rem] overflow-hidden mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100"
+          className="relative bg-white rounded-[2rem] mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10"
         >
           {/* Cover Photo */}
           <div
+            onClick={() => {
+              if (coverUrl) {
+                setShowCoverOptions(!showCoverOptions);
+                setShowPhotoOptions(false);
+              } else {
+                coverInputRef.current.click();
+              }
+            }}
             className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group cursor-pointer"
-            onClick={() => coverInputRef.current.click()}
           >
             {coverUrl ? (
               <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
@@ -142,9 +166,77 @@ const Profile = () => {
                 <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-adorix-accent/20 rounded-full blur-[100px]"></div>
               </>
             )}
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/20">
-                <Camera className="w-6 h-6 text-white" />
+
+            {/* Loading Overlay */}
+            <AnimatePresence>
+              {isSaving && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-adorix-dark/40 backdrop-blur-sm z-40 flex items-center justify-center"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <Loader2 className="w-10 h-10 text-white animate-spin" />
+                    <span className="text-white font-black text-sm uppercase tracking-widest">Optimizing Cover...</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className={`absolute inset-0 bg-black/20 ${showCoverOptions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity flex items-center justify-center z-50`}>
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (coverUrl) {
+                      setShowCoverOptions(!showCoverOptions);
+                    } else {
+                      coverInputRef.current.click();
+                    }
+                  }}
+                  className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20 hover:bg-white/20 transition-all shadow-2xl active:scale-90"
+                >
+                  <Camera className="w-6 h-6 text-white" />
+                </button>
+
+                <AnimatePresence>
+                  {showCoverOptions && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                      className="absolute top-full mt-4 left-0 bg-white rounded-3xl shadow-2xl border border-gray-100 p-3 min-w-[220px] z-[100]"
+                    >
+                      <button
+                        onClick={() => {
+                          coverInputRef.current.click();
+                          setShowCoverOptions(false);
+                        }}
+                        className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-adorix-dark"
+                      >
+                        <div className={`w-10 h-10 ${coverUrl ? 'bg-adorix-primary/10 text-adorix-primary' : 'bg-emerald-100 text-emerald-600'} rounded-xl flex items-center justify-center`}>
+                          {coverUrl ? <RefreshCcw className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                        </div>
+                        {coverUrl ? 'Change Cover' : 'Add Cover'}
+                      </button>
+                      {coverUrl && (
+                        <button
+                          onClick={() => {
+                            setCoverUrl(null);
+                            setShowCoverOptions(false);
+                          }}
+                          className="w-full text-left p-4 hover:bg-red-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-red-500"
+                        >
+                          <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-500">
+                            <Trash2 className="w-5 h-5" />
+                          </div>
+                          Remove Cover
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -153,7 +245,17 @@ const Profile = () => {
           <div className="px-10 pb-10">
             <div className="flex flex-col md:flex-row items-end gap-8 -mt-16 relative z-10">
               {/* Circular Avatar */}
-              <div className="relative group mx-auto md:mx-0">
+              <div
+                onClick={() => {
+                  if (avatarUrl) {
+                    setShowPhotoOptions(!showPhotoOptions);
+                    setShowCoverOptions(false);
+                  } else {
+                    profileInputRef.current.click();
+                  }
+                }}
+                className="relative group mx-auto md:mx-0 cursor-pointer z-[60]"
+              >
                 <div className="w-40 h-40 rounded-full bg-white p-1 shadow-2xl transition-transform hover:scale-105">
                   <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50">
                     <img
@@ -161,14 +263,76 @@ const Profile = () => {
                       alt="Avatar"
                       className="w-full h-full object-cover"
                     />
+
+                    {/* Avatar Loading Overlay */}
+                    <AnimatePresence>
+                      {isSaving && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute inset-0 bg-adorix-primary/60 backdrop-blur-sm z-30 flex items-center justify-center"
+                        >
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
-                <button
-                  onClick={() => profileInputRef.current.click()}
-                  className="absolute bottom-1 right-1 bg-adorix-dark text-white p-3 rounded-full shadow-xl hover:bg-adorix-primary transition-colors border-4 border-white group-hover:scale-110"
-                >
-                  <Camera className="w-5 h-5" />
-                </button>
+                <div className="absolute bottom-1 right-1 z-[60]" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (avatarUrl) {
+                        setShowPhotoOptions(!showPhotoOptions);
+                        setShowCoverOptions(false);
+                      } else {
+                        profileInputRef.current.click();
+                      }
+                    }}
+                    className="bg-adorix-dark text-white p-3 rounded-full shadow-xl hover:bg-adorix-primary transition-colors border-4 border-white group-hover:scale-110"
+                  >
+                    <Camera className="w-5 h-5" />
+                  </button>
+
+                  <AnimatePresence>
+                    {showPhotoOptions && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                        className="absolute bottom-full right-0 mb-4 bg-white rounded-3xl shadow-2xl border border-gray-100 p-3 min-w-[200px] z-[100]"
+                      >
+                        <button
+                          onClick={() => {
+                            profileInputRef.current.click();
+                            setShowPhotoOptions(false);
+                          }}
+                          className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-adorix-dark"
+                        >
+                          <div className={`w-10 h-10 ${avatarUrl ? 'bg-adorix-primary/10 text-adorix-primary' : 'bg-emerald-100 text-emerald-600'} rounded-xl flex items-center justify-center`}>
+                            {avatarUrl ? <RefreshCcw className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                          </div>
+                          {avatarUrl ? 'Change Photo' : 'Add Photo'}
+                        </button>
+                        {avatarUrl && (
+                          <button
+                            onClick={() => {
+                              setAvatarUrl(null);
+                              setShowPhotoOptions(false);
+                            }}
+                            className="w-full text-left p-4 hover:bg-red-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-red-500"
+                          >
+                            <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-500">
+                              <Trash2 className="w-5 h-5" />
+                            </div>
+                            Remove Photo
+                          </button>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               {/* Identity & Status */}
@@ -334,6 +498,69 @@ const Profile = () => {
                   </button>
                 </div>
 
+                {/* Profile & Cover Management in Tab */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                  {/* Avatar Management */}
+                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 flex flex-col items-center text-center">
+                    <div className="relative mb-6">
+                      <div className="w-32 h-32 rounded-full bg-white p-1 shadow-lg">
+                        <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-white">
+                          <img
+                            src={avatarUrl || `https://ui-avatars.com/api/?name=${profileData.fullName}&background=0D8A9E&color=fff&size=200`}
+                            alt="Avatar Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full gap-3">
+                      <button
+                        onClick={() => profileInputRef.current.click()}
+                        className="w-full py-3 bg-white hover:bg-gray-100 text-adorix-dark rounded-2xl font-black flex items-center justify-center gap-2 shadow-sm border border-gray-200 transition-all active:scale-95"
+                      >
+                        <Upload className="w-4 h-4 text-adorix-primary" /> {avatarUrl ? 'Change Avatar' : 'Add Avatar'}
+                      </button>
+                      {avatarUrl && (
+                        <button
+                          onClick={() => setAvatarUrl(null)}
+                          className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-2xl font-black flex items-center justify-center gap-2 transition-all active:scale-95"
+                        >
+                          <Trash2 className="w-4 h-4" /> Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Cover Management */}
+                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 flex flex-col items-center text-center">
+                    <div className="w-full h-32 rounded-3xl bg-white p-1 shadow-lg mb-6 overflow-hidden">
+                      <div className="w-full h-full rounded-[1.25rem] bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-white relative">
+                        {coverUrl ? (
+                          <img src={coverUrl} alt="Cover Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-adorix-dark to-slate-800 opacity-80" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full gap-3">
+                      <button
+                        onClick={() => coverInputRef.current.click()}
+                        className="w-full py-3 bg-white hover:bg-gray-100 text-adorix-dark rounded-2xl font-black flex items-center justify-center gap-2 shadow-sm border border-gray-200 transition-all active:scale-95"
+                      >
+                        <Upload className="w-4 h-4 text-adorix-secondary" /> {coverUrl ? 'Change Cover' : 'Add Cover'}
+                      </button>
+                      {coverUrl && (
+                        <button
+                          onClick={() => setCoverUrl(null)}
+                          className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-2xl font-black flex items-center justify-center gap-2 transition-all active:scale-95"
+                        >
+                          <Trash2 className="w-4 h-4" /> Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
                   <div className="space-y-2">
                     <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
@@ -487,8 +714,8 @@ const Profile = () => {
               </div>
             )}
 
-            {/* Preferences - Modern Toggles */}
-            {activeTab === 'preferences' && (
+            {/* Settings - Modern Toggles */}
+            {activeTab === 'settings' && (
               <div className="max-w-4xl mx-auto bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm">
                 <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
                   <Bell className="w-8 h-8 text-adorix-accent animate-pulse" /> Notification Engine
