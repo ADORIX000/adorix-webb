@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  CreditCard, Smartphone, ShieldCheck, ArrowLeft,
-  Sparkles, Zap, ChevronRight, Landmark
+  ArrowLeft, ChevronRight, Landmark, CreditCard, ShieldCheck
 } from 'lucide-react';
+import ApplePayIcon from '../../../components/common/ApplePayIcon';
 
 export default function UpgradePlan() {
   const { plan } = useParams();
@@ -20,25 +20,11 @@ export default function UpgradePlan() {
       color: 'blue'
     },
     {
-      id: 'paypal',
-      name: 'PayPal',
-      icon: Landmark,
-      description: 'Fast and secure checkout',
-      color: 'indigo'
-    },
-    {
       id: 'applepay',
       name: 'Apple Pay',
-      icon: Smartphone,
+      icon: ApplePayIcon,
       description: 'Quick payment with Apple',
       color: 'gray'
-    },
-    {
-      id: 'googlepay',
-      name: 'Google Pay',
-      icon: Sparkles,
-      description: 'Secure Google Pay integration',
-      color: 'emerald'
     },
   ];
 
