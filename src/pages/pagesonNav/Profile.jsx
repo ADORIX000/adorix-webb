@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   User, Settings, CreditCard, Shield, Bell, Eye, Camera, Mail, Phone,
   MapPin, Briefcase, Calendar, TrendingUp, Activity, Zap, Download,
-  Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-  BadgeCheck
+  Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
