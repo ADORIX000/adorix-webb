@@ -5,6 +5,7 @@ import {
   ArrowLeft, CreditCard, HelpCircle,
   Pencil, Sparkles, ShieldCheck
 } from 'lucide-react';
+import ApplePayIcon from '../../../components/common/ApplePayIcon';
 
 export default function Checkout() {
   const { plan, method } = useParams();
@@ -14,12 +15,8 @@ export default function Checkout() {
     switch (method) {
       case 'card':
         return <CardPayment plan={plan} navigate={navigate} />;
-      case 'paypal':
-        return <PayPalPayment plan={plan} provider="PayPal" navigate={navigate} />;
       case 'applepay':
-        return <ProviderPayment plan={plan} provider="Apple Pay" navigate={navigate} />;
-      case 'googlepay':
-        return <ProviderPayment plan={plan} provider="Google Pay" navigate={navigate} />;
+        return <ProviderPayment plan={plan} provider="Apple Pay" icon={ApplePayIcon} navigate={navigate} />;
       default:
         return <CardPayment plan={plan} navigate={navigate} />;
     }
@@ -170,29 +167,11 @@ function CardPayment({ plan, navigate }) {
   );
 }
 
-function PayPalPayment({ plan, provider, navigate }) {
-  return (
-    <div className="text-center py-12">
-      <div className="w-20 h-20 bg-[#0070ba]/10 rounded-full flex items-center justify-center text-[#0070ba] mx-auto mb-6">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="w-10" />
-      </div>
-      <h2 className="text-xl font-normal text-[#202124] mb-2">{provider} Checkout</h2>
-      <p className="text-sm text-gray-600 mb-8">Pay securely using your PayPal account.</p>
-      <button
-        onClick={() => { alert('PayPal success'); navigate('/dashboard'); }}
-        className="w-full py-4 bg-[#0070ba] text-white rounded-full font-medium hover:opacity-90 transition-all"
-      >
-        Continue to PayPal
-      </button>
-    </div>
-  );
-}
-
-function ProviderPayment({ plan, provider, navigate }) {
+function ProviderPayment({ plan, provider, navigate, icon: IconComponent = ShieldCheck }) {
   return (
     <div className="text-center py-12">
       <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-100">
-        <ShieldCheck className="w-10 h-10 text-gray-400" />
+        <IconComponent className="w-10 h-10 text-gray-400" />
       </div>
       <h2 className="text-xl font-normal text-[#202124] mb-2">{provider}</h2>
       <p className="text-sm text-gray-600 mb-8">Pay securely using {provider} biometric auth.</p>
