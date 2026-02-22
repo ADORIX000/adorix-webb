@@ -5,6 +5,7 @@ import Footer from './components/common/Footer';
 
 // Pages
 import Home from './pages/pagesonNav/Home';
+import Features from './pages/pagesonNav/Features';
 import Contact from './pages/pagesonNav/Contact';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/features" element={<Features />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/pricing" element={<Pricing />} />
 

@@ -23,6 +23,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
+    { name: 'Features', path: '/features' },
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Campaign Studio', path: '/dashboard/studio' },
     { name: 'Pricing', path: '/pricing' },
@@ -34,8 +35,8 @@ const Navbar = () => {
     <>
       <nav
         className={`w-full fixed top-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'h-16 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm'
-            : 'h-24 bg-transparent border-b border-transparent'
+          ? 'h-16 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm'
+          : 'h-24 bg-transparent border-b border-transparent'
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
