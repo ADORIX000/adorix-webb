@@ -62,7 +62,7 @@ const MeetTeam = () => {
     ];
 
     return (
-        <section className="py-24 px-6 max-w-7xl mx-auto z-10 relative">
+        <section id="team" className="py-24 px-6 max-w-7xl mx-auto z-10 relative">
             <div className="text-center mb-16">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}

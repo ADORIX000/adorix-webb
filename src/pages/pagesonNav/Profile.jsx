@@ -4,7 +4,7 @@ import {
   User, Settings, CreditCard, Shield, Bell, Eye, Camera, Mail, Phone,
   MapPin, Briefcase, Calendar, TrendingUp, Activity, Zap, Download,
   Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-  LogOut, ShieldCheck, FileKey
+  LogOut, ShieldCheck, FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, EyeOff
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,6 +13,10 @@ const Profile = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  const [showCoverOptions, setShowCoverOptions] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isResetMode, setIsResetMode] = useState(false);
 
   // File Refs
   const profileInputRef = useRef(null);
@@ -42,15 +46,28 @@ const Profile = () => {
   const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (file) {
+      setIsSaving(true);
       const url = URL.createObjectURL(file);
-      if (type === 'avatar') setAvatarUrl(url);
-      else setCoverUrl(url);
+
+      // Simulate/Trigger immediate UI update and success toast
+      setTimeout(() => {
+        if (type === 'avatar') {
+          if (avatarUrl && avatarUrl.startsWith('blob:')) URL.revokeObjectURL(avatarUrl);
+          setAvatarUrl(url);
+        } else {
+          if (coverUrl && coverUrl.startsWith('blob:')) URL.revokeObjectURL(coverUrl);
+          setCoverUrl(url);
+        }
+        setIsSaving(false);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+      }, 800);
     }
   };
 
   const handleSave = () => {
     setIsSaving(true);
-    // Simulate API call
+    // Simulate API call for form data
     setTimeout(() => {
       setIsSaving(false);
       setShowToast(true);
@@ -65,6 +82,10 @@ const Profile = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    setIsResetMode(!isResetMode);
+  };
+
   const handleCopyApiKey = () => {
     navigator.clipboard.writeText('adorix_sk_live_1234567890abcdef');
     setCopied(true);
@@ -74,9 +95,9 @@ const Profile = () => {
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Activity },
     { id: 'account', label: 'Account Info', icon: User },
-    { id: 'security', label: 'Security', icon: Shield },
+    { id: 'password', label: 'Password', icon: Lock },
     { id: 'billing', label: 'Billing', icon: CreditCard },
-    { id: 'preferences', label: 'Preferences', icon: Settings },
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   const stats = [
@@ -93,6 +114,7 @@ const Profile = () => {
         type="file"
         ref={profileInputRef}
         onChange={(e) => handleFileChange(e, 'avatar')}
+        onClick={(e) => { e.target.value = null; }}
         className="hidden"
         accept="image/*"
       />
@@ -100,6 +122,7 @@ const Profile = () => {
         type="file"
         ref={coverInputRef}
         onChange={(e) => handleFileChange(e, 'cover')}
+        onClick={(e) => { e.target.value = null; }}
         className="hidden"
         accept="image/*"
       />
@@ -116,7 +139,7 @@ const Profile = () => {
             <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
               <Check className="w-4 h-4" />
             </div>
-            Profile updated successfully!
+            {isSaving ? 'Processing request...' : 'Action completed successfully!'}
           </motion.div>
         )}
       </AnimatePresence>
@@ -126,12 +149,19 @@ const Profile = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative bg-white rounded-[2rem] overflow-hidden mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100"
+          className="relative bg-white rounded-[2rem] mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10"
         >
           {/* Cover Photo */}
           <div
+            onClick={() => {
+              if (coverUrl) {
+                setShowCoverOptions(!showCoverOptions);
+                setShowPhotoOptions(false);
+              } else {
+                coverInputRef.current.click();
+              }
+            }}
             className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group cursor-pointer"
-            onClick={() => coverInputRef.current.click()}
           >
             {coverUrl ? (
               <img src={coverUrl} alt="Cover" className="w-full h-full object-cover" />
@@ -142,9 +172,77 @@ const Profile = () => {
                 <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-adorix-accent/20 rounded-full blur-[100px]"></div>
               </>
             )}
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <div className="bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/20">
-                <Camera className="w-6 h-6 text-white" />
+
+            {/* Loading Overlay */}
+            <AnimatePresence>
+              {isSaving && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-adorix-dark/40 backdrop-blur-sm z-40 flex items-center justify-center"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <Loader2 className="w-10 h-10 text-white animate-spin" />
+                    <span className="text-white font-black text-sm uppercase tracking-widest">Optimizing Cover...</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className={`absolute inset-0 bg-black/20 ${showCoverOptions ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity flex items-center justify-center z-50`}>
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (coverUrl) {
+                      setShowCoverOptions(!showCoverOptions);
+                    } else {
+                      coverInputRef.current.click();
+                    }
+                  }}
+                  className="bg-white/10 backdrop-blur-md p-4 rounded-full border border-white/20 hover:bg-white/20 transition-all shadow-2xl active:scale-90"
+                >
+                  <Camera className="w-6 h-6 text-white" />
+                </button>
+
+                <AnimatePresence>
+                  {showCoverOptions && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                      className="absolute top-full mt-4 left-0 bg-white rounded-3xl shadow-2xl border border-gray-100 p-3 min-w-[220px] z-[100]"
+                    >
+                      <button
+                        onClick={() => {
+                          coverInputRef.current.click();
+                          setShowCoverOptions(false);
+                        }}
+                        className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-adorix-dark"
+                      >
+                        <div className={`w-10 h-10 ${coverUrl ? 'bg-adorix-primary/10 text-adorix-primary' : 'bg-emerald-100 text-emerald-600'} rounded-xl flex items-center justify-center`}>
+                          {coverUrl ? <RefreshCcw className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                        </div>
+                        {coverUrl ? 'Change Cover' : 'Add Cover'}
+                      </button>
+                      {coverUrl && (
+                        <button
+                          onClick={() => {
+                            setCoverUrl(null);
+                            setShowCoverOptions(false);
+                          }}
+                          className="w-full text-left p-4 hover:bg-red-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-red-500"
+                        >
+                          <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-500">
+                            <Trash2 className="w-5 h-5" />
+                          </div>
+                          Remove Cover
+                        </button>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -153,7 +251,17 @@ const Profile = () => {
           <div className="px-10 pb-10">
             <div className="flex flex-col md:flex-row items-end gap-8 -mt-16 relative z-10">
               {/* Circular Avatar */}
-              <div className="relative group mx-auto md:mx-0">
+              <div
+                onClick={() => {
+                  if (avatarUrl) {
+                    setShowPhotoOptions(!showPhotoOptions);
+                    setShowCoverOptions(false);
+                  } else {
+                    profileInputRef.current.click();
+                  }
+                }}
+                className="relative group mx-auto md:mx-0 cursor-pointer z-[60]"
+              >
                 <div className="w-40 h-40 rounded-full bg-white p-1 shadow-2xl transition-transform hover:scale-105">
                   <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50">
                     <img
@@ -161,14 +269,76 @@ const Profile = () => {
                       alt="Avatar"
                       className="w-full h-full object-cover"
                     />
+
+                    {/* Avatar Loading Overlay */}
+                    <AnimatePresence>
+                      {isSaving && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute inset-0 bg-adorix-primary/60 backdrop-blur-sm z-30 flex items-center justify-center"
+                        >
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
-                <button
-                  onClick={() => profileInputRef.current.click()}
-                  className="absolute bottom-1 right-1 bg-adorix-dark text-white p-3 rounded-full shadow-xl hover:bg-adorix-primary transition-colors border-4 border-white group-hover:scale-110"
-                >
-                  <Camera className="w-5 h-5" />
-                </button>
+                <div className="absolute bottom-1 right-1 z-[60]" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (avatarUrl) {
+                        setShowPhotoOptions(!showPhotoOptions);
+                        setShowCoverOptions(false);
+                      } else {
+                        profileInputRef.current.click();
+                      }
+                    }}
+                    className="bg-adorix-dark text-white p-3 rounded-full shadow-xl hover:bg-adorix-primary transition-colors border-4 border-white group-hover:scale-110"
+                  >
+                    <Camera className="w-5 h-5" />
+                  </button>
+
+                  <AnimatePresence>
+                    {showPhotoOptions && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                        className="absolute bottom-full right-0 mb-4 bg-white rounded-3xl shadow-2xl border border-gray-100 p-3 min-w-[200px] z-[100]"
+                      >
+                        <button
+                          onClick={() => {
+                            profileInputRef.current.click();
+                            setShowPhotoOptions(false);
+                          }}
+                          className="w-full text-left p-4 hover:bg-gray-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-adorix-dark"
+                        >
+                          <div className={`w-10 h-10 ${avatarUrl ? 'bg-adorix-primary/10 text-adorix-primary' : 'bg-emerald-100 text-emerald-600'} rounded-xl flex items-center justify-center`}>
+                            {avatarUrl ? <RefreshCcw className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+                          </div>
+                          {avatarUrl ? 'Change Photo' : 'Add Photo'}
+                        </button>
+                        {avatarUrl && (
+                          <button
+                            onClick={() => {
+                              setAvatarUrl(null);
+                              setShowPhotoOptions(false);
+                            }}
+                            className="w-full text-left p-4 hover:bg-red-50 rounded-2xl transition-colors flex items-center gap-3 font-bold text-red-500"
+                          >
+                            <div className="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-red-500">
+                              <Trash2 className="w-5 h-5" />
+                            </div>
+                            Remove Photo
+                          </button>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               {/* Identity & Status */}
@@ -188,16 +358,12 @@ const Profile = () => {
                 </p>
               </div>
 
-              {/* Main Actions */}
               <div className="flex gap-3 pb-2 justify-center">
                 <button
                   onClick={() => setActiveTab('account')}
                   className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-adorix-dark rounded-2xl font-black transition-all flex items-center gap-2"
                 >
                   <Edit2 className="w-4 h-4" /> Edit
-                </button>
-                <button className="p-3 bg-adorix-dark hover:bg-adorix-primary text-white rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95">
-                  <Settings className="w-6 h-6" />
                 </button>
               </div>
             </div>
@@ -338,6 +504,69 @@ const Profile = () => {
                   </button>
                 </div>
 
+                {/* Profile & Cover Management in Tab */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                  {/* Avatar Management */}
+                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 flex flex-col items-center text-center">
+                    <div className="relative mb-6">
+                      <div className="w-32 h-32 rounded-full bg-white p-1 shadow-lg">
+                        <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-white">
+                          <img
+                            src={avatarUrl || `https://ui-avatars.com/api/?name=${profileData.fullName}&background=0D8A9E&color=fff&size=200`}
+                            alt="Avatar Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full gap-3">
+                      <button
+                        onClick={() => profileInputRef.current.click()}
+                        className="w-full py-3 bg-white hover:bg-gray-100 text-adorix-dark rounded-2xl font-black flex items-center justify-center gap-2 shadow-sm border border-gray-200 transition-all active:scale-95"
+                      >
+                        <Upload className="w-4 h-4 text-adorix-primary" /> {avatarUrl ? 'Change Avatar' : 'Add Avatar'}
+                      </button>
+                      {avatarUrl && (
+                        <button
+                          onClick={() => setAvatarUrl(null)}
+                          className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-2xl font-black flex items-center justify-center gap-2 transition-all active:scale-95"
+                        >
+                          <Trash2 className="w-4 h-4" /> Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Cover Management */}
+                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border-2 border-dashed border-gray-200 flex flex-col items-center text-center">
+                    <div className="w-full h-32 rounded-3xl bg-white p-1 shadow-lg mb-6 overflow-hidden">
+                      <div className="w-full h-full rounded-[1.25rem] bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-white relative">
+                        {coverUrl ? (
+                          <img src={coverUrl} alt="Cover Preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-r from-adorix-dark to-slate-800 opacity-80" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full gap-3">
+                      <button
+                        onClick={() => coverInputRef.current.click()}
+                        className="w-full py-3 bg-white hover:bg-gray-100 text-adorix-dark rounded-2xl font-black flex items-center justify-center gap-2 shadow-sm border border-gray-200 transition-all active:scale-95"
+                      >
+                        <Upload className="w-4 h-4 text-adorix-secondary" /> {coverUrl ? 'Change Cover' : 'Add Cover'}
+                      </button>
+                      {coverUrl && (
+                        <button
+                          onClick={() => setCoverUrl(null)}
+                          className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-500 rounded-2xl font-black flex items-center justify-center gap-2 transition-all active:scale-95"
+                        >
+                          <Trash2 className="w-4 h-4" /> Remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
                   <div className="space-y-2">
                     <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
@@ -413,155 +642,250 @@ const Profile = () => {
               </div>
             )}
 
-            {/* Other tabs remain sleek and consistent */}
-            {activeTab === 'security' && (
+            {/* Password - Access Key Authentication */}
+            {activeTab === 'password' && (
               <div className="max-w-4xl mx-auto space-y-8">
                 <div className="bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm relative overflow-hidden group">
                   <div className="absolute top-0 right-0 p-12 opacity-5 scale-150 rotate-12 group-hover:rotate-0 transition-transform duration-700">
-                    <Shield className="w-32 h-32" />
+                    <Lock className="w-32 h-32" />
                   </div>
-                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight">Security Protocol</h2>
-                  <div className="space-y-6 max-w-xl">
+                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
+                    <div className="w-12 h-12 bg-adorix-primary/10 rounded-2xl flex items-center justify-center text-adorix-primary">
+                      <Lock className="w-6 h-6" />
+                    </div>
+                    Access Key Authentication
+                  </h2>
+                  <div className="space-y-8 max-w-xl">
+                    {!isResetMode ? (
+                      <div className="space-y-2">
+                        <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center justify-between">
+                          <span className="flex items-center gap-2">
+                            <FileKey className="w-3 h-3 text-adorix-primary" /> Current Password
+                          </span>
+                        </label>
+                        <div className="relative group">
+                          <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="••••••••••••"
+                            className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                          >
+                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
+                        <div className="flex justify-end mt-2 px-2">
+                          <button
+                            onClick={handleForgotPassword}
+                            className="text-xs font-black text-adorix-secondary hover:text-adorix-primary transition-colors flex items-center gap-1 uppercase tracking-widest"
+                          >
+                            <Sparkles className="w-3 h-3" /> Forgot your password?
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6 bg-adorix-primary/5 rounded-[2rem] border-2 border-dashed border-adorix-primary/20 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-adorix-primary shadow-sm">
+                              <Sparkles className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-black text-adorix-dark">Recovery Mode Active</p>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Set a new password directly</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setIsResetMode(false)}
+                            className="text-xs font-black text-adorix-primary hover:underline uppercase tracking-widest"
+                          >
+                            Cancel Reset
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2">Current Key</label>
-                      <input type="password" placeholder="••••••••••••" className="w-full bg-gray-50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary transition-all font-bold" />
+                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                        <ShieldCheck className="w-3 h-3 text-adorix-secondary" /> New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create strong password"
+                          className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2">New Secret Key</label>
-                      <input type="password" placeholder="Enter new password" className="w-full bg-gray-50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary transition-all font-bold" />
+                      <label className="text-xs font-black text-adorix-dark uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                        <Check className="w-3 h-3 text-emerald-500" /> Confirm New Password
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Repeat new password"
+                          className="w-full bg-gray-50/50 border-2 border-gray-100 rounded-3xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark pr-14"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
-                    <button className="px-10 py-4 bg-adorix-primary text-white rounded-[1.5rem] font-black tracking-tight shadow-xl hover:bg-adorix-dark transition-all">Update Key</button>
+
+                    <div className="pt-4">
+                      <button className="w-full py-5 bg-adorix-dark text-white rounded-[2rem] font-black shadow-xl shadow-adorix-dark/20 hover:bg-adorix-primary transition-all flex items-center justify-center gap-3 group active:scale-95">
+                        <Save className="w-5 h-5 group-hover:animate-pulse" /> Update Authentication Key
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Billing - Sleek Card Layout */}
-            {activeTab === 'billing' && (
-              <div className="max-w-5xl mx-auto space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 className="text-xl font-black mb-8 flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-adorix-primary" /> Active Card
-                    </h3>
-                    <div className="bg-gradient-to-br from-adorix-dark to-gray-800 p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden group">
-                      <div className="relative z-10">
-                        <div className="flex justify-between items-start mb-12">
-                          <div className="w-12 h-8 bg-amber-400/20 rounded-md backdrop-blur-md border border-amber-400/30"></div>
-                          <Globe className="w-8 h-8 opacity-20" />
-                        </div>
-                        <p className="text-2xl font-mono tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
-                        <div className="flex justify-between items-end">
-                          <div>
-                            <p className="text-[10px] uppercase font-black opacity-40 mb-1">Holder</p>
-                            <p className="font-bold tracking-widest">{profileData.fullName.toUpperCase()}</p>
+            {
+              activeTab === 'billing' && (
+                <div className="max-w-5xl mx-auto space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                      <h3 className="text-xl font-black mb-8 flex items-center gap-2">
+                        <CreditCard className="w-5 h-5 text-adorix-primary" /> Active Card
+                      </h3>
+                      <div className="bg-gradient-to-br from-adorix-dark to-gray-800 p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden group">
+                        <div className="relative z-10">
+                          <div className="flex justify-between items-start mb-12">
+                            <div className="w-12 h-8 bg-amber-400/20 rounded-md backdrop-blur-md border border-amber-400/30"></div>
+                            <Globe className="w-8 h-8 opacity-20" />
                           </div>
-                          <div>
-                            <p className="text-[10px] uppercase font-black opacity-40 mb-1">Expiry</p>
-                            <p className="font-bold">12 / 26</p>
+                          <p className="text-2xl font-mono tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <p className="text-[10px] uppercase font-black opacity-40 mb-1">Holder</p>
+                              <p className="font-bold tracking-widest">{profileData.fullName.toUpperCase()}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] uppercase font-black opacity-40 mb-1">Expiry</p>
+                              <p className="font-bold">12 / 26</p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
-                    <h3 className="text-xl font-black mb-8 flex items-center gap-2">
-                      <History className="w-5 h-5 text-adorix-secondary" /> History
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        { date: 'Jan 15, 2026', amt: 'LKR 575', status: 'PAID' },
-                        { date: 'Dec 15, 2025', amt: 'LKR 575', status: 'PAID' },
-                        { date: 'Nov 15, 2025', amt: 'LKR 575', status: 'PAID' },
-                      ].map((inv, i) => (
-                        <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-adorix-light transition-colors">
-                          <div>
-                            <p className="font-black text-adorix-dark">{inv.date}</p>
-                            <p className="text-xs font-bold text-gray-400">{inv.amt}</p>
+                    <div className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                      <h3 className="text-xl font-black mb-8 flex items-center gap-2">
+                        <History className="w-5 h-5 text-adorix-secondary" /> History
+                      </h3>
+                      <div className="space-y-4">
+                        {[
+                          { date: 'Jan 15, 2026', amt: 'LKR 575', status: 'PAID' },
+                          { date: 'Dec 15, 2025', amt: 'LKR 575', status: 'PAID' },
+                          { date: 'Nov 15, 2025', amt: 'LKR 575', status: 'PAID' },
+                        ].map((inv, i) => (
+                          <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl hover:bg-adorix-light transition-colors">
+                            <div>
+                              <p className="font-black text-adorix-dark">{inv.date}</p>
+                              <p className="text-xs font-bold text-gray-400">{inv.amt}</p>
+                            </div>
+                            <button className="p-3 bg-white text-adorix-primary rounded-xl hover:scale-110 transition-transform shadow-sm">
+                              <Download className="w-4 h-4" />
+                            </button>
                           </div>
-                          <button className="p-3 bg-white text-adorix-primary rounded-xl hover:scale-110 transition-transform shadow-sm">
-                            <Download className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )
+            }
 
-            {/* Preferences - Modern Toggles */}
-            {activeTab === 'preferences' && (
-              <div className="max-w-4xl mx-auto bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm">
-                <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
-                  <Bell className="w-8 h-8 text-adorix-accent animate-pulse" /> Notification Engine
-                </h2>
-                <div className="space-y-6">
-                  {[
-                    { title: 'Global Newsletters', desc: 'Updates on new AI models & kiosk features', checked: true },
-                    { title: 'Smart Campaign Alerts', desc: 'Automated insights when patterns change', checked: true },
-                    { title: 'Security Heartbeat', desc: 'Real-time login & device status pings', checked: false },
-                    { title: 'Billing Artifacts', desc: 'Invoices and usage limit reports', checked: true },
-                  ].map((pref, i) => (
-                    <div key={i} className="flex items-center justify-between p-6 bg-gray-50/50 rounded-[2rem] border-2 border-transparent hover:border-adorix-primary/10 transition-all group">
-                      <div>
-                        <p className="text-lg font-black text-adorix-dark mb-1 group-hover:text-adorix-primary transition-colors">{pref.title}</p>
-                        <p className="text-sm text-gray-500 font-medium italic">{pref.desc}</p>
+            {/* Settings - Modern Toggles */}
+            {
+              activeTab === 'settings' && (
+                <div className="max-w-4xl mx-auto bg-white p-12 rounded-[3rem] border border-gray-100 shadow-sm">
+                  <h2 className="text-3xl font-black text-adorix-dark mb-10 tracking-tight flex items-center gap-4">
+                    <Bell className="w-8 h-8 text-adorix-accent animate-pulse" /> Notification Engine
+                  </h2>
+                  <div className="space-y-6">
+                    {[
+                      { title: 'Global Newsletters', desc: 'Updates on new AI models & kiosk features', checked: true },
+                      { title: 'Smart Campaign Alerts', desc: 'Automated insights when patterns change', checked: true },
+                      { title: 'Security Heartbeat', desc: 'Real-time login & device status pings', checked: false },
+                      { title: 'Billing Artifacts', desc: 'Invoices and usage limit reports', checked: true },
+                    ].map((pref, i) => (
+                      <div key={i} className="flex items-center justify-between p-6 bg-gray-50/50 rounded-[2rem] border-2 border-transparent hover:border-adorix-primary/10 transition-all group">
+                        <div>
+                          <p className="text-lg font-black text-adorix-dark mb-1 group-hover:text-adorix-primary transition-colors">{pref.title}</p>
+                          <p className="text-sm text-gray-500 font-medium italic">{pref.desc}</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" defaultChecked={pref.checked} className="sr-only peer" />
+                          <div className="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-adorix-primary"></div>
+                        </label>
                       </div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" defaultChecked={pref.checked} className="sr-only peer" />
-                        <div className="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-adorix-primary"></div>
-                      </label>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Privacy & Logout Sections */}
-                <div className="mt-12 pt-12 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 group hover:border-adorix-primary/20 transition-all">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-adorix-primary shadow-sm group-hover:scale-110 transition-transform">
-                        <ShieldCheck className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-black text-adorix-dark">Privacy Policy</h3>
-                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Legal Compliance</p>
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-500 font-medium italic mb-6">Review how we protect your data and handle information across the ADORIX mesh network.</p>
-                    <button className="text-adorix-primary font-black text-sm hover:underline flex items-center gap-2">
-                      <FileKey className="w-4 h-4" /> View Full Policy
-                    </button>
+                    ))}
                   </div>
 
-                  <div className="p-8 bg-red-50/30 rounded-[2.5rem] border border-red-100 group hover:border-red-200 transition-all flex flex-col justify-between">
-                    <div>
+                  {/* Privacy & Logout Sections */}
+                  <div className="mt-12 pt-12 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 group hover:border-adorix-primary/20 transition-all">
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:rotate-12 transition-transform">
-                          <LogOut className="w-6 h-6" />
+                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-adorix-primary shadow-sm group-hover:scale-110 transition-transform">
+                          <ShieldCheck className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-black text-adorix-dark">Session Management</h3>
-                          <p className="text-xs text-red-400 font-bold uppercase tracking-wider">Account Access</p>
+                          <h3 className="font-black text-adorix-dark">Privacy Policy</h3>
+                          <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Legal Compliance</p>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-500 font-medium italic mb-6">Instantly terminate your current session and exit the workspace dashboard.</p>
+                      <p className="text-sm text-gray-500 font-medium italic mb-6">Review how we protect your data and handle information across the ADORIX mesh network.</p>
+                      <button className="text-adorix-primary font-black text-sm hover:underline flex items-center gap-2">
+                        <FileKey className="w-4 h-4" /> View Full Policy
+                      </button>
                     </div>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2"
-                    >
-                      <LogOut className="w-4 h-4" /> Log Out
-                    </button>
+
+                    <div className="p-8 bg-red-50/30 rounded-[2.5rem] border border-red-100 group hover:border-red-200 transition-all flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:rotate-12 transition-transform">
+                            <LogOut className="w-6 h-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-black text-adorix-dark">Session Management</h3>
+                            <p className="text-xs text-red-400 font-bold uppercase tracking-wider">Account Access</p>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-500 font-medium italic mb-6">Instantly terminate your current session and exit the workspace dashboard.</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" /> Log Out
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
+              )
+            }
+          </motion.div >
+        </AnimatePresence >
+      </div >
+    </div >
   );
 };
 
