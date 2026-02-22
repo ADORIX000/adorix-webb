@@ -188,16 +188,12 @@ const Profile = () => {
                 </p>
               </div>
 
-              {/* Main Actions */}
               <div className="flex gap-3 pb-2 justify-center">
                 <button
                   onClick={() => setActiveTab('account')}
                   className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-adorix-dark rounded-2xl font-black transition-all flex items-center gap-2"
                 >
                   <Edit2 className="w-4 h-4" /> Edit
-                </button>
-                <button className="p-3 bg-adorix-dark hover:bg-adorix-primary text-white rounded-2xl shadow-lg transition-all hover:scale-105 active:scale-95">
-                  <Settings className="w-6 h-6" />
                 </button>
               </div>
             </div>
