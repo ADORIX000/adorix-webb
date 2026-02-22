@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   User, Settings, CreditCard, Shield, Bell, Eye, Camera, Mail, Phone,
   MapPin, Briefcase, Calendar, TrendingUp, Activity, Zap, Download,
-  Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal
+  Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
+  LogOut, ShieldCheck, FileKey
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -55,6 +56,13 @@ const Profile = () => {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     }, 1200);
+  };
+
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to log out of ADORIX?")) {
+      console.log("Logging out...");
+      window.location.href = '/'; // Simple redirect for now
+    }
   };
 
   const handleCopyApiKey = () => {
@@ -508,6 +516,46 @@ const Profile = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Privacy & Logout Sections */}
+                <div className="mt-12 pt-12 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100 group hover:border-adorix-primary/20 transition-all">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-adorix-primary shadow-sm group-hover:scale-110 transition-transform">
+                        <ShieldCheck className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="font-black text-adorix-dark">Privacy Policy</h3>
+                        <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Legal Compliance</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-500 font-medium italic mb-6">Review how we protect your data and handle information across the ADORIX mesh network.</p>
+                    <button className="text-adorix-primary font-black text-sm hover:underline flex items-center gap-2">
+                      <FileKey className="w-4 h-4" /> View Full Policy
+                    </button>
+                  </div>
+
+                  <div className="p-8 bg-red-50/30 rounded-[2.5rem] border border-red-100 group hover:border-red-200 transition-all flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-red-500 shadow-sm group-hover:rotate-12 transition-transform">
+                          <LogOut className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h3 className="font-black text-adorix-dark">Session Management</h3>
+                          <p className="text-xs text-red-400 font-bold uppercase tracking-wider">Account Access</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-500 font-medium italic mb-6">Instantly terminate your current session and exit the workspace dashboard.</p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full py-4 bg-red-500 text-white rounded-2xl font-black text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 active:scale-95 flex items-center justify-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" /> Log Out
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>
@@ -552,4 +600,4 @@ const BadgeCheck = ({ className }) => (
   </svg>
 );
 
-export default Profile;
+export default Profile
