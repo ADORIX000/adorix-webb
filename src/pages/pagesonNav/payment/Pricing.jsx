@@ -74,7 +74,7 @@ const PricingCard = ({
       </ul>
 
       <Link
-        to="/payment-method"
+        to={`/upgrade/${title.toLowerCase()}`}
         className={`block text-center w-full py-4 rounded-2xl font-bold transition-all ${recommended
           ? 'bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20'
           : 'bg-gray-100 text-gray-900 hover:bg-adorix-light hover:text-adorix-dark'
