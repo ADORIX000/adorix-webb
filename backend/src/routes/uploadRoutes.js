@@ -1,8 +1,9 @@
 import { Router } from "express";
+import { uploadMedia } from "../controllers/uploadController.js";
+import { protect } from "../middlewares/authMiddleware.js";
+
 const router = Router();
 
-router.get("/test", (req, res) => {
-  res.json({ ok: true, message: "upload routes working" });
-});
+router.post("/", protect, uploadMedia);
 
 export default router;
