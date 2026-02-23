@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X } from 'lucide-react';
 
 const CampaignStudio = () => {
@@ -47,9 +48,26 @@ const CampaignStudio = () => {
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-adorix-dark">Campaign Studio</h1>
-          <p className="text-adorix-secondary">Create, test, and preview your ads in a realistic environment.</p>
+        <div className="text-center mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter"
+          >
+            Ads that <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
+              look back at you.
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium"
+          >
+            Create, test, and preview your ads in a realistic environment with ADORIX Studio.
+          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

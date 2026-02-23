@@ -16,21 +16,6 @@ const Home = () => {
       {/* 2. HERO SECTION */}
       <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
 
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-gray-600 bg-white/80 backdrop-blur-md rounded-full border border-gray-200 shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
-            </span>
-            v2.0 Live: AI Gaze Tracking Active
-          </div>
-        </motion.div>
-
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
           <TypingText text="Ads that" speed={0.05} />
