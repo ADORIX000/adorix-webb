@@ -34,13 +34,6 @@ const Contact = () => {
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-20">
-                    <motion.span
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="px-4 py-2 bg-adorix-primary/10 text-adorix-primary rounded-full text-xs font-black uppercase tracking-widest mb-6 inline-block"
-                    >
-                        Get In Touch
-                    </motion.span>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -52,42 +45,14 @@ const Contact = () => {
                             Future together.
                         </span>
                     </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium"
-                    >
-                        Whether you're a potential partner, a customer, or just curious about AI vision, we'd love to hear from you.
-                    </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24">
-                    <ContactCard
-                        icon={Mail}
-                        title="Email Us"
-                        detail="hello@adorix.ai"
-                        delay={0.1}
-                    />
-                    <ContactCard
-                        icon={MessageSquare}
-                        title="Live Chat"
-                        detail="Available 24/7 for partners"
-                        delay={0.2}
-                    />
-                    <ContactCard
-                        icon={Globe}
-                        title="Global Sales"
-                        detail="sales@adorix.ai"
-                        delay={0.3}
-                    />
-                </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div className="max-w-3xl mx-auto">
                     {/* Contact Form */}
                     <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         className="bg-white rounded-[3rem] p-8 md:p-12 border border-gray-100 shadow-2xl shadow-adorix-dark/5"
                     >
@@ -135,54 +100,6 @@ const Contact = () => {
                             </button>
                         </form>
                     </motion.div>
-
-                    {/* Location & Socials */}
-                    <div className="space-y-12 h-full flex flex-col justify-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <h2 className="text-3xl font-black text-adorix-dark mb-8">Our Presence</h2>
-                            <div className="space-y-8">
-                                <div className="flex gap-6">
-                                    <div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center flex-shrink-0">
-                                        <MapPin className="w-6 h-6 text-adorix-primary" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-black text-adorix-dark text-lg uppercase tracking-tight">Innovation Hub</h4>
-                                        <p className="text-gray-500 font-medium">128 Technology Drive, Silicon Valley, CA</p>
-                                    </div>
-                                </div>
-                                <div className="flex gap-6">
-                                    <div className="w-12 h-12 bg-white rounded-xl shadow-md flex items-center justify-center flex-shrink-0">
-                                        <Phone className="w-6 h-6 text-adorix-primary" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-black text-adorix-dark text-lg uppercase tracking-tight">Connect Direct</h4>
-                                        <p className="text-gray-500 font-medium">+1 (555) 000-ADORIX</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            className="p-10 bg-adorix-dark rounded-[3rem] text-white relative overflow-hidden group"
-                        >
-                            <h3 className="text-2xl font-black mb-6 relative z-10">Follow the Revolution</h3>
-                            <div className="flex gap-4 relative z-10">
-                                {[Twitter, Github, Linkedin].map((Icon, i) => (
-                                    <button key={i} className="w-12 h-12 bg-white/10 hover:bg-adorix-primary rounded-xl flex items-center justify-center transition-all">
-                                        <Icon className="w-6 h-6" />
-                                    </button>
-                                ))}
-                            </div>
-                            <Sparkles className="absolute -right-4 -bottom-4 w-32 h-32 text-white/5 group-hover:rotate-12 transition-transform duration-700" />
-                        </motion.div>
-                    </div>
                 </div>
             </div>
         </div>
