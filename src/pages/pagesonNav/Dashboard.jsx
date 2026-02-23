@@ -9,6 +9,7 @@ import {
   Play, RefreshCw, MonitorPlay,
   ChevronRight, Star
 } from 'lucide-react';
+import TypingText from '../../components/home/TypingText';
 
 // ─── Data Generators ────────────────────────────────────────────────────────
 const generateInitialData = () =>
@@ -137,7 +138,7 @@ const Dashboard = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-extrabold text-adorix-dark tracking-tight">
-              Live Campaign Monitor
+              <TypingText text="Live Campaign Monitor" speed={0.05} />
             </h1>
             <p className="text-sm text-adorix-secondary mt-1">
               {time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}

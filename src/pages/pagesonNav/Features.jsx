@@ -6,6 +6,7 @@ import {
     Cpu, MessageSquare, Fingerprint, Eye, Database, Share2
 } from 'lucide-react';
 import FeatureCards from '../../components/home/FeatureCards';
+import TypingText from '../../components/home/TypingText';
 
 const Features = () => {
     return (
@@ -21,9 +22,9 @@ const Features = () => {
                         Capabilities v3.1
                     </span>
                     <h1 className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter">
-                        Intelligent Features <br />
+                        <TypingText text="Intelligent Features" speed={0.05} /> <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-                            For Next-Gen Ads
+                            <TypingText text="For Next-Gen Ads" startDelay={1.2} speed={0.05} />
                         </span>
                     </h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">

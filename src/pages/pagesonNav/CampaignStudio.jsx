@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X } from 'lucide-react';
+import TypingText from '../../components/home/TypingText';
 
 const CampaignStudio = () => {
   const navigate = useNavigate();
@@ -55,9 +56,9 @@ const CampaignStudio = () => {
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter"
             >
-                Launch Your Next <br />
+                <TypingText text="Launch Your Next" speed={0.05} /> <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-                Big Campaign.
+                  <TypingText text="Big Campaign." startDelay={1} speed={0.05} />
                 </span>
           </motion.h1>
         </div>

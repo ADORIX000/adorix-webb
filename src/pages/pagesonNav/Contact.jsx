@@ -5,6 +5,7 @@ import {
     Send, Globe, Github, Twitter, Linkedin,
     ArrowRight, Sparkles, Zap
 } from 'lucide-react';
+import TypingText from '../../components/home/TypingText';
 
 const ContactCard = ({ icon: Icon, title, detail, delay }) => (
     <motion.div
@@ -38,9 +39,9 @@ const Contact = () => {
                         transition={{ delay: 0.1 }}
                         className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter"
                     >
-                        Let's build the <br />
+                        <TypingText text="Let's build the" speed={0.05} /> <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-                            Future together.
+                            <TypingText text="Future together." startDelay={1} speed={0.05} />
                         </span>
                     </motion.h1>
                 </div>
