@@ -9,7 +9,6 @@ import {
   Play, RefreshCw, MonitorPlay,
   ChevronRight, Star
 } from 'lucide-react';
-import TypingText from '../../components/home/TypingText';
 
 // ─── Data Generators ────────────────────────────────────────────────────────
 const generateInitialData = () =>
@@ -20,7 +19,6 @@ const generateInitialData = () =>
     conversions: Math.floor(Math.random() * 15) + 2,
   }));
 
-// Age-range breakdown for kiosk interactions
 const AGE_RANGE_DATA = [
   { name: '10 – 15', value: 12, color: '#F59E0B' },
   { name: '16 – 29', value: 34, color: '#12B2C1' },
@@ -130,24 +128,19 @@ const Dashboard = () => {
   ];
 
   return (
-    /* pt-28 = clears the fixed global Navbar (h-24 collapsed) */
     <div className="min-h-screen bg-transparent pt-28 pb-12">
 
-      {/* ── Page Header ───────────────────────────────────────────────────── */}
-      <div className="max-w-screen-2xl mx-auto px-8 mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold text-adorix-dark tracking-tight">
-              <TypingText text="Live Campaign Monitor" speed={0.05} />
-            </h1>
-            <p className="text-sm text-adorix-secondary mt-1">
-              {time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              &nbsp;·&nbsp;
-              <span className="font-mono">{time.toLocaleTimeString()}</span>
-            </p>
-          </div>
-
-
+      {/* ── Page Header (Centered & Larger Font) ─────────────────────────── */}
+      <div className="max-w-screen-2xl mx-auto px-8 mb-12">
+        <div className="flex flex-col items-center justify-center text-center">
+          <h1 className="text-5xl font-black text-adorix-dark tracking-tight mb-3">
+            Live Campaign Monitor
+          </h1>
+          <p className="text-base text-adorix-secondary font-medium">
+            {time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            &nbsp;·&nbsp;
+            <span className="font-mono text-adorix-primary">{time.toLocaleTimeString()}</span>
+          </p>
         </div>
       </div>
 
@@ -192,7 +185,6 @@ const Dashboard = () => {
         {/* ── Charts Row ────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-          {/* Live Traffic Area Chart */}
           <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-adorix-primary/10 p-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
@@ -247,15 +239,12 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Age-Range Interaction Breakdown + Mini Bar */}
           <div className="space-y-6">
-            {/* Donut — Age Ranges */}
             <div className="bg-white rounded-2xl shadow-sm border border-adorix-primary/10 p-6">
               <h3 className="text-lg font-bold text-adorix-dark">Interaction by Age</h3>
               <p className="text-xs text-adorix-secondary mb-4 mt-0.5">Who's engaging with the kiosk</p>
 
               <div className="flex items-center gap-4">
-                {/* Donut */}
                 <div className="relative w-28 h-28 flex-shrink-0">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
@@ -265,10 +254,8 @@ const Dashboard = () => {
                       </Pie>
                     </PieChart>
                   </ResponsiveContainer>
-
                 </div>
 
-                {/* Legend */}
                 <div className="flex-1 space-y-2">
                   {AGE_RANGE_DATA.map(d => (
                     <div key={d.name} className="flex items-center justify-between gap-2">
@@ -288,7 +275,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Bar — Recent Interactions */}
             <div className="bg-white rounded-2xl shadow-sm border border-adorix-primary/10 p-6">
               <h3 className="text-sm font-bold text-adorix-dark mb-3">Recent Interactions</h3>
               <div className="h-28">
@@ -307,13 +293,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* ── Bottom Row: Performance Score (wide) + Quick Actions ──────── */}
+        {/* ── Bottom Row ─────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
-          {/* Performance Score — expanded to xl:col-span-2 */}
           <div className="xl:col-span-2 bg-white rounded-2xl shadow-sm border border-adorix-primary/10 p-8">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-8">
-              {/* Score ring + label */}
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <RadialRing pct={82} color="#12B2C1" size={100} stroke={10} />
@@ -332,7 +316,6 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* Summary badges */}
               <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                 {[
                   { label: 'Best Day', val: 'Saturday', color: 'bg-adorix-light text-adorix-primary' },
@@ -347,7 +330,6 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Detailed metric bars */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
               {PERF_METRICS.map(m => (
                 <div key={m.label}>
@@ -366,7 +348,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Quick Actions */}
           <div className="bg-adorix-dark rounded-2xl p-6 shadow-xl shadow-adorix-dark/20 flex flex-col">
             <h3 className="text-white font-bold text-lg mb-1">Quick Actions</h3>
             <p className="text-adorix-accent text-xs mb-6">Manage your kiosks</p>
@@ -391,7 +372,6 @@ const Dashboard = () => {
                 </button>
               ))}
             </div>
-
           </div>
         </div>
 
