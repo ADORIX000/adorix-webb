@@ -30,34 +30,34 @@ const TeamMember = ({ name, role, image, delay }) => (
 const MeetTeam = () => {
     const team = [
         {
-            name: "Alex River",
-            role: "Founder & Lead Architect",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+            name: "Deeghayu Arandara",
+            role: "TEAM LEAD & IOT ARCHITECT",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Deeghayu",
         },
         {
-            name: "Sarah Chen",
-            role: "AI Research Head",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+            name: "Binethma Jayawickrama",
+            role: "COMPUTER VISION ENGINEER",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Binethma",
         },
         {
-            name: "Marcus Thorne",
-            role: "Product Designer",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+            name: "Sithika Weerasinghe",
+            role: "FULL STACK DEVELOPER",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sithika",
         },
         {
-            name: "Elena Vance",
-            role: "Frontend Engineer",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+            name: "Chanithma Dangalla",
+            role: "BACKEND DEVELOPER",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chanithma",
         },
         {
-            name: "David Moss",
-            role: "Backend Architect",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+            name: "Sahan Adithya",
+            role: "AI INTERACTION DESIGNER",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sahan",
         },
         {
-            name: "Julian Kosta",
-            role: "Vision Systems Lead",
-            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Julian",
+            name: "Lithira Kalubowila",
+            role: "DATA ANALYTICS SPECIALIST",
+            image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lithira",
         }
     ];
 
