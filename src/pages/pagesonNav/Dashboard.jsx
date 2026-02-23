@@ -130,7 +130,7 @@ const Dashboard = () => {
 
   return (
     /* pt-28 = clears the fixed global Navbar (h-24 collapsed) */
-    <div className="min-h-screen bg-adorix-light pt-28 pb-12">
+    <div className="min-h-screen bg-transparent pt-28 pb-12">
 
       {/* ── Page Header ───────────────────────────────────────────────────── */}
       <div className="max-w-screen-2xl mx-auto px-8 mb-8">

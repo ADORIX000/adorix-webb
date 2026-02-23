@@ -54,20 +54,12 @@ const CampaignStudio = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter"
-          >
-            Ads that <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-              look back at you.
-            </span>
+            >
+                Launch Your Next <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
+                Big Campaign.
+                </span>
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium"
-          >
-            Create, test, and preview your ads in a realistic environment with ADORIX Studio.
-          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

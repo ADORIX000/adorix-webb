@@ -9,7 +9,7 @@ import FeatureCards from '../../components/home/FeatureCards';
 
 const Features = () => {
     return (
-        <div className="pt-28 pb-20 px-6 min-h-screen bg-[#f8fafc]">
+        <div className="pt-28 pb-20 px-6 min-h-screen bg-transparent">
             {/* Header Section */}
             <section className="max-w-5xl mx-auto text-center mb-20">
                 <motion.div
@@ -99,10 +99,7 @@ const Features = () => {
             {/* CTA Section */}
             <section className="max-w-7xl mx-auto mt-32 text-center">
                 <div className="bg-adorix-dark rounded-[3rem] p-16 md:p-24 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                        <div className="absolute top-0 left-0 w-64 h-64 bg-adorix-primary rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
-                        <div className="absolute bottom-0 right-0 w-64 h-64 bg-adorix-accent rounded-full blur-[120px] translate-x-1/2 translate-y-1/2" />
-                    </div>
+
                     <div className="relative z-10">
                         <h2 className="text-4xl md:text-5xl font-black text-white mb-8 tracking-tighter">Ready to experience these features?</h2>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">

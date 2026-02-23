@@ -108,7 +108,7 @@ const Profile = () => {
   ];
 
   return (
-    <div className="pt-28 px-6 pb-20 min-h-screen bg-[#f8fafc]">
+    <div className="pt-28 px-6 pb-20 min-h-screen bg-transparent">
       {/* Hidden Inputs */}
       <input
         type="file"
