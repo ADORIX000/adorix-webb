@@ -61,15 +61,20 @@ const Navbar = () => {
           </div>
 
           {/* Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link to="/login" className="text-sm font-bold text-gray-600 hover:text-adorix-dark transition-colors">
+          <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
+            <Link
+              to="/login"
+              className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
+            >
               Sign in
+              <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === '/login' ? 'scale-x-100' : ''}`} />
             </Link>
             <Link
               to="/signup"
-              className="px-6 py-2.5 bg-adorix-dark text-white rounded-full text-sm font-bold hover:bg-adorix-primary hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 shadow-adorix-dark/20"
+              className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
             >
               Sign up
+              <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === '/signup' ? 'scale-x-100' : ''}`} />
             </Link>
           </div>
 
@@ -95,11 +100,17 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <div className="flex flex-col gap-4 mt-8 w-full max-w-xs">
-            <Link to="/login" className="w-full py-4 text-center font-bold text-gray-600 border border-gray-200 rounded-xl">
+          <div className="flex flex-col items-center gap-8 mt-2 w-full max-w-xs">
+            <Link
+              to="/login"
+              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
+            >
               Sign in
             </Link>
-            <Link to="/signup" className="w-full py-4 text-center font-bold text-white bg-adorix-primary rounded-xl">
+            <Link
+              to="/signup"
+              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
+            >
               Sign up
             </Link>
           </div>
