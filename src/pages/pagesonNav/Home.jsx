@@ -14,23 +14,7 @@ const Home = () => {
     <div className="relative w-full overflow-hidden">
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
-
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="inline-flex items-center gap-2 px-5 py-2 text-sm font-bold text-gray-600 bg-white/80 backdrop-blur-md rounded-full border border-gray-200 shadow-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
-            </span>
-            v2.0 Live: AI Gaze Tracking Active
-          </div>
-        </motion.div>
-
+      <section className="relative pt-56 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
           <TypingText text="Ads that" speed={0.05} />
@@ -79,14 +63,14 @@ const Home = () => {
           </div>
 
           {/* RIGHT COLUMN: Description (Extremely Simple) */}
-          <div className="text-left space-y-6 lg:col-span-2 flex flex-col justify-center">
-            <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+          <div className="text-center lg:text-left space-y-14 lg:col-span-2 flex flex-col justify-center lg:-mt-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
               The Intelligent Flow
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed font-medium">
+            <p className="text-center lg:text-justify text-xl text-gray-600 leading-[2.6] font-medium">
               Adorix turns passive screens into active, intelligent agents.
               Detect visitors, analyze demographics, and serve personalized content
-              in milliseconds—all while maintaining absolute privacy.
+              in milliseconds all while maintaining absolute privacy.
               It’s not just a display; it’s a responsive environment that adapts to everyone.
             </p>
           </div>
