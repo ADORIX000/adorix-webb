@@ -14,7 +14,8 @@ const Home = () => {
     <div className="relative w-full overflow-hidden">
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-56 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
           <TypingText text="Ads that" speed={0.05} />

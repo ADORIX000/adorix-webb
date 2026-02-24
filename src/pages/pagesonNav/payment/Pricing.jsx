@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, Star, Zap, Sparkles, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import TypingText from '../../../components/home/TypingText';
 
 const PricingCard = ({
   title,
@@ -24,7 +25,7 @@ const PricingCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Most Popular Tag - appears only on hover for Recommended card */}
+      {/* Most Popular Tag */}
       {recommended && (
         <div className={`absolute -top-4 left-1/2 -translate-x-1/2 transition-all duration-300 ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-95 pointer-events-none'
           }`}>
@@ -74,7 +75,7 @@ const PricingCard = ({
       </ul>
 
       <Link
-        to="/payment-method"
+        to={`/upgrade/${title.toLowerCase()}`}
         className={`block text-center w-full py-4 rounded-2xl font-bold transition-all ${recommended
           ? 'bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20'
           : 'bg-gray-100 text-gray-900 hover:bg-adorix-light hover:text-adorix-dark'
@@ -86,10 +87,7 @@ const PricingCard = ({
   );
 };
 
-
-
 const Pricing = () => {
-
   const plans = [
     {
       title: 'Plus',
@@ -146,8 +144,6 @@ const Pricing = () => {
     }
   ];
 
-
-
   return (
     <div className="pt-32 pb-20 px-6 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -160,11 +156,13 @@ const Pricing = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl md:text-7xl font-black text-adorix-dark mb-6 tracking-tight">
-              Kiosk Plans for <span className="text-adorix-primary">Growers</span>
+              {/* Sequential typing preserved */}
+              <TypingText text="Kiosk Plans for " speed={0.05} />
+              <span className="text-adorix-primary">
+                <TypingText text="Growers" speed={0.05} delay={0.85} />
+              </span>
             </h1>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-medium">
-              Take your kiosks to the next level with our pro features and AI analytics.
-            </p>
+            {/* Sub-text sentence has been removed */}
           </motion.div>
         </div>
 
@@ -182,9 +180,6 @@ const Pricing = () => {
             </motion.div>
           ))}
         </div>
-
-
-
       </div>
     </div>
   );
