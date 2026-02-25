@@ -64,14 +64,14 @@ const Home = () => {
           </div>
 
           {/* RIGHT COLUMN: Description (Extremely Simple) */}
-          <div className="text-left space-y-6 lg:col-span-2 flex flex-col justify-center">
-            <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+          <div className="text-center lg:text-left space-y-14 lg:col-span-2 flex flex-col justify-center lg:-mt-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
               The Intelligent Flow
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed font-medium">
+            <p className="text-center lg:text-justify text-xl text-gray-600 leading-[2.6] font-medium">
               Adorix turns passive screens into active, intelligent agents.
               Detect visitors, analyze demographics, and serve personalized content
-              in milliseconds—all while maintaining absolute privacy.
+              in milliseconds all while maintaining absolute privacy.
               It’s not just a display; it’s a responsive environment that adapts to everyone.
             </p>
           </div>
