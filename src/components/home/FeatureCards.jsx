@@ -769,28 +769,28 @@ const FeatureCard = ({ animation: Animation, title, description, delay, cardClas
                 <Animation isPaused={isHovered} />
             </div>
 
-            {/* Premium Blur Overlay - Visible on Hover */}
+            {/* Blur Overlay - Visible on Hover, content centered */}
             <AnimatePresence>
                 {isHovered && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/60 backdrop-blur-2xl z-10 flex flex-col items-center justify-center p-8 text-center space-y-6"
+                        className="absolute inset-0 bg-white/60 backdrop-blur-2xl z-10 flex flex-col items-center justify-center p-8 text-center"
                     >
                         <motion.h3
-                            initial={{ y: 15, opacity: 0 }}
+                            initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.4 }}
-                            className="text-2xl font-bold text-gray-900 tracking-tight"
+                            transition={{ duration: 0.35 }}
+                            className="text-2xl font-bold text-gray-900 tracking-tight leading-snug mb-4"
                         >
                             {title}
                         </motion.h3>
                         <motion.p
-                            initial={{ y: 15, opacity: 0 }}
+                            initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.1, duration: 0.4 }}
-                            className="text-gray-700 leading-relaxed text-sm font-medium text-justify px-2"
+                            transition={{ delay: 0.08, duration: 0.35 }}
+                            className="text-gray-700 leading-relaxed text-sm font-medium"
                         >
                             {description}
                         </motion.p>
