@@ -109,30 +109,6 @@ const Dashboard = () => {
 
       <div className="max-w-screen-xl mx-auto px-6 space-y-6">
 
-        {/* ── Stat Cards ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {STATS.map((s, i) => (
-            <div
-              key={i}
-              className={`bg-white rounded-xl p-5 border border-gray-100 border-l-4 ${s.border} shadow-sm`}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <span className={`p-2 rounded-lg ${s.accent}`}>
-                  <s.icon className="w-4 h-4" />
-                </span>
-                {s.live && (
-                  <span className="flex items-center gap-1 text-xs text-red-500 font-semibold">
-                    <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" /> Live
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-              <p className="text-2xl font-bold text-adorix-dark mt-1">{s.val}</p>
-              <p className="text-xs text-gray-400 mt-1">{s.sub}</p>
-            </div>
-          ))}
-        </div>
-
         {/* ── Charts Row ─────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
 
@@ -234,6 +210,30 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ── Stat Cards ─────────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {STATS.map((s, i) => (
+            <div
+              key={i}
+              className={`bg-white rounded-xl p-5 border border-gray-100 border-l-4 ${s.border} shadow-sm`}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className={`p-2 rounded-lg ${s.accent}`}>
+                  <s.icon className="w-4 h-4" />
+                </span>
+                {s.live && (
+                  <span className="flex items-center gap-1 text-xs text-red-500 font-semibold">
+                    <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" /> Live
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 font-medium">{s.label}</p>
+              <p className="text-2xl font-bold text-adorix-dark mt-1">{s.val}</p>
+              <p className="text-xs text-gray-400 mt-1">{s.sub}</p>
+            </div>
+          ))}
         </div>
 
         {/* ── Bottom Row ─────────────────────────────────────────────────── */}
