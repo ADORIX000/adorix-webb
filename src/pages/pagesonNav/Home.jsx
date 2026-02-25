@@ -14,7 +14,7 @@ const Home = () => {
     <div className="relative w-full overflow-hidden">
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
 
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
@@ -59,20 +59,20 @@ const Home = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16 items-center">
 
           {/* LEFT COLUMN: Diagram (Larger: 3 cols) */}
-          <div className="flex justify-center lg:justify-start lg:col-span-3 self-center">
+          <div className="flex justify-center lg:justify-start lg:col-span-3">
             <WorkflowAnimation />
           </div>
 
-          {/* RIGHT COLUMN: Description */}
-          <div className="text-left lg:text-left space-y-8 lg:col-span-2 flex flex-col self-center">
+          {/* RIGHT COLUMN: Description (Extremely Simple) */}
+          <div className="text-left space-y-6 lg:col-span-2 flex flex-col justify-center">
             <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
               The Intelligent Flow
             </h2>
-            <p className="text-xl text-gray-600 font-medium text-justify" style={{ lineHeight: '2.4' }}>
+            <p className="text-xl text-gray-600 leading-relaxed font-medium">
               Adorix turns passive screens into active, intelligent agents.
               Detect visitors, analyze demographics, and serve personalized content
               in milliseconds—all while maintaining absolute privacy.
-              It's not just a display; it's a responsive environment that adapts to everyone.
+              It’s not just a display; it’s a responsive environment that adapts to everyone.
             </p>
           </div>
 
@@ -108,9 +108,9 @@ const Home = () => {
 
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Ready to capture real attention?</h2>
-            <button className="bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
+            <Link to="/signup" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
               Deploy Your First Campaign
-            </button>
+            </Link>
             <p className="mt-8 text-gray-500 text-sm">No credit card required for demo.</p>
           </div>
         </div>
