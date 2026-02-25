@@ -99,12 +99,19 @@ const Dashboard = () => {
             <span className="font-mono">{time.toLocaleTimeString()}</span>
           </p>
         </div>
-        <button
-          onClick={() => navigate('/dashboard/studio')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-adorix-dark text-white rounded-lg text-sm font-semibold hover:bg-adorix-primary transition"
-        >
-          <Play className="w-4 h-4" /> Launch Campaign
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-semibold text-adorix-dark">Sahan Adithya</p>
+            <p className="text-xs text-gray-400">AI Interaction Designer</p>
+          </div>
+          <button
+            onClick={() => navigate('/profile')}
+            className="w-10 h-10 rounded-full bg-adorix-primary text-white font-bold text-sm flex items-center justify-center ring-2 ring-adorix-primary/20 hover:ring-adorix-primary/50 transition"
+            title="View Profile"
+          >
+            SA
+          </button>
+        </div>
       </div>
 
       <div className="max-w-screen-xl mx-auto px-6 space-y-6">
