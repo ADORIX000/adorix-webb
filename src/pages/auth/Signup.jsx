@@ -96,88 +96,37 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-white flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen w-full relative overflow-hidden bg-white flex items-center justify-center px-6 pt-24 pb-12">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <motion.div
           animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, 60, 0],
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
           }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute -top-[10%] -right-[5%] w-[50%] h-[50%] bg-adorix-primary/5 rounded-full blur-[100px]"
+          className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-adorix-primary/5 rounded-full blur-[120px]"
         />
         <motion.div
           animate={{
-            scale: [1.1, 1, 1.1],
-            rotate: [0, -60, 0],
+            scale: [1.2, 1, 1.2],
+            rotate: [0, -90, 0],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-[10%] -left-[5%] w-[50%] h-[50%] bg-adorix-accent/5 rounded-full blur-[100px]"
+          className="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-adorix-accent/5 rounded-full blur-[120px]"
         />
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-[1100px] grid lg:grid-cols-2 bg-white/40 backdrop-blur-2xl rounded-[3rem] border border-white/40 shadow-2xl relative z-10 overflow-hidden"
+        className="w-full max-w-[500px] bg-white rounded-[2rem] border border-gray-100 shadow-2xl relative z-10 overflow-hidden flex flex-col"
       >
-        {/* Left Side: Brand/Visual */}
-        <div className="hidden lg:flex relative bg-adorix-dark p-16 flex-col justify-between overflow-hidden">
-          <div className="relative z-10">
-            <Link to="/" className="text-3xl font-black text-white tracking-tighter flex items-center gap-3 mb-16">
-              <div className="w-10 h-10 bg-adorix-primary rounded-xl flex items-center justify-center">A</div>
-              ADORIX
-            </Link>
-
-            <h2 className="text-5xl font-black text-white leading-tight mb-8">
-              Start your <br />
-              <span className="text-adorix-accent">journey with us.</span>
-            </h2>
-
-            <ul className="space-y-6">
-              {[
-                "Deploy global campaigns in minutes",
-                "Advanced demographic gaze tracking",
-                "Privacy-first edge AI engine",
-                "Real-time interactive dashboard"
-              ].map((text, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.1 }}
-                  className="flex items-center gap-4 text-gray-400 font-bold"
-                >
-                  <CheckCircle2 className="w-5 h-5 text-adorix-primary" />
-                  {text}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="relative z-10 p-8 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
-            <p className="text-white font-italic mb-4">"Adorix has completely changed how we think about physical advertising presence."</p>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-adorix-primary" title="Sarah Johnson" />
-              <div>
-                <p className="text-sm font-black text-white">Sarah Johnson</p>
-                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">CMO, TechFlow</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative mesh */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_100%_100%,#12B2C1,transparent)]" />
-          </div>
-        </div>
-
-        {/* Right Side: Form */}
-        <div className="p-8 md:p-12 lg:p-16">
+        {/* Centered Form */}
+        <div className="p-8 md:p-12 lg:p-14 w-full">
           <div className="max-w-md mx-auto">
-            <div className="mb-10">
+            <div className="mb-10 text-center">
               <h1 className="text-4xl font-black text-adorix-dark mb-4 tracking-tight">Create account</h1>
               <p className="text-gray-500 font-medium">
                 Already have an account? <Link to="/login" className="text-adorix-primary font-black hover:underline">Sign in</Link>
@@ -237,8 +186,8 @@ const Signup = () => {
                   <span className="flex items-center gap-2"><Lock className="w-3 h-3" /> Password</span>
                   {formData.password && (
                     <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${passwordStrength.score <= 1 ? 'bg-red-100 text-red-600' :
-                        passwordStrength.score <= 3 ? 'bg-amber-100 text-amber-600' :
-                          'bg-emerald-100 text-emerald-600'
+                      passwordStrength.score <= 3 ? 'bg-amber-100 text-amber-600' :
+                        'bg-emerald-100 text-emerald-600'
                       }`}>
                       {passwordStrength.label}
                     </span>
@@ -270,8 +219,8 @@ const Signup = () => {
                       <div
                         key={s}
                         className={`h-1 flex-1 rounded-full transition-all duration-500 ${s <= passwordStrength.score
-                            ? (passwordStrength.score <= 1 ? 'bg-red-500' : passwordStrength.score <= 3 ? 'bg-amber-500' : 'bg-emerald-500')
-                            : 'bg-gray-100'
+                          ? (passwordStrength.score <= 1 ? 'bg-red-500' : passwordStrength.score <= 3 ? 'bg-amber-500' : 'bg-emerald-500')
+                          : 'bg-gray-100'
                           }`}
                       />
                     ))}

@@ -21,7 +21,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-white flex items-center justify-center px-6">
+    <div className="min-h-screen w-full relative overflow-hidden bg-white flex items-center justify-center px-6 pt-24 pb-12">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <motion.div
@@ -46,46 +46,12 @@ const Login = () => {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
-        className="w-full max-w-[1100px] grid lg:grid-cols-2 bg-white/40 backdrop-blur-2xl rounded-[3rem] border border-white/40 shadow-2xl relative z-10 overflow-hidden"
+        className="w-full max-w-[500px] bg-white rounded-[2rem] border border-gray-100 shadow-2xl relative z-10 overflow-hidden flex flex-col"
       >
-        {/* Left Side: Brand/Visual */}
-        <div className="hidden lg:flex relative bg-adorix-dark p-16 flex-col justify-between overflow-hidden">
-          <div className="relative z-10">
-            <Link to="/" className="text-3xl font-black text-white tracking-tighter flex items-center gap-3 mb-16">
-              <div className="w-10 h-10 bg-adorix-primary rounded-xl flex items-center justify-center">A</div>
-              ADORIX
-            </Link>
-
-            <h2 className="text-5xl font-black text-white leading-tight mb-8">
-              Experience the <br />
-              <span className="text-adorix-primary">AI revolution.</span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-sm leading-relaxed">
-              Step into the future of interactive display intelligence. Your portal to the Adorix ecosystem awaits.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex items-center gap-8">
-            <div className="flex -space-x-4">
-              {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-12 h-12 rounded-full border-4 border-adorix-dark overflow-hidden bg-gray-800">
-                  <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`} alt="User" />
-                </div>
-              ))}
-            </div>
-            <p className="text-sm font-bold text-gray-400">Join 10k+ advertisers</p>
-          </div>
-
-          {/* Decorative mesh */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_-20%,#0D8A9E,transparent)]" />
-          </div>
-        </div>
-
-        {/* Right Side: Form */}
-        <div className="p-8 md:p-16 lg:p-20">
+        {/* Centered Login Form */}
+        <div className="p-8 md:p-12 lg:p-14 w-full">
           <div className="max-w-md mx-auto">
-            <div className="mb-12">
+            <div className="mb-10 text-center">
               <h1 className="text-4xl font-black text-adorix-dark mb-4 tracking-tight">Welcome back</h1>
               <p className="text-gray-500 font-medium">
                 New to Adorix? <Link to="/signup" className="text-adorix-primary font-black hover:underline">Create an account</Link>
