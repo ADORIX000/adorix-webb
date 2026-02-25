@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Verification = () => {
   return (
-    <div className="pt-32 flex justify-center items-center">
+    <div className="pt-32 pb-32 flex justify-center items-center min-h-[80vh]">
       <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md text-center">
         <div className="bg-adorix-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
           <Mail className="w-8 h-8 text-adorix-600" />
