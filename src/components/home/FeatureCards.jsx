@@ -776,13 +776,13 @@ const FeatureCard = ({ animation: Animation, title, description, delay, cardClas
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/40 backdrop-blur-xl z-10 flex flex-col items-center justify-center p-8 text-center"
+                        className="absolute inset-0 bg-white/60 backdrop-blur-2xl z-10 flex flex-col items-center justify-center p-8 text-center space-y-6"
                     >
                         <motion.h3
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4 }}
-                            className="mb-3 text-xl font-bold text-gray-900 tracking-tight"
+                            className="text-2xl font-bold text-gray-900 tracking-tight"
                         >
                             {title}
                         </motion.h3>
@@ -790,7 +790,7 @@ const FeatureCard = ({ animation: Animation, title, description, delay, cardClas
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.1, duration: 0.4 }}
-                            className="text-gray-600 leading-relaxed text-sm font-medium"
+                            className="text-gray-700 leading-relaxed text-sm font-medium text-justify px-2"
                         >
                             {description}
                         </motion.p>
@@ -866,7 +866,7 @@ const FeatureCards = () => {
                 </div>
 
                 {/* 4-col grid: row 1 = 4 cards, row 2 = 2 cards, all same 9:16 size */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {features.map((feature, index) => (
                         <FeatureCard
                             key={index}
