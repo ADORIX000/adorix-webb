@@ -50,10 +50,10 @@ const BioMesh = ({ isPaused }) => {
                 <g transform="translate(65, 40)">
                     <motion.circle r="16" fill="none" stroke="var(--adorix-secondary)" strokeDasharray="2 4" strokeWidth="1"
                         animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} />
-                    <motion.circle r="10" fill="none" stroke="#FF8C00" strokeDasharray="8 4" strokeWidth="1.5"
+                    <motion.circle r="10" fill="none" stroke="var(--adorix-primary)" strokeDasharray="8 4" strokeWidth="1.5"
                         animate={{ rotate: -360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} />
                     <circle r="3" fill="var(--adorix-primary)" />
-                    <motion.circle r="6" fill="#FF8C00" opacity="0.4" filter="url(#softGlow)"
+                    <motion.circle r="6" fill="var(--adorix-primary)" opacity="0.4" filter="url(#softGlow)"
                         animate={isPaused ? { scale: [1, 1.5, 1], opacity: [0.2, 0.6, 0.2] } : { scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} />
                 </g>
 
@@ -67,8 +67,8 @@ const BioMesh = ({ isPaused }) => {
                                 transition={{ duration: 1.5, repeat: Infinity, delay: (i % 3) * 0.4, ease: "easeOut" }}
                             />
                         )}
-                        <circle cx={node.x} cy={node.y} r="1.5" fill="white" stroke={i % 2 === 0 ? "#FF8C00" : "var(--adorix-accent)"} strokeWidth="0.5" />
-                        <motion.circle cx={node.x} cy={node.y} r="1" fill={i % 2 === 0 ? "#FF8C00" : "var(--adorix-accent)"}
+                        <circle cx={node.x} cy={node.y} r="1.5" fill="white" stroke={i % 2 === 0 ? "var(--adorix-primary)" : "var(--adorix-accent)"} strokeWidth="0.5" />
+                        <motion.circle cx={node.x} cy={node.y} r="1" fill={i % 2 === 0 ? "var(--adorix-primary)" : "var(--adorix-accent)"}
                             animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2 + (i % 3), repeat: Infinity }}
                         />
                     </g>
@@ -81,7 +81,7 @@ const BioMesh = ({ isPaused }) => {
 
                 {/* Left Side Small HUD Text - Darker colors for readability on white */}
                 <g>
-                    <text x="30" y="24" fontSize="3" fill="#FF8C00" fontFamily="monospace" fontWeight="700">PREDICTIVE AI</text>
+                    <text x="30" y="24" fontSize="3" fill="var(--adorix-primary)" fontFamily="monospace" fontWeight="700">PREDICTIVE AI</text>
                     <text x="30" y="28" fontSize="2" fill="var(--adorix-secondary)" fontFamily="monospace" fontWeight="500">SYS.NEURAL.NET</text>
 
                     <text x="34" y="52" fontSize="3" fill="var(--adorix-primary)" fontFamily="monospace" fontWeight="700">GENERATIVE</text>
@@ -95,7 +95,7 @@ const BioMesh = ({ isPaused }) => {
                 {/* Badge 1: Top */}
                 <g transform="translate(3, 20)">
                     <rect width="25" height="12" rx="2" fill="white" stroke="var(--adorix-primary)" strokeWidth="0.5" filter="url(#dropShadowLight)" />
-                    <circle cx="6" cy="6" r="2" fill="#FF8C00" />
+                    <circle cx="6" cy="6" r="2" fill="var(--adorix-primary)" />
                     <rect x="10" y="4" width="10" height="1.5" fill="var(--adorix-secondary)" opacity="0.6" />
                     <rect x="10" y="7" width="12" height="1.5" fill="var(--adorix-secondary)" opacity="0.3" />
                     <motion.rect x="10" y="4" width="4" height="4.5" fill="var(--adorix-primary)" opacity="0.8"
@@ -116,7 +116,7 @@ const BioMesh = ({ isPaused }) => {
                     <circle cx="24" cy="5" r="2" fill="var(--adorix-accent)" />
                     <rect x="4" y="3" width="14" height="1" fill="var(--adorix-secondary)" opacity="0.4" />
                     <rect x="4" y="6" width="10" height="1" fill="var(--adorix-secondary)" opacity="0.4" />
-                    <motion.circle cx="18" cy="6" r="1.5" fill="#FF8C00"
+                    <motion.circle cx="18" cy="6" r="1.5" fill="var(--adorix-primary)"
                         animate={isPaused ? { opacity: [0, 1, 0] } : { opacity: 1 }} transition={{ duration: 1, repeat: Infinity }}
                     />
                 </g>
@@ -198,7 +198,7 @@ const SupersonicStream = ({ isPaused }) => (
 
                 {/* Pulsing Lightning Bolt */}
                 <motion.g transform="translate(52, 43)" filter="url(#speedGlow)">
-                    <motion.path d="M 8 0 L 2 10 L 7 10 L 4 20 L 14 8 L 9 8 Z" fill="#FF8C00"
+                    <motion.path d="M 8 0 L 2 10 L 7 10 L 4 20 L 14 8 L 9 8 Z" fill="var(--adorix-primary)"
                         animate={isPaused ? { opacity: [0.7, 1, 0.7], scale: [0.95, 1.05, 0.95] } : {}} transition={{ duration: 1.5, repeat: Infinity }}
                     />
                 </motion.g>
@@ -209,7 +209,7 @@ const SupersonicStream = ({ isPaused }) => (
                 <circle cx="10" cy="10" r="12" fill="white" stroke="var(--adorix-primary)" strokeWidth="1.5" />
                 {/* Tick marks */}
                 {[...Array(9)].map((_, i) => (
-                    <line key={`tick-${i}`} x1="10" y1="2" x2="10" y2={i > 4 ? "4" : "3"} stroke={i > 6 ? "#FF8C00" : "var(--adorix-primary)"} strokeWidth={i > 6 ? "0.8" : "0.4"}
+                    <line key={`tick-${i}`} x1="10" y1="2" x2="10" y2={i > 4 ? "4" : "3"} stroke={i > 6 ? "var(--adorix-primary)" : "var(--adorix-primary)"} strokeWidth={i > 6 ? "0.8" : "0.4"}
                         transform={`rotate(${i * 30 - 120} 10 10)`}
                     />
                 ))}
@@ -220,7 +220,7 @@ const SupersonicStream = ({ isPaused }) => (
                     transition={isPaused ? { duration: 12, repeat: Infinity, ease: (t) => Math.floor(t * 12) / 12 } : { duration: 1, ease: "easeOut" }}
                     style={{ transformOrigin: '10px 10px' }}
                 >
-                    <polygon points="9,10 11,10 10,2" fill="#FF8C00" />
+                    <polygon points="9,10 11,10 10,2" fill="var(--adorix-primary)" />
                     <circle cx="10" cy="10" r="1.5" fill="var(--adorix-dark)" />
                     <circle cx="10" cy="10" r="0.5" fill="white" />
                 </motion.g>
@@ -751,7 +751,7 @@ const HolographicScope = ({ isPaused }) => (
 
 // --- Main Components ---
 
-const FeatureCard = ({ animation: Animation, title, description, delay }) => {
+const FeatureCard = ({ animation: Animation, title, description, delay, cardClassName = '' }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -762,7 +762,7 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
             transition={{ delay, duration: 0.5 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group relative h-80 w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl"
+            className={`group relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl ${cardClassName}`}
         >
             {/* Animation Background Layer */}
             <div className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out z-0">
@@ -776,13 +776,13 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/40 backdrop-blur-xl z-10 flex flex-col items-center justify-center p-10 text-center"
+                        className="absolute inset-0 bg-white/40 backdrop-blur-xl z-10 flex flex-col items-center justify-center p-8 text-center"
                     >
                         <motion.h3
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4 }}
-                            className="mb-4 text-2xl font-bold text-gray-900 tracking-tight"
+                            className="mb-3 text-xl font-bold text-gray-900 tracking-tight"
                         >
                             {title}
                         </motion.h3>
@@ -790,7 +790,7 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.1, duration: 0.4 }}
-                            className="text-gray-600 leading-relaxed text-sm md:text-base font-medium"
+                            className="text-gray-600 leading-relaxed text-sm font-medium"
                         >
                             {description}
                         </motion.p>
@@ -865,7 +865,8 @@ const FeatureCards = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {/* 4-col grid: row 1 = 4 cards, row 2 = 2 cards, all same 9:16 size */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {features.map((feature, index) => (
                         <FeatureCard
                             key={index}
@@ -873,6 +874,7 @@ const FeatureCards = () => {
                             title={feature.title}
                             description={feature.description}
                             delay={index * 0.1}
+                            cardClassName={`aspect-[9/16]${index === 4 ? ' md:col-start-2' : ''}`}
                         />
                     ))}
                 </div>
