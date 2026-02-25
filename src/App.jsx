@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/navbar';
 import GradientWrapper from './components/layout/GradientWrapper';
 import Footer from './components/common/Footer';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Pages
 import Home from './pages/pagesonNav/Home';
@@ -28,6 +29,7 @@ import Feedback from './pages/settings/Feedback';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <GradientWrapper>
         <Navbar />
         <Routes>
