@@ -87,10 +87,10 @@ const Dashboard = () => {
   const ranges = ['Today', '7 Days', '30 Days', 'All Time'];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-28 pb-16">
+    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="max-w-screen-xl mx-auto px-6 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 mb-6 flex items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-adorix-dark">Campaign Monitor</h1>
           <p className="text-sm text-gray-400 mt-0.5">
@@ -114,13 +114,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="max-w-screen-xl mx-auto px-6 space-y-6">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 space-y-5">
 
         {/* ── Charts Row ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
           {/* Area Chart */}
-          <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
               <div>
                 <h3 className="text-base font-bold text-adorix-dark">Audience Traffic</h3>
@@ -135,7 +135,7 @@ const Dashboard = () => {
                 ))}
               </div>
             </div>
-            <div className="h-64">
+            <div className="h-48 sm:h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                   <defs>
@@ -220,7 +220,7 @@ const Dashboard = () => {
         </div>
 
         {/* ── Stat Cards ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {STATS.map((s, i) => (
             <div
               key={i}
@@ -244,10 +244,10 @@ const Dashboard = () => {
         </div>
 
         {/* ── Bottom Row ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           {/* Performance metrics */}
-          <div className="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-base font-bold text-adorix-dark">Performance Score</h3>
@@ -261,7 +261,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="flex gap-3 flex-wrap mb-6">
+            <div className="grid grid-cols-3 gap-2 mb-6">
               {[
                 { label: 'Best Day', val: 'Saturday' },
                 { label: 'Peak Hour', val: '3–5 PM' },
@@ -274,7 +274,7 @@ const Dashboard = () => {
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
               {PERF_METRICS.map(m => (
                 <div key={m.label}>
                   <div className="flex justify-between text-xs mb-1.5">
