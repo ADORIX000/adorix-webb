@@ -874,7 +874,7 @@ const FeatureCards = () => {
                             title={feature.title}
                             description={feature.description}
                             delay={index * 0.1}
-                            cardClassName={`aspect-[9/16]${index === 4 ? ' lg:col-start-2' : ''}`}
+                            cardClassName={`aspect-[4/3] md:aspect-[9/16]${index === 4 ? ' lg:col-start-2' : ''}`}
                         />
                     ))}
                 </div>
