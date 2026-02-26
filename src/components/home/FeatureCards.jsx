@@ -611,34 +611,34 @@ const FeatureCard = ({ animation: Animation, title, description, delay, cardClas
 const FeatureCards = () => {
     const features = [
         {
-            animation: BioMesh,
-            title: 'AI-Powered Insights',
-            description: 'Leverage advanced machine learning to understand customer behavior and optimize your campaigns in real-time.',
+            animation: HolographicScope, // 1
+            title: 'Precision Campaigns',
+            description: 'Create hyper-targeted campaigns with our advanced segmentation tools. Deliver personalized experiences at scale.',
         },
         {
-            animation: SupersonicStream,
-            title: 'Lightning Fast Performance',
-            description: 'Experience blazing-fast ad delivery with our optimized infrastructure. Your campaigns load instantly, every time.',
-        },
-        {
-            animation: QuantumVault,
-            title: 'Enterprise Security',
-            description: 'Bank-level encryption and compliance with industry standards. Your data is protected with military-grade security.',
-        },
-        {
-            animation: SpectralField,
-            title: 'Real-Time Analytics',
-            description: 'Track every interaction with comprehensive dashboards. Make data-driven decisions with actionable insights.',
-        },
-        {
-            animation: TargetingPulse,
+            animation: TargetingPulse, // 2
             title: 'Audience Targeting',
             description: 'Reach the right people at the right time. Our smart algorithms ensure maximum engagement and conversion.',
         },
         {
-            animation: HolographicScope,
-            title: 'Precision Campaigns',
-            description: 'Create hyper-targeted campaigns with our advanced segmentation tools. Deliver personalized experiences at scale.',
+            animation: QuantumVault, // 3
+            title: 'Enterprise Security',
+            description: 'Bank-level encryption and compliance with industry standards. Your data is protected with military-grade security.',
+        },
+        {
+            animation: SpectralField, // 4
+            title: 'Real-Time Analytics',
+            description: 'Track every interaction with comprehensive dashboards. Make data-driven decisions with actionable insights.',
+        },
+        {
+            animation: BioMesh, // 6
+            title: 'AI-Powered Insights',
+            description: 'Leverage advanced machine learning to understand customer behavior and optimize your campaigns in real-time.',
+        },
+        {
+            animation: SupersonicStream, // 5
+            title: 'Lightning Fast Performance',
+            description: 'Experience blazing-fast ad delivery with our optimized infrastructure. Your campaigns load instantly, every time.',
         },
     ];
 
@@ -669,7 +669,7 @@ const FeatureCards = () => {
                     </motion.p>
                 </div>
 
-                {/* Responsive grid: 1 col on mobile, 2 on md, 4 on lg */}
+                {/* Grid Layout: 4 columns on large screens, with the bottom row centered */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {features.map((feature, index) => (
                         <FeatureCard
