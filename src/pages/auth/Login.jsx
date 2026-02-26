@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,14 +34,26 @@ const Login = () => {
       setErrors(validationErrors);
       return;
     }
+    // Handle standard login logic here
     navigate('/dashboard');
   };
+
+  // Google Login Functionality
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log('Google Login Success:', tokenResponse);
+      // Here you would typically send tokenResponse.access_token to your backend
+      navigate('/dashboard');
+    },
+    onError: (error) => console.log('Google Login Failed:', error),
+  });
 
   return (
     <div className="pt-28 pb-24 flex justify-center items-center min-h-[80vh]">
       <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
         <h2 className="text-3xl font-bold text-adorix-dark mb-2">Welcome back</h2>
         <p className="text-gray-500 mb-8">Sign in to your Adorix dashboard</p>
+        
         <form onSubmit={handleLogin} className="space-y-5" noValidate>
           {/* Email */}
           <div>
@@ -80,9 +93,10 @@ const Login = () => {
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Google Sign In */}
+          {/* Google Sign In - NOW FUNCTIONAL */}
           <button
             type="button"
+            onClick={() => googleLogin()}
             className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 px-4 hover:bg-gray-50 active:bg-gray-100 transition font-semibold text-gray-700 bg-white shadow-sm"
           >
             <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -26,7 +27,6 @@ const Signup = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Clear error on change
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: '' });
     }
@@ -42,11 +42,22 @@ const Signup = () => {
     navigate('/verify');
   };
 
+  // Google Signup Functionality
+  const googleSignup = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log('Google Signup Success:', tokenResponse);
+      // Logic for creating account via Google
+      navigate('/verify');
+    },
+    onError: (error) => console.log('Google Signup Failed:', error),
+  });
+
   return (
     <div className="pt-28 pb-24 flex justify-center items-center min-h-[80vh]">
       <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
         <h2 className="text-3xl font-bold text-adorix-dark mb-2">Create account</h2>
         <p className="text-gray-500 mb-8">Join the ad revolution today.</p>
+        
         <form onSubmit={handleSignup} className="space-y-5" noValidate>
           {/* Full Name */}
           <div>
@@ -97,9 +108,10 @@ const Signup = () => {
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Google Sign Up */}
+          {/* Google Sign Up - NOW FUNCTIONAL */}
           <button
             type="button"
+            onClick={() => googleSignup()}
             className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 px-4 hover:bg-gray-50 active:bg-gray-100 transition font-semibold text-gray-700 bg-white shadow-sm"
           >
             <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
