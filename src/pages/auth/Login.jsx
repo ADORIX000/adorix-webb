@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Github, Chrome, Sparkles, ShieldCheck } from 'lucide-react';
+import { handleGoogleLogin } from '../../utils/auth';
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -124,9 +126,13 @@ const Login = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 py-4 bg-white border-2 border-gray-100 rounded-2xl font-black text-sm hover:border-adorix-primary hover:bg-adorix-primary/5 transition-all text-adorix-dark active:scale-[0.98]">
+              <button
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center gap-3 py-4 bg-white border-2 border-gray-100 rounded-2xl font-black text-sm hover:border-adorix-primary hover:bg-adorix-primary/5 transition-all text-adorix-dark active:scale-[0.98]"
+              >
                 <Chrome className="w-5 h-5" /> Google
               </button>
+
               <button className="flex items-center justify-center gap-3 py-4 bg-white border-2 border-gray-100 rounded-2xl font-black text-sm hover:border-adorix-primary hover:bg-adorix-primary/5 transition-all text-adorix-dark active:scale-[0.98]">
                 <Github className="w-5 h-5" /> Github
               </button>
