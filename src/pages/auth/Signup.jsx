@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -101,10 +101,22 @@ const Signup = () => {
               name="name"
               value={form.name}
               onChange={handleChange}
+              autoFocus
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
               placeholder="John Doe"
             />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            <AnimatePresence>
+              {errors.name && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  className="text-red-500 text-xs overflow-hidden"
+                >
+                  {errors.name}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Email */}
@@ -118,7 +130,18 @@ const Signup = () => {
               className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
               placeholder="you@example.com"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            <AnimatePresence>
+              {errors.email && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  className="text-red-500 text-xs overflow-hidden"
+                >
+                  {errors.email}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Password */}
@@ -177,7 +200,18 @@ const Signup = () => {
               })}
             </div>
 
-            {errors.password && <p className="text-red-500 text-xs mt-2">{errors.password}</p>}
+            {errors.password && (
+              <AnimatePresence>
+                <motion.p
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  className="text-red-500 text-xs overflow-hidden"
+                >
+                  {errors.password}
+                </motion.p>
+              </AnimatePresence>
+            )}
           </div>
 
           {/* Divider */}
