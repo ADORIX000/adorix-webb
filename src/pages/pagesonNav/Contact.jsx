@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import {
     Mail, MessageSquare, Phone, MapPin,
     Send, Globe, Github, Twitter, Linkedin,
-    ArrowRight, Sparkles, Zap
+    ArrowRight, Sparkles
 } from 'lucide-react';
 import TypingText from '../../components/home/TypingText';
 
@@ -29,8 +29,6 @@ const ContactCard = ({ icon: Icon, title, detail, delay }) => (
 const Contact = () => {
     return (
         <div className="pt-32 pb-24 px-6 min-h-screen bg-transparent relative overflow-hidden">
-
-
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-20">
                     <motion.h1
@@ -46,7 +44,6 @@ const Contact = () => {
                     </motion.h1>
                 </div>
 
-
                 <div className="max-w-3xl mx-auto">
                     {/* Contact Form */}
                     <motion.div
@@ -55,8 +52,8 @@ const Contact = () => {
                         viewport={{ once: true }}
                         className="bg-white/30 backdrop-blur-xl rounded-[3rem] p-8 md:p-12 border border-white/20 shadow-2xl shadow-adorix-dark/5"
                     >
-                        <h2 className="text-3xl font-black text-adorix-dark mb-8 flex items-center gap-3">
-                            <Zap className="w-8 h-8 text-adorix-primary" /> Send Message
+                        <h2 className="text-3xl font-black text-adorix-dark mb-8">
+                            Send Message
                         </h2>
                         <form className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

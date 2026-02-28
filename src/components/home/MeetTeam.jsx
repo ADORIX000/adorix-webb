@@ -8,7 +8,7 @@ const TeamMember = ({ name, role, image, delay }) => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5 }}
-        className="bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center"
+        className="flex-shrink-0 w-[80vw] sm:w-auto bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center snap-center"
     >
         <div className="relative mb-6 inline-block">
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-adorix-light group-hover:border-adorix-primary transition-colors duration-500 mx-auto">
@@ -62,7 +62,7 @@ const MeetTeam = () => {
     ];
 
     return (
-        <section id="team" className="py-24 px-6 max-w-7xl mx-auto z-10 relative">
+        <section className="py-24 px-6 max-w-7xl mx-auto z-10 relative">
             <div className="text-center mb-16">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -83,7 +83,7 @@ const MeetTeam = () => {
                 </motion.p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex sm:grid overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-8 sm:pb-0 scrollbar-hide">
                 {team.map((member, index) => (
                     <TeamMember key={index} {...member} delay={index * 0.1} />
                 ))}

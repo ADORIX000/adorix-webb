@@ -5,379 +5,183 @@ import { motion, AnimatePresence } from 'framer-motion';
 // --- Hyper-Premium Advanced Animation Components (High Visibility v2.2) ---
 
 const BioMesh = ({ isPaused }) => {
-    // 8 neural nodes inside the face covering the brain and jaw area
-    const brainNodes = [
-        { x: 50, y: 20 }, { x: 42, y: 32 }, { x: 38, y: 50 }, { x: 45, y: 65 },
-        { x: 75, y: 25 }, { x: 70, y: 60 }, { x: 55, y: 78 }, { x: 65, y: 90 }
+    const nodes = [
+        { x: 30, y: 30 }, { x: 70, y: 30 }, { x: 50, y: 20 },
+        { x: 30, y: 70 }, { x: 70, y: 70 }, { x: 50, y: 80 }
     ];
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-white rounded-2xl group border border-gray-100 shadow-sm">
-            {/* White background with subtle border for a clean, premium look */}
-            <svg viewBox="0 0 100 100" className="w-full h-full p-4 transition-transform duration-700 group-hover:scale-[1.03] origin-center relative z-10">
-                <defs>
-                    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="1" result="blur" />
-                        <feMerge>
-                            <feMergeNode in="blur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                    {/* Shadow for floating HUD elements */}
-                    <filter id="dropShadowLight" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#1F2B2D" floodOpacity="0.1" />
-                    </filter>
-                </defs>
-
-                {/* Base Grid in background - darker for visibility on white */}
-                <g stroke="var(--adorix-primary)" strokeWidth="0.2" opacity="0.15">
-                    {[10, 20, 30, 40, 50, 60, 70, 80, 90].map(y => <line key={`hy${y}`} x1="0" y1={y} x2="100" y2={y} />)}
-                    {[10, 20, 30, 40, 50, 60, 70, 80, 90].map(x => <line key={`vx${x}`} x1={x} y1="0" x2={x} y2="100" />)}
+        <div className="relative w-full h-full flex items-center justify-center bg-white rounded-2xl overflow-hidden">
+            <svg viewBox="0 0 100 100" className="w-4/5 h-4/5">
+                {/* Clean Grid */}
+                <g stroke="var(--adorix-primary)" strokeWidth="0.2" opacity="0.1">
+                    {[20, 40, 60, 80].map(p => <line key={`h${p}`} x1="0" y1={p} x2="100" y2={p} />)}
+                    {[20, 40, 60, 80].map(p => <line key={`v${p}`} x1={p} y1="0" x2={p} y2="100" />)}
                 </g>
 
-                {/* Internal Circuitry/Grid mapping */}
-                <g>
-                    {/* Horizontal scanning line inside face - using primary color for visibility */}
-                    <motion.rect x="0" y="0" width="100" height="1.5" fill="var(--adorix-primary)" opacity="0.3"
-                        animate={isPaused ? { y: [0, 100] } : { y: [0, 100] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    />
-                    {/* Inner tech concentric circles acting like a brain lobe */}
-                    <circle cx="65" cy="40" r="25" fill="none" stroke="var(--adorix-secondary)" strokeWidth="0.5" opacity="0.4" />
-                    <circle cx="65" cy="40" r="15" fill="none" stroke="var(--adorix-accent)" strokeWidth="0.5" opacity="0.3" />
+                {/* Neural Connections */}
+                <g stroke="var(--adorix-primary)" strokeWidth="0.3" opacity="0.2">
+                    {nodes.map((n, i) => (
+                        <line key={i} x1="50" y1="50" x2={n.x} y2={n.y} />
+                    ))}
                 </g>
 
-                {/* Core Brain Hub (Center of activity) - Orange stands out well on white */}
-                <g transform="translate(65, 40)">
-                    <motion.circle r="16" fill="none" stroke="var(--adorix-secondary)" strokeDasharray="2 4" strokeWidth="1"
-                        animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} />
-                    <motion.circle r="10" fill="none" stroke="#FF8C00" strokeDasharray="8 4" strokeWidth="1.5"
-                        animate={{ rotate: -360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} />
-                    <circle r="3" fill="var(--adorix-primary)" />
-                    <motion.circle r="6" fill="#FF8C00" opacity="0.4" filter="url(#softGlow)"
-                        animate={isPaused ? { scale: [1, 1.5, 1], opacity: [0.2, 0.6, 0.2] } : { scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+                {/* Central Focus Orb */}
+                <g transform="translate(50, 50)">
+                    <motion.circle r="18" fill="none" stroke="var(--adorix-primary)" strokeWidth="0.8" strokeDasharray="4 2"
+                        animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} />
+                    <motion.circle r="12" fill="none" stroke="var(--adorix-accent)" strokeWidth="1.5" strokeDasharray="6 4"
+                        animate={{ rotate: -360 }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }} />
+                    <circle r="4" fill="var(--adorix-primary)" />
+                    <motion.circle r="6" fill="var(--adorix-primary)" opacity="0.3"
+                        animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }} />
                 </g>
 
-                {/* Neural Pathways connecting from core to face nodes */}
-                {brainNodes.map((node, i) => (
-                    <g key={`pathway-${i}`}>
-                        <line x1="65" y1="40" x2={node.x} y2={node.y} stroke="var(--adorix-primary)" strokeWidth="0.4" opacity="0.5" />
-                        {isPaused && (
-                            <motion.circle r="1" fill="var(--adorix-primary)"
-                                animate={{ cx: [65, node.x], cy: [40, node.y], opacity: [0, 1, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity, delay: (i % 3) * 0.4, ease: "easeOut" }}
-                            />
-                        )}
-                        <circle cx={node.x} cy={node.y} r="1.5" fill="white" stroke={i % 2 === 0 ? "#FF8C00" : "var(--adorix-accent)"} strokeWidth="0.5" />
-                        <motion.circle cx={node.x} cy={node.y} r="1" fill={i % 2 === 0 ? "#FF8C00" : "var(--adorix-accent)"}
-                            animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2 + (i % 3), repeat: Infinity }}
-                        />
-                    </g>
+                {/* Neural Nodes */}
+                {nodes.map((n, i) => (
+                    <motion.circle key={i} cx={n.x} cy={n.y} r="1.5" fill="var(--adorix-accent)"
+                        animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }} />
                 ))}
 
-                {/* HUD Connections from left edge to face */}
-                <path d="M 28 26 L 35 26 L 42 35" fill="none" stroke="var(--adorix-secondary)" strokeWidth="0.5" strokeOpacity="0.5" strokeDasharray="1 1" />
-                <path d="M 32 55 L 38 55 L 40 50" fill="none" stroke="var(--adorix-secondary)" strokeWidth="0.5" strokeOpacity="0.5" strokeDasharray="1 1" />
-                <path d="M 32 80 L 38 80 L 42 70" fill="none" stroke="var(--adorix-secondary)" strokeWidth="0.5" strokeOpacity="0.5" strokeDasharray="1 1" />
-
-                {/* Left Side Small HUD Text - Darker colors for readability on white */}
-                <g>
-                    <text x="30" y="24" fontSize="3" fill="#FF8C00" fontFamily="monospace" fontWeight="700">PREDICTIVE AI</text>
-                    <text x="30" y="28" fontSize="2" fill="var(--adorix-secondary)" fontFamily="monospace" fontWeight="500">SYS.NEURAL.NET</text>
-
-                    <text x="34" y="52" fontSize="3" fill="var(--adorix-primary)" fontFamily="monospace" fontWeight="700">GENERATIVE</text>
-                    <text x="34" y="56" fontSize="2" fill="var(--adorix-secondary)" fontFamily="monospace" fontWeight="500">SYNTHETIC LOGIC</text>
-
-                    <text x="34" y="78" fontSize="3" fill="var(--adorix-dark)" fontFamily="monospace" fontWeight="700">COGNITIVE</text>
-                    <text x="34" y="82" fontSize="2" fill="var(--adorix-secondary)" fontFamily="monospace" fontWeight="500">DATA PROCESSING</text>
-                </g>
-
-                {/* Left Side Floating HUD Badges - Light theme styling */}
-                {/* Badge 1: Top */}
-                <g transform="translate(3, 20)">
-                    <rect width="25" height="12" rx="2" fill="white" stroke="var(--adorix-primary)" strokeWidth="0.5" filter="url(#dropShadowLight)" />
-                    <circle cx="6" cy="6" r="2" fill="#FF8C00" />
-                    <rect x="10" y="4" width="10" height="1.5" fill="var(--adorix-secondary)" opacity="0.6" />
-                    <rect x="10" y="7" width="12" height="1.5" fill="var(--adorix-secondary)" opacity="0.3" />
-                    <motion.rect x="10" y="4" width="4" height="4.5" fill="var(--adorix-primary)" opacity="0.8"
-                        animate={isPaused ? { x: [10, 18, 10] } : {}} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                </g>
-
-                {/* Badge 2: Middle (Circular focus) */}
-                <g transform="translate(10, 48)">
-                    <rect width="22" height="20" rx="4" fill="white" stroke="var(--adorix-accent)" strokeWidth="0.5" filter="url(#dropShadowLight)" />
-                    <circle cx="11" cy="10" r="4.5" fill="none" stroke="var(--adorix-primary)" strokeWidth="1" />
-                    <circle cx="11" cy="10" r="2" fill="var(--adorix-accent)" />
-                </g>
-
-                {/* Badge 3: Bottom */}
-                <g transform="translate(4, 75)">
-                    <rect width="28" height="10" rx="2" fill="white" stroke="var(--adorix-primary)" strokeWidth="0.5" filter="url(#dropShadowLight)" />
-                    <circle cx="24" cy="5" r="2" fill="var(--adorix-accent)" />
-                    <rect x="4" y="3" width="14" height="1" fill="var(--adorix-secondary)" opacity="0.4" />
-                    <rect x="4" y="6" width="10" height="1" fill="var(--adorix-secondary)" opacity="0.4" />
-                    <motion.circle cx="18" cy="6" r="1.5" fill="#FF8C00"
-                        animate={isPaused ? { opacity: [0, 1, 0] } : { opacity: 1 }} transition={{ duration: 1, repeat: Infinity }}
-                    />
-                </g>
+                {/* Scanning Line */}
+                <motion.rect x="15" y="0" width="70" height="0.6" fill="var(--adorix-primary)" opacity="0.5"
+                    animate={isPaused ? { y: [15, 85] } : { y: 50 }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
             </svg>
         </div>
     );
 };
 
 const SupersonicStream = ({ isPaused }) => (
-    <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-white rounded-2xl group border border-gray-100 shadow-sm">
-        <svg viewBox="0 0 100 100" className="w-full h-full p-2 origin-center relative z-10">
+    <div className="relative w-full h-full flex items-center justify-center bg-white rounded-2xl overflow-hidden">
+        <svg viewBox="0 0 100 100" className="w-full h-full p-4">
             <defs>
-                <filter id="speedGlow">
-                    <feGaussianBlur stdDeviation="1.5" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
+                <filter id="speedBlur">
+                    <feGaussianBlur stdDeviation="1.5" />
                 </filter>
-                <linearGradient id="windowGlass" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#f0f4f8" stopOpacity="0.9" />
-                </linearGradient>
             </defs>
 
-            {/* Background Parallax Speed Particles */}
-            <g opacity="0.4">
-                {/* Slow distant lines */}
-                {[10, 30, 60, 85].map((y, i) => (
-                    <motion.line key={`bg1-${y}`} x1="120" x2="10" y1={y} y2={y} stroke="var(--adorix-primary)" strokeWidth="0.5" strokeLinecap="round" strokeDasharray="30 40 10 20"
-                        animate={isPaused ? { x: [-50, 150] } : {}} transition={{ duration: 4 - (i * 0.5), repeat: Infinity, ease: "linear" }}
+            {/* Warp Speed Tunnel Effect */}
+            <g opacity="0.15">
+                {[...Array(3)].map((_, i) => (
+                    <motion.circle
+                        key={i}
+                        cx="50" cy="50" r="10"
+                        fill="none"
+                        stroke="var(--adorix-primary)"
+                        strokeWidth="0.5"
+                        animate={{ r: [10, 80], opacity: [0.6, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.5, ease: "easeOut" }}
                     />
                 ))}
+            </g>
 
-                {/* Fast close dashed blocks */}
-                {[20, 45, 75, 90].map((y, i) => (
-                    <motion.line key={`bg2-${y}`} x1="150" x2="-20" y1={y} y2={y} stroke="var(--adorix-accent)" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="5 15" opacity="0.7"
-                        animate={isPaused ? { x: [-100, 100] } : {}} transition={{ duration: 1.5 - (i * 0.2), repeat: Infinity, ease: "linear" }}
+            {/* Advanced Speed Lines with Parallax */}
+            <g>
+                {[...Array(8)].map((_, i) => (
+                    <motion.line
+                        key={i}
+                        x1="120" x2="-20"
+                        y1={20 + i * 8} y2={20 + i * 8}
+                        stroke="var(--adorix-primary)"
+                        strokeWidth={0.5 + Math.random()}
+                        strokeDasharray="20 40"
+                        opacity={0.2 + Math.random() * 0.3}
+                        animate={isPaused ? { x: [-150, 150] } : { x: 0 }}
+                        transition={{ duration: 0.8 + Math.random() * 0.5, repeat: Infinity, ease: "linear" }}
                     />
                 ))}
-
-                {/* Speed frames (Angled polygons) */}
-                <motion.polygon points="80,10 95,10 85,90 70,90" fill="var(--adorix-primary)" opacity="0.1"
-                    animate={isPaused ? { x: [-120, 100] } : {}} transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-                />
             </g>
 
-            {/* Central Orbit / Tether Line */}
-            <circle cx="50" cy="50" r="30" fill="none" stroke="var(--adorix-secondary)" strokeWidth="0.5" strokeDasharray="2 4" opacity="0.3" />
-
-            <g filter="url(#speedGlow)">
-                {/* Tether connecting window to speedometer */}
-                <motion.path d="M 50 50 Q 65 70, 75 75" fill="none" stroke="var(--adorix-accent)" strokeWidth="0.8" strokeDasharray="2 2"
-                    animate={isPaused ? { strokeDashoffset: [0, -20] } : {}} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                />
-            </g>
-
-            {/* Central Browser Window with High-Frequency Jitter */}
+            {/* Simplified but Dynamic Browser Window */}
             <motion.g
-                animate={isPaused ? { x: [-0.5, 0.5, -0.2, 0.2, 0], y: [-0.2, 0.2, 0, -0.2, 0] } : {}}
-                transition={{ duration: 0.1, repeat: Infinity, repeatType: "mirror" }}
+                animate={isPaused ? {
+                    y: [0, -3, 0],
+                    rotate: [-1, 1, -1]
+                } : { y: 0 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
-                {/* Window Body */}
-                <rect x="25" y="30" width="50" height="40" rx="3" fill="url(#windowGlass)" filter="drop-shadow(0px 4px 6px rgba(0,0,0,0.4))" />
+                {/* Window Glow */}
+                <circle cx="50" cy="50" r="25" fill="var(--adorix-primary)" opacity="0.05" filter="url(#speedBlur)" />
 
-                {/* Top Browser Bar */}
-                <rect x="25" y="30" width="50" height="8" rx="3" fill="var(--adorix-dark)" />
-                {/* Window Buttons */}
-                <circle cx="28" cy="34" r="1.5" fill="#ff5f56" />
-                <circle cx="32" cy="34" r="1.5" fill="#ffbd2e" />
-                <circle cx="36" cy="34" r="1.5" fill="#27c93f" />
+                <rect x="25" y="32" width="50" height="36" rx="4" fill="white" stroke="var(--adorix-primary)" strokeWidth="1" shadow="0 10px 15px -3px rgb(0 0 0 / 0.1)" />
+                <rect x="25" y="32" width="50" height="8" rx="4" fill="var(--adorix-dark)" />
 
-                {/* Code / Data Lines inside Window */}
-                <rect x="30" y="44" width="20" height="2" fill="var(--adorix-primary)" opacity="0.5" rx="1" />
-                <rect x="30" y="48" width="15" height="2" fill="var(--adorix-primary)" opacity="0.5" rx="1" />
-                <rect x="30" y="52" width="25" height="2" fill="var(--adorix-primary)" opacity="0.5" rx="1" />
-                <rect x="30" y="56" width="18" height="2" fill="var(--adorix-primary)" opacity="0.5" rx="1" />
-                <rect x="30" y="60" width="22" height="2" fill="var(--adorix-primary)" opacity="0.5" rx="1" />
+                {/* Dynamic Content Lines */}
+                <rect x="30" y="46" width="30" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
+                <rect x="30" y="52" width="20" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
+                <motion.rect
+                    x="30" y="58" width="15" height="2" fill="var(--adorix-accent)" rx="1"
+                    animate={{ width: [15, 35, 15] }} transition={{ duration: 2, repeat: Infinity }}
+                />
 
-                {/* Pulsing Lightning Bolt */}
-                <motion.g transform="translate(52, 43)" filter="url(#speedGlow)">
-                    <motion.path d="M 8 0 L 2 10 L 7 10 L 4 20 L 14 8 L 9 8 Z" fill="#FF8C00"
-                        animate={isPaused ? { opacity: [0.7, 1, 0.7], scale: [0.95, 1.05, 0.95] } : {}} transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                </motion.g>
+                {/* Advanced Lightning Strike */}
+                <motion.path
+                    d="M 62 42 L 54 54 L 59 54 L 56 66 L 66 52 L 61 52 Z"
+                    fill="var(--adorix-accent)"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1 }}
+                />
             </motion.g>
 
-            {/* Bottom Right Speedometer (Adapted for Light Background) */}
-            <g transform="translate(68, 68)" filter="url(#speedGlow)">
-                <circle cx="10" cy="10" r="12" fill="white" stroke="var(--adorix-primary)" strokeWidth="1.5" />
-                {/* Tick marks */}
-                {[...Array(9)].map((_, i) => (
-                    <line key={`tick-${i}`} x1="10" y1="2" x2="10" y2={i > 4 ? "4" : "3"} stroke={i > 6 ? "#FF8C00" : "var(--adorix-primary)"} strokeWidth={i > 6 ? "0.8" : "0.4"}
-                        transform={`rotate(${i * 30 - 120} 10 10)`}
-                    />
-                ))}
-
-                {/* Speedometer Needle (Ticking clockwise like a clock) */}
-                <motion.g
-                    animate={isPaused ? { rotate: [0, 360] } : { rotate: 0 }}
-                    transition={isPaused ? { duration: 12, repeat: Infinity, ease: (t) => Math.floor(t * 12) / 12 } : { duration: 1, ease: "easeOut" }}
-                    style={{ transformOrigin: '10px 10px' }}
-                >
-                    <polygon points="9,10 11,10 10,2" fill="#FF8C00" />
-                    <circle cx="10" cy="10" r="1.5" fill="var(--adorix-dark)" />
-                    <circle cx="10" cy="10" r="0.5" fill="white" />
-                </motion.g>
-            </g>
-
+            {/* High-speed streak particles */}
+            {[...Array(6)].map((_, i) => (
+                <motion.rect
+                    key={`p-${i}`}
+                    width={10 + Math.random() * 20}
+                    height="0.8"
+                    fill="var(--adorix-accent)"
+                    opacity="0.4"
+                    animate={isPaused ? { x: [150, -100] } : { x: 50 }}
+                    transition={{
+                        duration: 0.5 + Math.random() * 0.5,
+                        repeat: Infinity,
+                        delay: Math.random(),
+                        ease: "linear"
+                    }}
+                    y={15 + Math.random() * 70}
+                />
+            ))}
         </svg>
     </div>
 );
 
 const QuantumVault = ({ isPaused }) => {
     return (
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-white rounded-2xl group border border-gray-100 shadow-sm">
-            <svg viewBox="0 0 100 100" className="w-full h-full p-2 transition-transform duration-700 group-hover:scale-[1.03] origin-center relative z-10">
+        <div className="relative w-full h-full flex items-center justify-center bg-white rounded-2xl overflow-hidden">
+            <svg viewBox="0 0 100 100" className="w-4/5 h-4/5">
                 <defs>
-                    <filter id="neonGlowVideo" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="1.5" result="blur" />
-                        <feMerge>
-                            <feMergeNode in="blur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                    <filter id="intenseGlowVideo" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="3" result="blur" />
-                        <feMerge>
-                            <feMergeNode in="blur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                    <filter id="whorlDistortion">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" result="noise" />
-                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G" />
-                    </filter>
-
-                    {/* Footprint gradient for the scanning area - updated for light mode */}
-                    <linearGradient id="laserFootprint" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="var(--adorix-accent)" stopOpacity="0" />
-                        <stop offset="100%" stopColor="var(--adorix-accent)" stopOpacity="0.15" />
-                    </linearGradient>
-
-                    <clipPath id="scannerWipeClip">
-                        <motion.rect x="0" y="-10" width="100" height="25"
-                            animate={isPaused ? { y: [-30, 110, -30] } : { y: -50 }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                    </clipPath>
-
-                    {/* Oval clipping mask for the fingerprint */}
                     <clipPath id="fingerClip">
                         <ellipse cx="50" cy="50" rx="16" ry="24" />
                     </clipPath>
-
-                    {/* Highly detailed base geometry for the fingerprint */}
-                    <g id="organicBasePrint" style={{ transformOrigin: '50px 50px', transform: 'scale(0.85)' }} clipPath="url(#fingerClip)">
-                        {Array.from({ length: 22 }).map((_, i) => (
-                            <path key={`ring-${i}`} d={`M ${50 - i * 1.3} 85 L ${50 - i * 1.3} 45 A ${i * 1.3} ${i * 1.5} 0 0 1 ${50 + i * 1.3} 45 L ${50 + i * 1.3} 85`} fill="none" />
+                    {/* Simplified Base geometry for the fingerprint */}
+                    <g id="basePrint" clipPath="url(#fingerClip)">
+                        {Array.from({ length: 15 }).map((_, i) => (
+                            <path key={i} d={`M ${50 - i * 1.5} 80 L ${50 - i * 1.5} 45 A ${i * 1.5} ${i * 2} 0 0 1 ${50 + i * 1.5} 45 L ${50 + i * 1.5} 80`} fill="none" stroke="var(--adorix-primary)" strokeWidth="0.8" opacity="0.3" />
                         ))}
-                        <circle cx="50" cy="45" r="0.5" fill="none" />
                     </g>
                 </defs>
 
-                {/* Subtle Background Grid Effect */}
-                <g fill="var(--adorix-primary)" opacity="0.1">
-                    {[10, 20, 30, 40, 50, 60, 70, 80, 90].map((x) =>
-                        [10, 20, 30, 40, 50, 60, 70, 80, 90].map((y) => (
-                            <circle key={`dot-${x}-${y}`} cx={x} cy={y} r="0.5" />
-                        ))
-                    )}
-                </g>
-
-                {/* Outer HUD Rings (Video match) - Static */}
-                <g filter="url(#neonGlowVideo)">
-                    <g style={{ transformOrigin: '50px 50px' }}>
-                        <ellipse cx="50" cy="50" rx="28" ry="36" fill="none" stroke="var(--adorix-primary)" strokeWidth="0.5" strokeDasharray="3 4 1 8" opacity="0.4" />
-                        <ellipse cx="50" cy="50" rx="27" ry="35" fill="none" stroke="var(--adorix-accent)" strokeWidth="0.2" strokeDasharray="20 10" opacity="0.6" />
-
-                        {/* HUD crosshair ticks attached to inner ring (oval aligned) */}
-                        <path d="M 50 12 L 50 14 M 50 86 L 50 88 M 20 50 L 22 50 M 78 50 L 80 50" stroke="var(--adorix-accent)" strokeWidth="0.8" />
-                    </g>
-
-                    <g style={{ transformOrigin: '50px 50px' }}>
-                        <ellipse cx="50" cy="50" rx="24" ry="32" fill="none" stroke="#ffffff" strokeWidth="0.2" strokeDasharray="1 3" opacity="0.4" />
-                        {/* Rotating angle brackets (oval aligned) */}
-                        <path d="M 26 50 L 28 47 M 26 50 L 28 53 M 74 50 L 72 47 M 74 50 L 72 53" stroke="#ffffff" strokeWidth="0.8" opacity="0.6" />
-                    </g>
-
-                    {/* Inner segmented rotating ring */}
-                    <g style={{ transformOrigin: '50px 50px' }}>
-                        <ellipse cx="50" cy="50" rx="22" ry="30" fill="none" stroke="var(--adorix-primary)" strokeWidth="1" strokeDasharray="40 80" opacity="0.5" />
-                    </g>
-                </g>
-
-                {/* Static Crosshair / Target */}
-                <g stroke="var(--adorix-primary)" strokeWidth="0.3" opacity="0.5" filter="url(#neonGlowVideo)">
-                    <line x1="50" y1="18" x2="50" y2="28" />
-                    <line x1="50" y1="72" x2="50" y2="82" />
-                    <line x1="25" y1="50" x2="35" y2="50" />
-                    <line x1="65" y1="50" x2="75" y2="50" />
-
-                    <circle cx="50" cy="50" r="1.5" fill="var(--adorix-accent)" />
-                </g>
-
-                {/* Left/Right Data Matrix (HEX Codes) */}
-                <g clipPath="url(#hexDataClip)" opacity="0.7">
-                    <clipPath id="hexDataClip">
-                        <rect x="0" y="20" width="100" height="60" />
+                {/* Fingerprint */}
+                <use href="#basePrint" />
+                <motion.g clipPath="url(#scanClip)">
+                    <clipPath id="scanClip">
+                        <motion.rect x="0" y="0" width="100" height="20" animate={isPaused ? { y: [-20, 100] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
                     </clipPath>
-                    <motion.g animate={isPaused ? { y: [0, -40] } : { y: 0 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }}>
-                        {Array.from({ length: 30 }).map((_, i) => (
-                            <text key={`L-${i}`} x="8" y={i * 5} fontSize="2.5" fill="var(--adorix-primary)" fontFamily="monospace" fontWeight="bold">
-                                {i % 2 === 0 ? "0x" : "0A"}{(i * 7 % 99).toString(16).toUpperCase().padStart(2, '0')}
-                            </text>
+                    <g stroke="var(--adorix-accent)" strokeWidth="1" opacity="0.8">
+                        {Array.from({ length: 15 }).map((_, i) => (
+                            <path key={`s-${i}`} d={`M ${50 - i * 1.5} 80 L ${50 - i * 1.5} 45 A ${i * 1.5} ${i * 2} 0 0 1 ${50 + i * 1.5} 45 L ${50 + i * 1.5} 80`} fill="none" />
                         ))}
-                    </motion.g>
-                    <motion.g animate={isPaused ? { y: [-40, 0] } : { y: 0 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }}>
-                        {Array.from({ length: 30 }).map((_, i) => (
-                            <text key={`R-${i}`} x="85" y={i * 5} fontSize="2.5" fill="var(--adorix-accent)" fontFamily="monospace" fontWeight="bold">
-                                {(i * 13 % 255).toString(16).toUpperCase().padStart(2, '0')}
-                            </text>
-                        ))}
-                    </motion.g>
-                </g>
-
-                {/* Fingerprint Group Container */}
-                <g filter="url(#whorlDistortion)">
-                    {/* Dim Background Fingerprint (shrunk slightly to fit within HUD better) */}
-                    <g stroke="var(--adorix-primary)" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.15" style={{ transformOrigin: '50px 50px', transform: 'scale(0.85)' }}>
-                        <use href="#organicBasePrint" clipPath="url(#fingerClip)" />
                     </g>
+                </motion.g>
 
-                    {/* Bright Scanned Area (masked by scanner sweep) */}
-                    <g clipPath="url(#scannerWipeClip)" style={{ transformOrigin: '50px 50px', transform: 'scale(0.85)' }}>
-                        <g stroke="var(--adorix-accent)" strokeWidth="1" strokeLinecap="round" opacity="0.8" filter="url(#intenseGlowVideo)">
-                            <use href="#organicBasePrint" clipPath="url(#fingerClip)" />
-                        </g>
-                        <g stroke="#ffffff" strokeWidth="0.4" strokeLinecap="round" opacity="1">
-                            <use href="#organicBasePrint" clipPath="url(#fingerClip)" />
-                        </g>
-                    </g>
-                </g>
+                {/* Scanner Line */}
+                <motion.line x1="30" x2="70" y1="0" y2="0" stroke="var(--adorix-accent)" strokeWidth="1"
+                    animate={isPaused ? { y: [20, 80] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
 
-                {/* Scanner Laser Sweep - Mimicking BioMesh full-width scan */}
-                {isPaused && (
-                    <motion.rect x="0" y="0" width="100" height="0.6" fill="var(--adorix-accent)" opacity="0.8" filter="url(#intenseGlowVideo)"
-                        animate={{ y: [0, 100] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    />
-                )}
-
-                {/* Authorization Status Popups */}
-                {isPaused && (
-                    <motion.g transform="translate(50, 85)"
-                        animate={{ opacity: [0, 1, 1, 0] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <rect x="-18" y="-4" width="36" height="8" rx="1" fill="rgba(13,138,158,0.2)" stroke="var(--adorix-accent)" strokeWidth="0.5" filter="url(#neonGlowVideo)" />
-                        <text x="0" y="2" fontSize="3" fill="#ffffff" fontFamily="monospace" textAnchor="middle" fontWeight="bold">AUTHORIZED</text>
-                    </motion.g>
-                )}
+                {/* Secure Badge */}
+                <circle cx="85" cy="15" r="4" fill="var(--adorix-primary)" opacity="0.2" />
+                <path d="M 83 15 L 84.5 16.5 L 87 13.5" fill="none" stroke="var(--adorix-primary)" strokeWidth="1" opacity="0.8" />
             </svg>
         </div>
     );
@@ -751,7 +555,7 @@ const HolographicScope = ({ isPaused }) => (
 
 // --- Main Components ---
 
-const FeatureCard = ({ animation: Animation, title, description, delay }) => {
+const FeatureCard = ({ animation: Animation, title, description, delay, cardClassName = '' }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -762,7 +566,7 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
             transition={{ delay, duration: 0.5 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group relative h-80 w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl"
+            className={`group relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl ${cardClassName}`}
         >
             {/* Animation Background Layer */}
             <div className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out z-0">
@@ -776,13 +580,13 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/40 backdrop-blur-xl z-10 flex flex-col items-center justify-center p-10 text-center"
+                        className="absolute inset-0 bg-white/60 backdrop-blur-2xl z-10 flex flex-col items-center justify-center p-8 text-center space-y-6"
                     >
                         <motion.h3
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4 }}
-                            className="mb-4 text-2xl font-bold text-gray-900 tracking-tight"
+                            className="text-2xl font-bold text-gray-900 tracking-tight"
                         >
                             {title}
                         </motion.h3>
@@ -790,7 +594,7 @@ const FeatureCard = ({ animation: Animation, title, description, delay }) => {
                             initial={{ y: 15, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.1, duration: 0.4 }}
-                            className="text-gray-600 leading-relaxed text-sm md:text-base font-medium"
+                            className="text-gray-700 leading-relaxed text-sm font-medium text-justify px-2"
                         >
                             {description}
                         </motion.p>
@@ -865,7 +669,8 @@ const FeatureCards = () => {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {/* Responsive grid: 1 col on mobile, 2 on md, 4 on lg */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {features.map((feature, index) => (
                         <FeatureCard
                             key={index}
@@ -873,6 +678,7 @@ const FeatureCards = () => {
                             title={feature.title}
                             description={feature.description}
                             delay={index * 0.1}
+                            cardClassName={`aspect-[4/3] md:aspect-[4/5]${index === 4 ? ' lg:col-start-2' : ''}`}
                         />
                     ))}
                 </div>
