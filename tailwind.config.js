@@ -12,7 +12,7 @@ export default {
           light: '#E5F9F8',      // Backgrounds / Lightest shade
           dark: '#1F2B2D',       // Main Text / Darkest shade
           secondary: '#23717B',  // Deep Teal / Hover states / Subtitles
-          primary: '#0D8A9E',    // Main Brand Color / Buttons
+          primary: '#0A7383',    // Main Brand Color / Buttons
           accent: '#12B2C1',     // Highlights / Active states / Icons
         }
       },

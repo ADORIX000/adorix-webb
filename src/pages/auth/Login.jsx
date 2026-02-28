@@ -74,6 +74,7 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  aria-live="assertive"
                   className="text-red-500 text-xs overflow-hidden"
                 >
                   {errors.email}
@@ -120,6 +121,7 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  aria-live="assertive"
                   className="text-red-500 text-xs overflow-hidden"
                 >
                   {errors.password}
