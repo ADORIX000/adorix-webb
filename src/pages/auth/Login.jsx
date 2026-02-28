@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -8,6 +8,15 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('adorix_remember_email');
+    if (savedEmail) {
+      setForm(prev => ({ ...prev, email: savedEmail }));
+      setRememberMe(true);
+    }
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -37,6 +46,13 @@ const Login = () => {
       return;
     }
     setIsLoading(true);
+
+    if (rememberMe) {
+      localStorage.setItem('adorix_remember_email', form.email);
+    } else {
+      localStorage.removeItem('adorix_remember_email');
+    }
+
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     navigate('/dashboard');
@@ -103,6 +119,21 @@ const Login = () => {
               </button>
             </div>
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+          </div>
+
+          {/* Remember Me */}
+          <div className="flex items-center">
+            <input
+              id="remember_me"
+              name="remember_me"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 text-adorix-primary focus:ring-adorix-primary border-gray-300 rounded cursor-pointer transition"
+            />
+            <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-700 cursor-pointer">
+              Remember me
+            </label>
           </div>
 
           {/* Divider */}
