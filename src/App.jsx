@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/navbar';
-import GradientWrapper from './components/layout/GradientWrapper';
-import Footer from './components/common/Footer';
+import MainLayout from './components/layout/MainLayout';
 import ScrollToTop from './components/common/ScrollToTop';
 
 // Pages
@@ -30,9 +29,8 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <GradientWrapper>
-        <Navbar />
-        <Routes>
+      <Routes>
+        <Route element={<MainLayout />}>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/features" element={<Features />} />
@@ -60,10 +58,8 @@ function App() {
           <Route path="/settings/policies" element={<Policies />} />
           <Route path="/settings/help" element={<Help />} />
           <Route path="/settings/feedback" element={<Feedback />} />
-
-        </Routes>
-        <Footer />
-      </GradientWrapper>
+        </Route>
+      </Routes>
     </Router>
   );
 }
