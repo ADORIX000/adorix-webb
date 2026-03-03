@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: '', rememberMe: false });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('remember_me_email');
+    if (savedEmail) {
+      setForm((prev) => ({ ...prev, email: savedEmail, rememberMe: true }));
+    }
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -22,9 +29,13 @@ const Login = () => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
+    const { name, value, type, checked } = e.target;
+    setForm({
+      ...form,
+      [name]: type === 'checkbox' ? checked : value
+    });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
     }
   };
 
@@ -35,6 +46,13 @@ const Login = () => {
       setErrors(validationErrors);
       return;
     }
+
+    if (form.rememberMe) {
+      localStorage.setItem('remember_me_email', form.email);
+    } else {
+      localStorage.removeItem('remember_me_email');
+    }
+
     // Handle standard login logic here
     navigate('/dashboard');
   };
@@ -110,6 +128,21 @@ const Login = () => {
                 </motion.p>
               )}
             </AnimatePresence>
+          </div>
+
+          {/* Remember Me */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              checked={form.rememberMe}
+              onChange={handleChange}
+              className="h-4 w-4 text-adorix-primary focus:ring-adorix-primary border-gray-300 rounded cursor-pointer"
+            />
+            <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-700 cursor-pointer">
+              Remember me
+            </label>
           </div>
 
           {/* Divider */}
