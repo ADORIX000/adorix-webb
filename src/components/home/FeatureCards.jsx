@@ -585,11 +585,11 @@ const FeatureCard = ({ animation: Animation, title, description, cardClassName =
             </div>
 
             {/* Content Area - Premium Click-to-Reveal Overlay */}
-            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-8 md:p-12 text-center space-y-6 bg-white/90 backdrop-blur-3xl transition-all duration-300 ease-out ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <h3 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tighter leading-tight">
+            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-6 md:p-8 text-center space-y-4 bg-white/90 backdrop-blur-3xl transition-all duration-300 ease-out ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <h3 className="text-2xl md:text-2xl font-black text-gray-900 tracking-tight leading-tight">
                     {title}
                 </h3>
-                <p className="text-gray-700 md:text-gray-800 leading-relaxed text-lg md:text-xl font-bold max-w-[340px]">
+                <p className="text-gray-700 md:text-gray-800 leading-relaxed text-lg md:text-base font-bold max-w-[300px]">
                     {description}
                 </p>
             </div>
