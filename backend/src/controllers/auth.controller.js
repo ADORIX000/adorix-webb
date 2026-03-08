@@ -1,29 +1,39 @@
 const userService = require('../services/user.service');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = '7d'; // Token valid for 7 days
 
 /**
- * Authentication Controller
+ * Authentication Controller - Supabase + JWT + bcrypt
  */
 const signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        // Simple validation
         if (!name || !email || !password) {
             return res.status(400).json({ error: 'Name, email, and password are required' });
         }
 
+        // Check if user already exists
         const existingUser = await userService.findUserByEmail(email);
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists' });
+            return res.status(400).json({ error: 'An account with this email already exists. Please sign in.' });
         }
 
+        // Create user (password hashed inside userService)
         const user = await userService.createUser({ name, email, password });
 
-        // Create mock token
-        const token = `mock-token-${user.id}`;
+        // Sign a real JWT
+        const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRES_IN }
+        );
 
         res.status(201).json({
-            message: 'User created successfully',
+            message: 'Account created successfully',
             token,
             user: {
                 id: user.id,
@@ -32,7 +42,8 @@ const signup = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Signup error:', error.message);
+        res.status(500).json({ error: 'Something went wrong. Please try again.' });
     }
 };
 
@@ -44,13 +55,24 @@ const login = async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
+        // Find user in Supabase
         const user = await userService.findUserByEmail(email);
-        if (!user || user.password !== password) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+        if (!user) {
+            return res.status(401).json({ error: 'USER_NOT_FOUND' });
         }
 
-        // Create mock token
-        const token = `mock-token-${user.id}`;
+        // Compare hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Incorrect password. Please try again.' });
+        }
+
+        // Sign a real JWT
+        const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            JWT_SECRET,
+            { expiresIn: JWT_EXPIRES_IN }
+        );
 
         res.status(200).json({
             message: 'Login successful',
@@ -62,13 +84,13 @@ const login = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Login error:', error.message);
+        res.status(500).json({ error: 'Something went wrong. Please try again.' });
     }
 };
 
 const me = async (req, res) => {
     try {
-        // req.user is attached by authMiddleware
         if (!req.user) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
@@ -85,8 +107,4 @@ const me = async (req, res) => {
     }
 };
 
-module.exports = {
-    signup,
-    login,
-    me
-};
+module.exports = { signup, login, me };

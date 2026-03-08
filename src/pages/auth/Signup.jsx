@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 const Signup = () => {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const location = useLocation();
+  const { login } = useAuth();
+
+  const [form, setForm] = useState({
+    name: '',
+    email: location.state?.email || '',
+    password: ''
+  });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
+  const [infoMessage, setInfoMessage] = useState(location.state?.info || '');
+  const [loading, setLoading] = useState(false);
 
   const passwordRequirements = [
     { label: '8+ characters', test: (pwd) => pwd.length >= 8 },
@@ -17,22 +28,17 @@ const Signup = () => {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.name.trim()) {
-      newErrors.name = 'Full name is required.';
-    }
+    if (!form.name.trim()) newErrors.name = 'Full name is required.';
     if (!form.email.trim()) {
       newErrors.email = 'Email is required.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = 'Please enter a valid email address.';
     }
-
     if (!form.password) {
       newErrors.password = 'Password is required.';
     } else {
       const failed = passwordRequirements.filter(req => !req.test(form.password));
-      if (failed.length > 0) {
-        newErrors.password = 'Password does not meet all security requirements.';
-      }
+      if (failed.length > 0) newErrors.password = 'Password does not meet all security requirements.';
     }
     return newErrors;
   };
@@ -40,47 +46,61 @@ const Signup = () => {
   const suggestPassword = () => {
     const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const nums = "0123456789";
-    const symbols = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
-
-    let pwd = "";
-    pwd += chars.charAt(Math.floor(Math.random() * chars.length));
-    pwd += nums.charAt(Math.floor(Math.random() * nums.length));
-    pwd += symbols.charAt(Math.floor(Math.random() * symbols.length));
-
+    const symbols = "!@#$%^&*()_+~";
+    let pwd = chars[Math.floor(Math.random() * chars.length)] +
+      nums[Math.floor(Math.random() * nums.length)] +
+      symbols[Math.floor(Math.random() * symbols.length)];
     const all = chars + nums + symbols;
-    for (let i = 0; i < 9; i++) {
-      pwd += all.charAt(Math.floor(Math.random() * all.length));
-    }
-
-    // Shuffle
+    for (let i = 0; i < 9; i++) pwd += all[Math.floor(Math.random() * all.length)];
     pwd = pwd.split('').sort(() => 0.5 - Math.random()).join('');
-
     setForm({ ...form, password: pwd });
     if (errors.password) setErrors({ ...errors, password: '' });
   };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: '' });
-    }
+    if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: '' });
+    if (serverError) setServerError('');
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-    navigate('/verify');
+
+    setLoading(true);
+    setServerError('');
+
+    try {
+      const response = await fetch(`${API_URL}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setServerError(data.error || 'Signup failed. Please try again.');
+        return;
+      }
+
+      // Automatically log the user in after signup
+      login(data.user, data.token);
+      navigate('/', { replace: true });
+    } catch (err) {
+      setServerError('Cannot connect to server. Make sure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Google Signup Functionality
   const googleSignup = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log('Google Signup Success:', tokenResponse);
-      // Logic for creating account via Google
       navigate('/verify');
     },
     onError: (error) => console.log('Google Signup Failed:', error),
@@ -91,6 +111,34 @@ const Signup = () => {
       <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
         <h2 className="text-3xl font-bold text-adorix-dark mb-2">Create account</h2>
         <p className="text-gray-500 mb-8">Join the ad revolution today.</p>
+
+        {/* Info Message Banner */}
+        <AnimatePresence>
+          {infoMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mb-5 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-600 text-sm font-medium"
+            >
+              {infoMessage}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Server Error Banner */}
+        <AnimatePresence>
+          {serverError && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mb-5 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium"
+            >
+              {serverError}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <form onSubmit={handleSignup} className="space-y-5" noValidate>
           {/* Full Name */}
@@ -107,13 +155,7 @@ const Signup = () => {
             />
             <AnimatePresence>
               {errors.name && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  aria-live="assertive"
-                  className="text-red-500 text-xs overflow-hidden"
-                >
+                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 4 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
                   {errors.name}
                 </motion.p>
               )}
@@ -133,13 +175,7 @@ const Signup = () => {
             />
             <AnimatePresence>
               {errors.email && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  aria-live="assertive"
-                  className="text-red-500 text-xs overflow-hidden"
-                >
+                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 4 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
                   {errors.email}
                 </motion.p>
               )}
@@ -150,11 +186,7 @@ const Signup = () => {
           <div>
             <div className="flex justify-between items-center mb-1">
               <label className="block text-sm font-medium text-gray-700">Password</label>
-              <button
-                type="button"
-                onClick={suggestPassword}
-                className="text-xs text-adorix-primary font-semibold hover:underline"
-              >
+              <button type="button" onClick={suggestPassword} className="text-xs text-adorix-primary font-semibold hover:underline">
                 Suggest Strong Password
               </button>
             </div>
@@ -176,9 +208,7 @@ const Signup = () => {
                     <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center transition ${isMet ? 'bg-green-500' : 'bg-gray-200'}`}>
                       {isMet && <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M5 13l4 4L19 7" /></svg>}
                     </div>
-                    <span className={`text-[10px] font-medium transition ${isMet ? 'text-green-600' : 'text-gray-400'}`}>
-                      {req.label}
-                    </span>
+                    <span className={`text-[10px] font-medium transition ${isMet ? 'text-green-600' : 'text-gray-400'}`}>{req.label}</span>
                   </div>
                 );
               })}
@@ -186,13 +216,7 @@ const Signup = () => {
 
             {errors.password && (
               <AnimatePresence>
-                <motion.p
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  aria-live="assertive"
-                  className="text-red-500 text-xs overflow-hidden"
-                >
+                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 8 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
                   {errors.password}
                 </motion.p>
               </AnimatePresence>
@@ -206,7 +230,7 @@ const Signup = () => {
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Google Sign Up - NOW FUNCTIONAL */}
+          {/* Google Sign Up */}
           <button
             type="button"
             onClick={() => googleSignup()}
@@ -222,8 +246,17 @@ const Signup = () => {
           </button>
 
           {/* Submit */}
-          <button type="submit" className="w-full bg-adorix-dark hover:bg-adorix-primary text-white font-bold py-3 rounded-lg transition shadow-md">
-            Create Account
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-adorix-dark hover:bg-adorix-primary text-white font-bold py-3 rounded-lg transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Creating account...
+              </>
+            ) : 'Create Account'}
           </button>
         </form>
 
@@ -231,8 +264,8 @@ const Signup = () => {
           Already have an account?{' '}
           <Link to="/login" className="text-adorix-primary font-semibold hover:underline">Sign in</Link>
         </p>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
