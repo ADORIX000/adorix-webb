@@ -45,7 +45,7 @@ const BioMesh = ({ isPaused }) => {
 
                 {/* Scanning Line */}
                 <motion.rect x="15" y="0" width="70" height="0.6" fill="var(--adorix-primary)" opacity="0.5"
-                    animate={isPaused ? { y: [15, 85] } : { y: 50 }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
+                    animate={!isPaused ? { y: [15, 85] } : { y: 50 }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} />
             </svg>
         </div>
     );
@@ -86,7 +86,7 @@ const SupersonicStream = ({ isPaused }) => (
                         strokeWidth={0.5 + Math.random()}
                         strokeDasharray="20 40"
                         opacity={0.2 + Math.random() * 0.3}
-                        animate={isPaused ? { x: [-150, 150] } : { x: 0 }}
+                        animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
                         transition={{ duration: 0.8 + Math.random() * 0.5, repeat: Infinity, ease: "linear" }}
                     />
                 ))}
@@ -94,7 +94,7 @@ const SupersonicStream = ({ isPaused }) => (
 
             {/* Simplified but Dynamic Browser Window */}
             <motion.g
-                animate={isPaused ? {
+                animate={!isPaused ? {
                     y: [0, -3, 0],
                     rotate: [-1, 1, -1]
                 } : { y: 0 }}
@@ -132,7 +132,7 @@ const SupersonicStream = ({ isPaused }) => (
                     height="0.8"
                     fill="var(--adorix-accent)"
                     opacity="0.4"
-                    animate={isPaused ? { x: [150, -100] } : { x: 50 }}
+                    animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
                     transition={{
                         duration: 0.5 + Math.random() * 0.5,
                         repeat: Infinity,
@@ -166,7 +166,7 @@ const QuantumVault = ({ isPaused }) => {
                 <use href="#basePrint" />
                 <motion.g clipPath="url(#scanClip)">
                     <clipPath id="scanClip">
-                        <motion.rect x="0" y="0" width="100" height="20" animate={isPaused ? { y: [-20, 100] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
+                        <motion.rect x="0" y="0" width="100" height="20" animate={!isPaused ? { y: [-20, 100] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
                     </clipPath>
                     <g stroke="var(--adorix-accent)" strokeWidth="1" opacity="0.8">
                         {Array.from({ length: 15 }).map((_, i) => (
@@ -177,7 +177,7 @@ const QuantumVault = ({ isPaused }) => {
 
                 {/* Scanner Line */}
                 <motion.line x1="30" x2="70" y1="0" y2="0" stroke="var(--adorix-accent)" strokeWidth="1"
-                    animate={isPaused ? { y: [20, 80] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
+                    animate={!isPaused ? { y: [20, 80] } : { y: 50 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
 
                 {/* Secure Badge */}
                 <circle cx="85" cy="15" r="4" fill="var(--adorix-primary)" opacity="0.2" />
@@ -363,35 +363,41 @@ const TargetingPulse = ({ isPaused }) => (
             </g>
 
             {/* Realistic Arrow hitting the bullseye */}
-            <motion.g
-                initial={{ x: 80, y: -80, opacity: 0 }}
-                animate={{ x: 0, y: 0, opacity: 1 }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 120, damping: 12, delay: 0.5, repeat: Infinity, repeatDelay: 4 }}
-            >
-                <g transform="translate(98, 48) rotate(135) scale(0.7)" filter="url(#arrowShadow)">
-                    {/* Carbon Fiber / Dark Shaft */}
-                    <rect x="-70" y="-1.25" width="65" height="2.5" fill="url(#shaftGrad)" rx="0.5" />
+            {!isPaused && (
+                <motion.g
+                    initial={{ x: 80, y: -80, opacity: 0 }}
+                    animate={{ x: 0, y: 0, opacity: 1 }}
+                    transition={{ duration: 0.6, type: "spring", stiffness: 120, damping: 12, delay: 0.5, repeat: Infinity, repeatDelay: 4 }}
+                >
+                    <g transform="translate(98, 48) rotate(135) scale(0.7)" filter="url(#arrowShadow)">
+                        {/* Carbon Fiber / Dark Shaft */}
+                        <rect x="-70" y="-1.25" width="65" height="2.5" fill="url(#shaftGrad)" rx="0.5" />
 
-                    {/* Fletchings (Feathers) */}
-                    {/* Top Accent Vane */}
-                    <path d="M -45 -1 L -58 -6 L -66 -6 L -58 -1 Z" fill="var(--adorix-accent)" stroke="var(--adorix-primary)" strokeWidth="0.5" strokeLinejoin="round" />
-                    {/* Bottom Accent Vane */}
-                    <path d="M -45 1 L -58 6 L -66 6 L -58 1 Z" fill="var(--adorix-accent)" stroke="var(--adorix-primary)" strokeWidth="0.5" strokeLinejoin="round" />
+                        {/* Fletchings (Feathers) */}
+                        <path d="M -45 -1 L -58 -6 L -66 -6 L -58 -1 Z" fill="var(--adorix-accent)" stroke="var(--adorix-primary)" strokeWidth="0.5" strokeLinejoin="round" />
+                        <path d="M -45 1 L -58 6 L -66 6 L -58 1 Z" fill="var(--adorix-accent)" stroke="var(--adorix-primary)" strokeWidth="0.5" strokeLinejoin="round" />
 
-                    {/* Nock (back notch) */}
-                    <path d="M -70 -1.5 L -73 -2.5 L -73 2.5 L -70 1.5 Z" fill="#1A202C" />
+                        {/* Nock (back notch) */}
+                        <path d="M -70 -1.5 L -73 -2.5 L -73 2.5 L -70 1.5 Z" fill="#1A202C" />
 
-                    {/* Metal Arrowhead Base / Binding */}
-                    <rect x="-9" y="-2" width="4" height="4" fill="#4A5568" rx="0.5" />
-                    <line x1="-8" y1="-2" x2="-8" y2="2" stroke="#A0AEC0" strokeWidth="0.5" />
-                    <line x1="-6" y1="-2" x2="-6" y2="2" stroke="#A0AEC0" strokeWidth="0.5" />
+                        {/* Metal Arrowhead Base / Binding */}
+                        <rect x="-9" y="-2" width="4" height="4" fill="#4A5568" rx="0.5" />
+                        <line x1="-8" y1="-2" x2="-8" y2="2" stroke="#A0AEC0" strokeWidth="0.5" />
+                        <line x1="-6" y1="-2" x2="-6" y2="2" stroke="#A0AEC0" strokeWidth="0.5" />
 
-                    {/* Realistic Metal Arrowhead (Broadhead) */}
-                    <path d="M 0 0 L -8 -4 L -6 0 L -8 4 Z" fill="url(#metalGrad)" stroke="#718096" strokeWidth="0.5" strokeLinejoin="round" />
-                    {/* Highlight/Edge */}
-                    <path d="M 0 0 L -8 0" stroke="#FFFFFF" strokeWidth="0.5" opacity="0.8" />
+                        <path d="M 0 0 L -8 -4 L -6 0 L -8 4 Z" fill="url(#metalGrad)" stroke="#718096" strokeWidth="0.5" strokeLinejoin="round" />
+                        <path d="M 0 0 L -8 0" stroke="#FFFFFF" strokeWidth="0.5" opacity="0.8" />
+                    </g>
+                </motion.g>
+            )}
+            {isPaused && (
+                <g transform="translate(100, 50)">
+                    <g transform="translate(-2, -2) rotate(135) scale(0.7)">
+                        <rect x="-70" y="-1.25" width="65" height="2.5" fill="url(#shaftGrad)" rx="0.5" />
+                        <path d="M 0 0 L -8 -4 L -6 0 L -8 4 Z" fill="url(#metalGrad)" stroke="#718096" strokeWidth="0.5" strokeLinejoin="round" />
+                    </g>
                 </g>
-            </motion.g>
+            )}
         </svg>
     </div>
 );
@@ -555,56 +561,42 @@ const HolographicScope = ({ isPaused }) => (
 
 // --- Main Components ---
 
-const FeatureCard = ({ animation: Animation, title, description, delay, cardClassName = '' }) => {
-    const [isHovered, setIsHovered] = useState(false);
+const FeatureCard = ({ animation: Animation, title, description, cardClassName = '' }) => {
+    const [isActive, setIsActive] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay, duration: 0.5 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className={`group relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl ${cardClassName}`}
+        <div
+            onClick={() => setIsActive(!isActive)}
+            className={`group relative w-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-2xl flex flex-col cursor-pointer ${cardClassName}`}
         >
-            {/* Animation Background Layer */}
-            <div className="absolute inset-0 flex items-center justify-center transition-all duration-700 ease-out z-0">
-                <Animation isPaused={isHovered} />
+            {/* Display Area (Animation) */}
+            <div className={`relative w-full ${!isMobile ? 'md:absolute md:inset-0' : 'aspect-square'} flex items-center justify-center transition-all duration-700 ease-out z-0 bg-gray-50/50`}>
+                <Animation isPaused={isActive} />
             </div>
 
-            {/* Premium Blur Overlay - Visible on Hover */}
-            <AnimatePresence>
-                {isHovered && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-white/60 backdrop-blur-2xl z-10 flex flex-col items-center justify-center p-8 text-center space-y-6"
-                    >
-                        <motion.h3
-                            initial={{ y: 15, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.4 }}
-                            className="text-2xl font-bold text-gray-900 tracking-tight"
-                        >
-                            {title}
-                        </motion.h3>
-                        <motion.p
-                            initial={{ y: 15, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.1, duration: 0.4 }}
-                            className="text-gray-700 leading-relaxed text-sm font-medium text-justify px-2"
-                        >
-                            {description}
-                        </motion.p>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Content Area - Premium Click-to-Reveal Overlay */}
+            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-8 md:p-12 text-center space-y-6 bg-white/90 backdrop-blur-3xl transition-all duration-300 ease-out ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <h3 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tighter leading-tight">
+                    {title}
+                </h3>
+                <p className="text-gray-700 md:text-gray-800 leading-relaxed text-lg md:text-xl font-bold max-w-[340px]">
+                    {description}
+                </p>
+            </div>
 
             {/* Subtle border shine on bottom */}
-            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-adorix-primary/20 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
-        </motion.div>
+            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-adorix-primary/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 z-20" />
+        </div>
     );
 };
 
@@ -669,8 +661,7 @@ const FeatureCards = () => {
                             animation={feature.animation}
                             title={feature.title}
                             description={feature.description}
-                            delay={index * 0.1}
-                            cardClassName={`aspect-[4/3] md:aspect-[4/5]${index === 4 ? ' lg:col-start-2' : ''}`}
+                            cardClassName={`min-h-[400px] md:min-h-0 md:aspect-[4/5]${index === 4 ? ' lg:col-start-2' : ''}`}
                         />
                     ))}
                 </div>
