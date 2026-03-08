@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-// Brand Logos (Full Color Inline SVGs)
 const Logos = {
     RaspberryPi: (props) => (
         <svg viewBox="0 0 100 120" {...props}>
@@ -90,16 +89,16 @@ const Logos = {
 };
 
 const TECH_STACK = [
-    { name: "Raspberry Pi", icon: Logos.RaspberryPi, url: "https://www.raspberrypi.org/" },
-    { name: "Python", icon: Logos.Python, url: "https://www.python.org/" },
-    { name: "TensorFlow", icon: Logos.TensorFlow, url: "https://www.tensorflow.org/" },
-    { name: "OpenCV", icon: Logos.OpenCV, url: "https://opencv.org/" },
-    { name: "Node.js", icon: Logos.Node, url: "https://nodejs.org/" },
-    { name: "React", icon: Logos.React, url: "https://react.dev/" },
-    { name: "JavaScript", icon: Logos.JS, url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
-    { name: "Vite", icon: Logos.Vite, url: "https://vitejs.dev/" },
-    { name: "Tailwind CSS", icon: Logos.Tailwind, url: "https://tailwindcss.com/" },
-    { name: "Framer Motion", icon: Logos.Framer, url: "https://www.framer.com/motion/" },
+    { name: "Raspberry Pi", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/raspberrypi/raspberrypi-original.svg", url: "https://www.raspberrypi.org/" },
+    { name: "Python", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg", url: "https://www.python.org/" },
+    { name: "TensorFlow", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg", url: "https://www.tensorflow.org/" },
+    { name: "OpenCV", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/opencv/opencv-original.svg", url: "https://opencv.org/" },
+    { name: "Node.js", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg", url: "https://nodejs.org/" },
+    { name: "React", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg", url: "https://react.dev/" },
+    { name: "JavaScript", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+    { name: "Vite", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vitejs/vitejs-original.svg", url: "https://vitejs.dev/" },
+    { name: "Tailwind CSS", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg", url: "https://tailwindcss.com/" },
+    { name: "Framer Motion", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/framermotion/framermotion-original.svg", url: "https://www.framer.com/motion/" },
     { name: "Recharts", icon: Logos.Recharts, url: "https://recharts.org/" },
     { name: "Picovoice", icon: Logos.Picovoice, url: "https://picovoice.ai/" },
 ];
@@ -142,12 +141,10 @@ const TechStack = () => {
                 Tech Stack
             </h2>
 
-            <div className={`
-                max-w-7xl mx-auto px-4
-                ${isMobile
-                    ? 'grid grid-cols-3 sm:grid-cols-4 gap-6 md:gap-8 justify-items-center'
-                    : 'flex flex-wrap justify-center items-center gap-6'}
-            `}>
+            <div className={`max-w-7xl mx-auto px-4 ${isMobile
+                ? 'grid grid-cols-3 sm:grid-cols-4 gap-6 md:gap-8 justify-items-center'
+                : 'flex flex-wrap justify-center items-center gap-6'
+                }`}>
                 {TECH_STACK.map((tech, index) => {
                     // Calculate wave offset for each item - ONLY on desktop
                     const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
@@ -166,7 +163,11 @@ const TechStack = () => {
                         >
                             {/* Logo with white circular background */}
                             <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center p-3 md:p-4 shadow-lg border border-gray-100">
-                                <tech.icon className="w-full h-full" />
+                                {tech.iconUrl ? (
+                                    <img src={tech.iconUrl} alt={tech.name} className="w-full h-full object-contain" />
+                                ) : (
+                                    <tech.icon className="w-full h-full" />
+                                )}
                             </div>
 
                             {/* Tooltip on hover */}
@@ -182,4 +183,3 @@ const TechStack = () => {
 };
 
 export default TechStack;
-

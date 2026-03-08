@@ -71,7 +71,7 @@ const Home = () => {
             <p className="text-xl text-gray-600 leading-relaxed font-medium">
               Adorix turns passive screens into active, intelligent agents.
               Detect visitors, analyze demographics, and serve personalized content
-              in milliseconds—all while maintaining absolute privacy.
+              in milliseconds all while maintaining absolute privacy.
               It’s not just a display; it’s a responsive environment that adapts to everyone.
             </p>
           </div>
