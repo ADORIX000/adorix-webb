@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
+import API_URL from '../../config';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+
   const [form, setForm] = useState({ email: '', password: '', rememberMe: false });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState(location.state?.error || '');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('remember_me_email');
@@ -30,16 +37,12 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === 'checkbox' ? checked : value
-    });
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
-    }
+    setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
+    if (errors[name]) setErrors({ ...errors, [name]: '' });
+    if (serverError) setServerError('');
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -47,22 +50,51 @@ const Login = () => {
       return;
     }
 
-    if (form.rememberMe) {
-      localStorage.setItem('remember_me_email', form.email);
-    } else {
-      localStorage.removeItem('remember_me_email');
-    }
+    setLoading(true);
+    setServerError('');
 
-    // Handle standard login logic here
-    navigate('/dashboard');
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.error === 'USER_NOT_FOUND') {
+          // Navigate to signup with the email already populated
+          navigate('/signup', { state: { email: form.email, info: 'No account found with this email. Please sign up first!' } });
+          return;
+        }
+        setServerError(data.error || 'Login failed. Please try again.');
+        return;
+      }
+
+      if (form.rememberMe) {
+        localStorage.setItem('remember_me_email', form.email);
+      } else {
+        localStorage.removeItem('remember_me_email');
+      }
+
+      // Store token + user in AuthContext
+      login(data.user, data.token);
+
+      // Redirect to home or where they came from
+      const from = location.state?.from?.pathname || '/';
+      navigate(from, { replace: true });
+    } catch (err) {
+      setServerError('Cannot connect to server. Make sure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Google Login Functionality
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log('Google Login Success:', tokenResponse);
-      // Here you would typically send tokenResponse.access_token to your backend
-      navigate('/dashboard');
+      navigate('/');
     },
     onError: (error) => console.log('Google Login Failed:', error),
   });
@@ -72,6 +104,20 @@ const Login = () => {
       <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
         <h2 className="text-3xl font-bold text-adorix-dark mb-2">Welcome back</h2>
         <p className="text-gray-500 mb-8">Sign in to your Adorix dashboard</p>
+
+        {/* Server Error Banner */}
+        <AnimatePresence>
+          {serverError && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mb-5 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium"
+            >
+              {serverError}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <form onSubmit={handleLogin} className="space-y-5" noValidate>
           {/* Email */}
@@ -92,7 +138,6 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  aria-live="assertive"
                   className="text-red-500 text-xs overflow-hidden"
                 >
                   {errors.email}
@@ -105,7 +150,7 @@ const Login = () => {
           <div>
             <div className="flex justify-between items-center mb-1">
               <label className="block text-sm font-medium text-gray-700">Password</label>
-              <Link to="#" className="text-xs text-adorix-primary font-medium hover:underline">Forgot password?</Link>
+              <Link to="/forgot-password" virtual-element="forgot-password" className="text-xs text-adorix-primary font-medium hover:underline">Forgot password?</Link>
             </div>
             <input
               type="password"
@@ -121,7 +166,6 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 4 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  aria-live="assertive"
                   className="text-red-500 text-xs overflow-hidden"
                 >
                   {errors.password}
@@ -152,7 +196,7 @@ const Login = () => {
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
-          {/* Google Sign In - NOW FUNCTIONAL */}
+          {/* Google Sign In */}
           <button
             type="button"
             onClick={() => googleLogin()}
@@ -168,8 +212,17 @@ const Login = () => {
           </button>
 
           {/* Submit */}
-          <button type="submit" className="w-full bg-adorix-dark hover:bg-adorix-primary text-white font-bold py-3 rounded-lg transition shadow-md">
-            Sign In
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-adorix-dark hover:bg-adorix-primary text-white font-bold py-3 rounded-lg transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Signing in...
+              </>
+            ) : 'Sign In'}
           </button>
         </form>
 
@@ -177,8 +230,8 @@ const Login = () => {
           Don't have an account?{' '}
           <Link to="/signup" className="text-adorix-primary font-semibold hover:underline">Sign up</Link>
         </p>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 };
 
