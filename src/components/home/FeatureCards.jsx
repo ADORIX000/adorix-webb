@@ -653,20 +653,12 @@ const FeatureCards = () => {
                         transition={{ duration: 0.8 }}
                         className="text-4xl md:text-6xl font-black text-gray-900 mb-8 tracking-tighter"
                     >
-                        Feature Engineering <br />
+                        Powerful Features <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-adorix-primary via-adorix-accent to-adorix-primary bg-[length:200%_auto] animate-gradient">
-                            At Scale v3.1
+                            Built for Results
                         </span>
                     </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium"
-                    >
-                        Every component is crafted with precision to deliver unparalleled performance and business intelligence.
-                    </motion.p>
+
                 </div>
 
                 {/* Grid Layout: 4 columns on large screens, with the bottom row centered */}

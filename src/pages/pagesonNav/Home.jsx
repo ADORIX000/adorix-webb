@@ -14,14 +14,14 @@ const Home = () => {
     <div className="relative w-full overflow-hidden">
 
       {/* 2. HERO SECTION */}
-      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+      <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
 
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-          <TypingText text="Revolutionize Your Sales" speed={0.05} />
+          <TypingText text="Ads that" speed={0.05} />
           <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-            <TypingText text="with AI-Powered Interactive Kiosks." startDelay={0.5} speed={0.05} />
+            <TypingText text="look back at you." startDelay={0.5} speed={0.05} />
           </span>
         </h1>
 
@@ -64,7 +64,7 @@ const Home = () => {
           </div>
 
           {/* RIGHT COLUMN: Description (Extremely Simple) */}
-          <div className="text-left space-y-6 lg:col-span-2 flex flex-col justify-center">
+          <div className="text-center lg:text-left space-y-6 lg:col-span-2 flex flex-col justify-center items-center lg:items-start">
             <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
               The Intelligent Flow
             </h2>

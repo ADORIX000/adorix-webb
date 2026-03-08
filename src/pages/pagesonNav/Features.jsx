@@ -27,9 +27,6 @@ const Features = () => {
                             <TypingText text="For Next-Gen Ads" startDelay={1.2} speed={0.05} />
                         </span>
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
-                        Adorix provides the substrate for truly interactive, reactive, and privacy-first advertising environments.
-                    </p>
                 </motion.div>
             </section>
 
