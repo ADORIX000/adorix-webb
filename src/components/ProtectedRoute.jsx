@@ -16,8 +16,8 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        // Redirect to login and remember where they were trying to go
-        return <Navigate to="/login" state={{ from: location, error: 'Please sign in to access this page.' }} replace />;
+        // Redirect to signup and remember where they were trying to go
+        return <Navigate to="/signup" state={{ from: location, error: 'Please create an account to access this page.' }} replace />;
     }
 
     return children;
