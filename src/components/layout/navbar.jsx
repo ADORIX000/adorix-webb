@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut, User } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
+  const { isAuthenticated, logout, user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -23,12 +25,14 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Campaign Studio', path: '/dashboard/studio' },
+    { name: 'Dashboard', path: '/dashboard', protected: true },
+    { name: 'Campaign Studio', path: '/dashboard/studio', protected: true },
     { name: 'Pricing', path: '/pricing' },
-    { name: 'Profile', path: '/profile' },
+    { name: 'Profile', path: '/profile', protected: true },
     { name: 'Contact', path: '/contact' },
   ];
+
+  const visibleLinks = navLinks.filter(link => !link.protected || isAuthenticated);
 
   return (
     <>
@@ -48,7 +52,7 @@ const Navbar = () => {
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
-            {navLinks.map((link) => (
+            {visibleLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -62,20 +66,40 @@ const Navbar = () => {
 
           {/* Auth Buttons */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
-            <Link
-              to="/login"
-              className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
-            >
-              Sign in
-              <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === '/login' ? 'scale-x-100' : ''}`} />
-            </Link>
-            <Link
-              to="/signup"
-              className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
-            >
-              Sign up
-              <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === '/signup' ? 'scale-x-100' : ''}`} />
-            </Link>
+            {!isAuthenticated ? (
+              <>
+                <Link
+                  to="/login"
+                  className={`transition-colors hover:text-adorix-primary relative group ${location.pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
+                >
+                  Log In
+                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${location.pathname === '/login' ? 'scale-x-100' : ''}`} />
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-adorix-dark text-white px-6 py-2 rounded-full hover:bg-adorix-primary transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+                >
+                  Sign Up
+                </Link>
+              </>
+            ) : (
+              <div className="flex items-center gap-6">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 text-adorix-dark hover:text-adorix-primary transition-colors"
+                >
+                  <User size={18} />
+                  <span>{user?.name || 'Account'}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -91,7 +115,7 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
-          {navLinks.map((link) => (
+          {visibleLinks.map((link) => (
             <Link
               key={link.path}
               to={link.path}
@@ -101,18 +125,39 @@ const Navbar = () => {
             </Link>
           ))}
           <div className="flex flex-col items-center gap-8 mt-2 w-full max-w-xs">
-            <Link
-              to="/login"
-              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link
-              to="/signup"
-              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
-            >
-              Sign up
-            </Link>
+            {!isAuthenticated ? (
+              <>
+                <Link
+                  to="/login"
+                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/signup"
+                  className="w-full bg-adorix-dark text-white text-center py-4 rounded-xl text-xl font-bold hover:bg-adorix-primary transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/profile"
+                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors flex items-center gap-3"
+                >
+                  <User size={24} />
+                  Profile
+                </Link>
+                <button
+                  onClick={logout}
+                  className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
+                >
+                  <LogOut size={24} />
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
