@@ -92,13 +92,32 @@ const Contact = () => {
 
         setStatus('submitting');
         
-        // Simulation for now - will update with actual API call in next step
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setStatus('success');
-            setLastSubmitTime(Date.now());
-            setFormData({ name: '', email: '', subject: 'General Inquiry', message: '', honeypot: '' });
+            const response = await fetch('http://localhost:5000/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus('success');
+                setLastSubmitTime(Date.now());
+                setFormData({ name: '', email: '', subject: 'General Inquiry', message: '', honeypot: '' });
+                // Reset to idle after 5 seconds to show the form again if needed
+                setTimeout(() => setStatus('idle'), 5000);
+            } else {
+                if (response.status === 429) {
+                    setStatus('cooldown');
+                } else {
+                    setStatus('error');
+                }
+            }
         } catch (error) {
+            console.error("Submission error:", error);
             setStatus('error');
         }
     };
