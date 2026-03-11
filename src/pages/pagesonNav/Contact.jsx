@@ -89,7 +89,7 @@ const Contact = () => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-white/40 backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-white/50 relative overflow-hidden"
+                        className="bg-white/10 backdrop-blur-3xl rounded-[3rem] p-8 md:p-12 border border-white/20 shadow-2xl relative overflow-hidden"
                     >
                         <h2 className="text-3xl font-black text-adorix-dark mb-8">
                             Send Message
@@ -105,7 +105,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="Alex Morgan"
-                                        className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark placeholder-gray-400"
+                                        className="w-full bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white/20 transition-all font-semibold text-adorix-dark placeholder-gray-500"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -117,7 +117,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="alex@example.com"
-                                        className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark placeholder-gray-400"
+                                        className="w-full bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white/20 transition-all font-semibold text-adorix-dark placeholder-gray-500"
                                     />
                                 </div>
                             </div>
@@ -127,7 +127,7 @@ const Contact = () => {
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark appearance-none cursor-pointer"
+                                    className="w-full bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white/20 transition-all font-semibold text-adorix-dark appearance-none cursor-pointer"
                                 >
                                     <option value="General Inquiry">General Inquiry</option>
                                     <option value="Technical Support">Technical Support</option>
@@ -144,13 +144,13 @@ const Contact = () => {
                                     required
                                     rows="5"
                                     placeholder="Tell us about your project..."
-                                    className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark resize-none placeholder-gray-400"
+                                    className="w-full bg-white/5 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white/20 transition-all font-semibold text-adorix-dark resize-none placeholder-gray-500"
                                 />
                             </div>
                             <button 
                                 type="submit" 
                                 disabled={status === 'sending' || status === 'success'}
-                                className="w-full py-5 bg-gradient-to-r from-adorix-dark to-adorix-secondary text-white rounded-2xl font-black text-lg shadow-[0_10px_40px_-10px_rgba(35,113,123,0.5)] hover:shadow-[0_10px_30px_-5px_rgba(10,115,131,0.6)] hover:scale-[1.01] transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+                                className="w-full py-5 bg-adorix-dark hover:bg-black text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed"
                             >
                                 {status === 'sending' ? (
                                     <>Sending <Sparkles className="w-5 h-5 animate-pulse ml-2" /></>
