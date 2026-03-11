@@ -1,30 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-    Mail, MessageSquare, Phone, MapPin,
     Send, Globe, Github, Twitter, Linkedin,
     ArrowRight, Sparkles
 } from 'lucide-react';
 import TypingText from '../../components/home/TypingText';
-
-const ContactCard = ({ icon: Icon, title, detail, delay }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay, duration: 0.5 }}
-        className="bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-gray-100 hover:border-adorix-primary/30 transition-all duration-500 group shadow-xl shadow-adorix-dark/5"
-    >
-        <div className="w-14 h-14 bg-adorix-primary/10 rounded-2xl flex items-center justify-center text-adorix-primary mb-6 group-hover:scale-110 group-hover:bg-adorix-primary group-hover:text-white transition-all duration-500">
-            <Icon className="w-6 h-6" />
-        </div>
-        <h3 className="text-xl font-black text-adorix-dark mb-2">{title}</h3>
-        <p className="text-gray-500 font-medium mb-4">{detail}</p>
-        <button className="text-sm font-black text-adorix-primary hover:text-adorix-dark transition-colors flex items-center gap-2 uppercase tracking-widest">
-            Connect <ArrowRight className="w-4 h-4" />
-        </button>
-    </motion.div>
-);
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -100,20 +80,16 @@ const Contact = () => {
                     </motion.h1>
                 </div>
 
-                {/* Contact Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16 relative z-10">
-                    <ContactCard icon={Mail} title="Email Us" detail="info@adorixit.com" delay={0.2} />
-                    <ContactCard icon={MessageSquare} title="Live Chat" detail="Available 24/7" delay={0.3} />
-                    <ContactCard icon={MapPin} title="Visit Us" detail="Adorix Headquarters" delay={0.4} />
-                </div>
+                <div className="max-w-3xl mx-auto relative group">
+                    {/* Decorative Ambient Blob Behind Form */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full md:w-[120%] md:h-[120%] bg-gradient-to-tr from-adorix-accent/20 via-adorix-primary/10 to-transparent blur-[80px] rounded-full -z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
 
-                <div className="max-w-3xl mx-auto">
                     {/* Contact Form */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-white/30 backdrop-blur-xl rounded-[3rem] p-8 md:p-12 border border-white/20 shadow-2xl shadow-adorix-dark/5"
+                        className="bg-white/40 backdrop-blur-2xl rounded-[3rem] p-8 md:p-12 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-white/50 relative overflow-hidden"
                     >
                         <h2 className="text-3xl font-black text-adorix-dark mb-8">
                             Send Message
@@ -129,7 +105,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="Alex Morgan"
-                                        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark"
+                                        className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark placeholder-gray-400"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -141,7 +117,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         placeholder="alex@example.com"
-                                        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark"
+                                        className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark placeholder-gray-400"
                                     />
                                 </div>
                             </div>
@@ -151,7 +127,7 @@ const Contact = () => {
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark appearance-none"
+                                    className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark appearance-none cursor-pointer"
                                 >
                                     <option value="General Inquiry">General Inquiry</option>
                                     <option value="Technical Support">Technical Support</option>
@@ -168,22 +144,22 @@ const Contact = () => {
                                     required
                                     rows="5"
                                     placeholder="Tell us about your project..."
-                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark resize-none"
+                                    className="w-full bg-white/50 backdrop-blur-sm border-2 border-white/60 rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white focus:shadow-[0_0_20px_rgba(10,115,131,0.1)] transition-all font-semibold text-adorix-dark resize-none placeholder-gray-400"
                                 />
                             </div>
                             <button 
                                 type="submit" 
                                 disabled={status === 'sending' || status === 'success'}
-                                className="w-full py-5 bg-adorix-dark text-white rounded-2xl font-black text-lg shadow-xl shadow-adorix-dark/20 hover:bg-adorix-primary transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed"
+                                className="w-full py-5 bg-gradient-to-r from-adorix-dark to-adorix-secondary text-white rounded-2xl font-black text-lg shadow-[0_10px_40px_-10px_rgba(35,113,123,0.5)] hover:shadow-[0_10px_30px_-5px_rgba(10,115,131,0.6)] hover:scale-[1.01] transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
                             >
                                 {status === 'sending' ? (
-                                    <>Sending... <Sparkles className="w-5 h-5 animate-pulse" /></>
+                                    <>Sending <Sparkles className="w-5 h-5 animate-pulse ml-2" /></>
                                 ) : status === 'success' ? (
-                                    'Email Received! Form Done.'
+                                    'Message Received! 🚀'
                                 ) : status === 'error' ? (
                                     'Failed to Send. Try Again.'
                                 ) : (
-                                    <>Send Message <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                                    <>Send Message <Send className="w-6 h-6 ml-1 group-hover:translate-x-1.5 group-hover:-translate-y-1.5 transition-transform duration-300" /></>
                                 )}
                             </button>
                         </form>
