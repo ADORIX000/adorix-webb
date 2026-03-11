@@ -31,10 +31,14 @@ const Contact = () => {
         name: '',
         email: '',
         subject: 'General Inquiry',
-        message: ''
+        message: '',
+        honeypot: '' // Hidden field for spam bots
     });
     const [errors, setErrors] = useState({});
-    const [status, setStatus] = useState('idle'); // idle, submitting, success, error
+    const [status, setStatus] = useState('idle'); // idle, submitting, success, error, cooldown
+    const [lastSubmitTime, setLastSubmitTime] = useState(0);
+
+    const COOLDOWN_DURATION = 60000; // 60 seconds cooldown
 
     const validateForm = () => {
         const newErrors = {};
@@ -67,6 +71,23 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // 1. Honeypot check: If filled, silently ignore or show success but don't send
+        if (formData.honeypot) {
+            console.warn("Spam detected via honeypot.");
+            setStatus('success');
+            setFormData({ name: '', email: '', subject: 'General Inquiry', message: '', honeypot: '' });
+            return;
+        }
+
+        // 2. Cooldown check
+        const now = Date.now();
+        if (now - lastSubmitTime < COOLDOWN_DURATION) {
+            setStatus('cooldown');
+            setTimeout(() => setStatus('idle'), 3000);
+            return;
+        }
+
         if (!validateForm()) return;
 
         setStatus('submitting');
@@ -75,7 +96,8 @@ const Contact = () => {
         try {
             await new Promise(resolve => setTimeout(resolve, 1500));
             setStatus('success');
-            setFormData({ name: '', email: '', subject: 'General Inquiry', message: '' });
+            setLastSubmitTime(Date.now());
+            setFormData({ name: '', email: '', subject: 'General Inquiry', message: '', honeypot: '' });
         } catch (error) {
             setStatus('error');
         }
@@ -110,6 +132,18 @@ const Contact = () => {
                             Send Message
                         </h2>
                         <form className="space-y-6" onSubmit={handleSubmit}>
+                            {/* Honeypot hidden field */}
+                            <div className="hidden" aria-hidden="true">
+                                <input
+                                    type="text"
+                                    name="honeypot"
+                                    value={formData.honeypot}
+                                    onChange={handleChange}
+                                    tabIndex="-1"
+                                    autoComplete="off"
+                                />
+                            </div>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Name</label>
@@ -183,6 +217,16 @@ const Contact = () => {
                                     >
                                         <AlertCircle className="w-5 h-5" />
                                         Something went wrong. Please try again.
+                                    </motion.div>
+                                ) : status === 'cooldown' ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="bg-orange-50 border-2 border-orange-500/20 text-orange-600 p-4 rounded-2xl flex items-center gap-3 font-bold"
+                                    >
+                                        <AlertCircle className="w-5 h-5" />
+                                        Please wait a moment before sending another message.
                                     </motion.div>
                                 ) : (
                                     <button 
