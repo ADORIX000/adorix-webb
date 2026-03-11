@@ -31,9 +31,8 @@ const Sidebar = () => {
     return (
         <div className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed left-0 top-0 z-50">
 
-            {/* Brand */}
             <div className="p-8">
-                <Link href="/" className="flex items-center gap-3 group">
+                <Link href="/dashboard" className="flex items-center gap-3 group">
                     <div className="w-8 h-8 bg-adorix-dark rounded-lg flex items-center justify-center text-white font-bold group-hover:bg-adorix-primary transition-colors">
                         A
                     </div>

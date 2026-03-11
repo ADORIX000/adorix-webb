@@ -24,12 +24,9 @@ const Navbar = () => {
   }, [location]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/dashboard/studio', protected: true },
-    { name: 'Pricing', path: '/pricing' },
     { name: 'Profile', path: '/profile', protected: true },
-    { name: 'Contact', path: '/contact' },
   ];
 
   const visibleLinks = navLinks.filter(link => !link.protected || isAuthenticated);
@@ -45,7 +42,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
+          <Link to="/dashboard" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
             <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
             ADORIX
           </Link>
