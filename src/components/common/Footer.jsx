@@ -48,6 +48,7 @@ const Footer = () => {
                         <ul className="space-y-4 text-gray-400 text-sm">
                             <li><Link to="/#team" className="hover:text-adorix-primary transition-colors">About Us</Link></li>
                             <li><Link to="/contact" className="hover:text-adorix-primary transition-colors">Contact</Link></li>
+                            <li><a href="mailto:info@adorixit.com" className="hover:text-adorix-primary transition-colors">info@adorixit.com</a></li>
                             <li><Link to="/settings/policies" className="hover:text-adorix-primary transition-colors">Privacy & Terms</Link></li>
                             <li><Link to="/contact" className="hover:text-adorix-primary transition-colors">Support</Link></li>
                         </ul>

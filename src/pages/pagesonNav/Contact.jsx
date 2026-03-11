@@ -44,6 +44,13 @@ const Contact = () => {
                     </motion.h1>
                 </div>
 
+                {/* Contact Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16 relative z-10">
+                    <ContactCard icon={Mail} title="Email Us" detail="info@adorixit.com" delay={0.2} />
+                    <ContactCard icon={MessageSquare} title="Live Chat" detail="Available 24/7" delay={0.3} />
+                    <ContactCard icon={MapPin} title="Visit Us" detail="Adorix Headquarters" delay={0.4} />
+                </div>
+
                 <div className="max-w-3xl mx-auto">
                     {/* Contact Form */}
                     <motion.div
