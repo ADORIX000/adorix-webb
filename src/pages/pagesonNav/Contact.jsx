@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Mail, MessageSquare, Phone, MapPin,
     Send, Globe, Github, Twitter, Linkedin,
-    ArrowRight, Sparkles
+    ArrowRight, Sparkles, AlertCircle, CheckCircle2
 } from 'lucide-react';
 import TypingText from '../../components/home/TypingText';
 
@@ -27,6 +27,60 @@ const ContactCard = ({ icon: Icon, title, detail, delay }) => (
 );
 
 const Contact = () => {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: 'General Inquiry',
+        message: ''
+    });
+    const [errors, setErrors] = useState({});
+    const [status, setStatus] = useState('idle'); // idle, submitting, success, error
+
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = 'Please enter a valid email address';
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Message cannot be empty';
+        } else if (formData.message.trim().length < 10) {
+            newErrors.message = 'Message must be at least 10 characters';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        // Clear error when user types
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        setStatus('submitting');
+        
+        // Simulation for now - will update with actual API call in next step
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setStatus('success');
+            setFormData({ name: '', email: '', subject: 'General Inquiry', message: '' });
+        } catch (error) {
+            setStatus('error');
+        }
+    };
+
     return (
         <div className="pt-32 pb-24 px-6 min-h-screen bg-transparent relative overflow-hidden">
             <div className="max-w-7xl mx-auto relative z-10">
@@ -55,28 +109,41 @@ const Contact = () => {
                         <h2 className="text-3xl font-black text-adorix-dark mb-8">
                             Send Message
                         </h2>
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Name</label>
                                     <input
                                         type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
                                         placeholder="Alex Morgan"
-                                        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark"
+                                        className={`w-full bg-gray-50 border-2 rounded-2xl px-6 py-4 outline-none transition-all font-bold text-adorix-dark ${errors.name ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-adorix-primary focus:bg-white'}`}
                                     />
+                                    {errors.name && <p className="text-red-500 text-xs font-bold ml-2">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Email</label>
                                     <input
                                         type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         placeholder="alex@example.com"
-                                        className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark"
+                                        className={`w-full bg-gray-50 border-2 rounded-2xl px-6 py-4 outline-none transition-all font-bold text-adorix-dark ${errors.email ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-adorix-primary focus:bg-white'}`}
                                     />
+                                    {errors.email && <p className="text-red-500 text-xs font-bold ml-2">{errors.email}</p>}
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Subject</label>
-                                <select className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark appearance-none">
+                                <select 
+                                    name="subject"
+                                    value={formData.subject}
+                                    onChange={handleChange}
+                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark appearance-none"
+                                >
                                     <option>General Inquiry</option>
                                     <option>Technical Support</option>
                                     <option>Partnership Proposal</option>
@@ -86,14 +153,53 @@ const Contact = () => {
                             <div className="space-y-2">
                                 <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Message</label>
                                 <textarea
+                                    name="message"
                                     rows="5"
+                                    value={formData.message}
+                                    onChange={handleChange}
                                     placeholder="Tell us about your project..."
-                                    className="w-full bg-gray-50 border-2 border-transparent rounded-2xl px-6 py-4 outline-none focus:border-adorix-primary focus:bg-white transition-all font-bold text-adorix-dark resize-none"
+                                    className={`w-full bg-gray-50 border-2 rounded-2xl px-6 py-4 outline-none transition-all font-bold text-adorix-dark resize-none ${errors.message ? 'border-red-500 bg-red-50' : 'border-transparent focus:border-adorix-primary focus:bg-white'}`}
                                 />
+                                {errors.message && <p className="text-red-500 text-xs font-bold ml-2">{errors.message}</p>}
                             </div>
-                            <button className="w-full py-5 bg-adorix-dark text-white rounded-2xl font-black text-lg shadow-xl shadow-adorix-dark/20 hover:bg-adorix-primary transition-all flex items-center justify-center gap-3 group active:scale-[0.98]">
-                                Send Message <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </button>
+
+                            <AnimatePresence mode="wait">
+                                {status === 'success' ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="bg-green-50 border-2 border-green-500/20 text-green-600 p-4 rounded-2xl flex items-center gap-3 font-bold"
+                                    >
+                                        <CheckCircle2 className="w-5 h-5" />
+                                        Message sent successfully!
+                                    </motion.div>
+                                ) : status === 'error' ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="bg-red-50 border-2 border-red-500/20 text-red-600 p-4 rounded-2xl flex items-center gap-3 font-bold"
+                                    >
+                                        <AlertCircle className="w-5 h-5" />
+                                        Something went wrong. Please try again.
+                                    </motion.div>
+                                ) : (
+                                    <button 
+                                        type="submit"
+                                        disabled={status === 'submitting'}
+                                        className="w-full py-5 bg-adorix-dark text-white rounded-2xl font-black text-lg shadow-xl shadow-adorix-dark/20 hover:bg-adorix-primary transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                                    >
+                                        {status === 'submitting' ? (
+                                            <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                                        ) : (
+                                            <>
+                                                Send Message <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+                            </AnimatePresence>
                         </form>
                     </motion.div>
                 </div>
