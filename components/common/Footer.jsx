@@ -1,0 +1,76 @@
+import React from 'react';
+import Link from 'next/link';
+import { Twitter, Linkedin, Github, Mail, ArrowRight } from 'lucide-react';
+
+const Footer = () => {
+    return (
+        <footer className="bg-adorix-dark text-white pt-20 pb-10 border-t border-white/10">
+            <div className="max-w-7xl mx-auto px-6">
+
+                {/* Top Section: Logo, Links */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+
+                    {/* Brand & Socials */}
+                    <div className="space-y-6">
+                        <Link href="/" className="text-3xl font-bold tracking-tight text-white">
+                            ADORIX
+                        </Link>
+                        <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
+                            Transforming passive screens into intelligent, interactive experiences with local AI.
+                        </p>
+                        <div className="flex gap-4">
+                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                                <Twitter className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                                <Linkedin className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                                <Github className="w-5 h-5" />
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Product Links */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-6">Product</h3>
+                        <ul className="space-y-4 text-gray-400 text-sm">
+                            <li><Link href="/features" className="hover:text-adorix-primary transition-colors">Features</Link></li>
+                            <li><Link href="/pricing" className="hover:text-adorix-primary transition-colors">Pricing</Link></li>
+                            <li><Link href="/dashboard" className="hover:text-adorix-primary transition-colors">Dashboard</Link></li>
+                            <li><Link href="/settings/help" className="hover:text-adorix-primary transition-colors">Help Center</Link></li>
+                        </ul>
+                    </div>
+
+                    {/* Company Links */}
+                    <div>
+                        <h3 className="font-bold text-lg mb-6">Company</h3>
+                        <ul className="space-y-4 text-gray-400 text-sm">
+                            <li><Link href="/#team" className="hover:text-adorix-primary transition-colors">About Us</Link></li>
+                            <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Contact</Link></li>
+                            <li><Link href="/settings/policies" className="hover:text-adorix-primary transition-colors">Privacy & Terms</Link></li>
+                            <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Support</Link></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                {/* Divider */}
+                <div className="h-px w-full bg-white/10 mb-8"></div>
+
+                {/* Bottom Section */}
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                    <p>&copy; {new Date().getFullYear()} Adorix Inc. All rights reserved.</p>
+                    <div className="flex gap-8">
+                        <Link href="/settings/policies" className="hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link href="/settings/policies" className="hover:text-white transition-colors">Terms of Service</Link>
+                        <Link href="/settings/policies" className="hover:text-white transition-colors">Cookie Settings</Link>
+                    </div>
+                </div>
+
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;
