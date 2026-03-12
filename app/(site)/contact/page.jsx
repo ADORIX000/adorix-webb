@@ -90,9 +90,9 @@ const Contact = () => {
                                         initial={{ scale: 0.5, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ type: 'spring', damping: 15 }}
-                                        className="bg-white rounded-full p-6 shadow-2xl shadow-green-500/20 mb-6"
+                                        className="bg-white rounded-full p-6 shadow-2xl shadow-adorix-primary/20 mb-6"
                                     >
-                                        <CheckCircle2 className="w-16 h-16 text-green-500" />
+                                        <CheckCircle2 className="w-16 h-16 text-adorix-primary" />
                                     </motion.div>
                                     <motion.h3 
                                         initial={{ y: 20, opacity: 0 }}
@@ -201,16 +201,10 @@ const Contact = () => {
                             <button 
                                 type="submit" 
                                 disabled={status === 'sending' || status === 'success'}
-                                className={`w-full py-5 rounded-2xl font-black text-lg transition-all duration-500 flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed ${
-                                    status === 'success' 
-                                        ? 'bg-green-500 text-white shadow-lg shadow-green-500/30' 
-                                        : 'bg-adorix-primary hover:bg-adorix-secondary text-white shadow-xl shadow-adorix-primary/20'
-                                }`}
+                                className="w-full py-5 rounded-2xl font-black text-lg transition-all duration-500 flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed bg-adorix-primary hover:bg-adorix-secondary text-white shadow-xl shadow-adorix-primary/20"
                             >
                                 {status === 'sending' ? (
                                     <>Sending <Sparkles className="w-5 h-5 animate-pulse ml-2" /></>
-                                ) : status === 'success' ? (
-                                    <><CheckCircle2 className="w-6 h-6" /> Message Received!</>
                                 ) : (
                                     <>Send Message <Send className="w-6 h-6 ml-1 group-hover:translate-x-1.5 group-hover:-translate-y-1.5 transition-transform duration-300" /></>
                                 )}
