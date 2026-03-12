@@ -26,8 +26,13 @@ const Contact = () => {
         e.preventDefault();
         setStatus('sending');
 
+        // Use environment variable for API URL or fallback to production domain
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://adorixit.com";
+        const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+        const backendUrl = isLocalhost ? "http://localhost:5000" : API_BASE_URL;
+
         try {
-            await axios.post("http://localhost:5000/api/contact", formData);
+            await axios.post(`${backendUrl}/api/contact`, formData);
             
             setStatus('success');
             setFormData({
