@@ -10,11 +10,20 @@ const corsHeaders = {
 
 export async function POST(request) {
   try {
+    // 0. Check for environment variables to avoid server crashes (Server 500 Fix)
+    if (!process.env.EMAIL_PASS) {
+      console.error('Critical Error: EMAIL_PASS is not defined in environment variables.');
+      return NextResponse.json(
+        { message: 'Server configuration error. Please contact administrator.' },
+        { status: 500, headers: corsHeaders }
+      );
+    }
+
     const { name, email, subject, message } = await request.json();
 
     // 1. Configure the Zoho SMTP transport
     const transporter = nodemailer.createTransport({
-      host: 'smtppro.zoho.com', // Using Pro as requested, can fallback to smtp.zoho.com
+      host: 'smtppro.zoho.com', // Using Pro as requested
       port: 465,
       secure: true, // Use SSL
       auth: {
@@ -22,6 +31,7 @@ export async function POST(request) {
         pass: process.env.EMAIL_PASS, // Use app-specific password from .env
       },
     });
+
 
     // 2. Define Email Content
     const mailOptions = {
