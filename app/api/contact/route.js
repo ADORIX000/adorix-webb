@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export async function POST(req) {
+// Define CORS headers to allow requests from your dashboard
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'https://dashboard.adorixit.com',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function POST(request) {
   try {
-    const { name, email, subject, message } = await req.json();
+    const { name, email, subject, message } = await request.json();
 
     // 1. Configure the Zoho SMTP transport
     const transporter = nodemailer.createTransport({
@@ -39,12 +46,22 @@ export async function POST(req) {
     // 3. Send the Email
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ message: 'Email sent successfully!' }, { status: 200 });
+    // Return success with CORS headers attached
+    return NextResponse.json(
+      { message: 'Email sent successfully!' }, 
+      { status: 200, headers: corsHeaders }
+    );
   } catch (error) {
     console.error('Nodemailer Error:', error);
+    // Return error with CORS headers attached
     return NextResponse.json(
       { message: 'Failed to send email.', error: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
+}
+
+// 4. Handle the OPTIONS "preflight" request from the browser
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
 }
