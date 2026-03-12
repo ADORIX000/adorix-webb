@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Send, Globe, Github, Twitter, Linkedin,
-    ArrowRight, Sparkles
+    ArrowRight, Sparkles, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import TypingText from '../../components/home/TypingText';
 
@@ -54,12 +54,12 @@ const Contact = () => {
                 setTimeout(() => setStatus('idle'), 5000);
             } else {
                 setStatus('error');
-                setTimeout(() => setStatus('idle'), 3000);
+                setTimeout(() => setStatus('idle'), 6000);
             }
         } catch (error) {
             console.error("Email submission error:", error);
             setStatus('error');
-            setTimeout(() => setStatus('idle'), 3000);
+            setTimeout(() => setStatus('idle'), 6000);
         }
     };
 
@@ -95,6 +95,19 @@ const Contact = () => {
                             Send Message
                         </h2>
                         <form className="space-y-6" onSubmit={handleSubmit}>
+                            <AnimatePresence>
+                                {status === 'error' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3 text-red-700 font-medium shadow-sm"
+                                    >
+                                        <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                                        <p>Failed to send email due to a network or service issue. Please check your connection and try again later.</p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-adorix-dark uppercase tracking-widest ml-2">Name</label>
