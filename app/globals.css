@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Global Reset with New Colors */
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: #E5F9F8;
+    /* adorix-light */
+    color: #1F2B2D;
+    /* adorix-dark */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+    /* Color Variables for SVGs and Theme */
+    --adorix-primary: #0A7383;
+    --adorix-secondary: #23717B;
+    --adorix-accent: #12B2C1;
+    --adorix-light: #E5F9F8;
+    --adorix-dark: #1F2B2D;
+}
+
+/* 2. Custom Scrollbar (Themed) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #E5F9F8;
+    /* adorix-light */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #23717B;
+    /* adorix-secondary */
+    border-radius: 5px;
+    border: 2px solid #E5F9F8;
+    /* Creates padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0D8A9E;
+    /* adorix-primary */
+}
+
+/* 3. Text Selection Color */
+::selection {
+    background-color: #12B2C1;
+    /* adorix-accent */
+    color: #ffffff;
+}
