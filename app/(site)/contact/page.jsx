@@ -78,6 +78,52 @@ const Contact = () => {
                         viewport={{ once: true }}
                         className="bg-white/10 backdrop-blur-3xl rounded-[3rem] p-8 md:p-12 border border-white/20 shadow-2xl relative overflow-hidden"
                     >
+                        <AnimatePresence>
+                            {status === 'success' && (
+                                <motion.div
+                                    initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                                    animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
+                                    exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                                    className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/40 text-center p-8"
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ type: 'spring', damping: 15 }}
+                                        className="bg-white rounded-full p-6 shadow-2xl shadow-green-500/20 mb-6"
+                                    >
+                                        <CheckCircle2 className="w-16 h-16 text-green-500" />
+                                    </motion.div>
+                                    <motion.h3 
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="text-4xl font-black text-adorix-dark mb-4 tracking-tighter"
+                                    >
+                                        Message Received!
+                                    </motion.h3>
+                                    <motion.p 
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="text-gray-600 font-medium text-lg leading-relaxed"
+                                    >
+                                        Thank you for reaching out. <br />
+                                        Our team will get back to you shortly.
+                                    </motion.p>
+                                    <motion.button
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                        onClick={() => setStatus('idle')}
+                                        className="mt-8 px-8 py-3 bg-adorix-primary text-white rounded-full font-bold hover:bg-adorix-secondary transition-colors shadow-lg shadow-adorix-primary/20"
+                                    >
+                                        Send Another
+                                    </motion.button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
                         <h2 className="text-3xl font-black text-adorix-dark mb-8">
                             Send Message
                         </h2>
