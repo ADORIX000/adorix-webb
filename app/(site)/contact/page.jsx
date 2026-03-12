@@ -16,6 +16,8 @@ const Contact = () => {
     });
     const [status, setStatus] = useState('idle'); // idle, sending, success, error
     const [errorMessage, setErrorMessage] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
 
     const handleChange = (e) => {
         setFormData({
@@ -61,6 +63,7 @@ const Contact = () => {
             }
             
             setStatus('success');
+            setIsSubmitted(true);
             setErrorMessage('');
             setFormData({
                 name: '',
@@ -68,7 +71,7 @@ const Contact = () => {
                 subject: 'General Inquiry',
                 message: ''
             });
-            setTimeout(() => setStatus('idle'), 5000);
+
         } catch (error) {
             console.error("Email submission error:", error);
             setStatus('error');
@@ -105,7 +108,7 @@ const Contact = () => {
                         className="bg-white/10 backdrop-blur-3xl rounded-[3rem] p-8 md:p-12 border border-white/20 shadow-2xl relative overflow-hidden"
                     >
                         <AnimatePresence>
-                            {status === 'success' && (
+                            {isSubmitted && (
                                 <motion.div
                                     initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
                                     animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
@@ -126,29 +129,33 @@ const Contact = () => {
                                         transition={{ delay: 0.2 }}
                                         className="text-4xl font-black text-adorix-dark mb-4 tracking-tighter"
                                     >
-                                        Message Received!
+                                        Message Sent!
                                     </motion.h3>
                                     <motion.p 
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ delay: 0.3 }}
-                                        className="text-gray-600 font-medium text-lg leading-relaxed"
+                                        className="text-gray-600 font-medium text-lg leading-relaxed max-w-sm mx-auto"
                                     >
-                                        Thank you for reaching out. <br />
-                                        Our team will get back to you shortly.
+                                        Thank you for contacting us. <br />
+                                        We will respond shortly.
                                     </motion.p>
                                     <motion.button
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ delay: 0.4 }}
-                                        onClick={() => setStatus('idle')}
+                                        onClick={() => {
+                                            setIsSubmitted(false);
+                                            setStatus('idle');
+                                        }}
                                         className="mt-8 px-8 py-3 bg-adorix-primary text-white rounded-full font-bold hover:bg-adorix-secondary transition-colors shadow-lg shadow-adorix-primary/20"
                                     >
-                                        Send Another
+                                        Send another message
                                     </motion.button>
                                 </motion.div>
                             )}
                         </AnimatePresence>
+
 
                         <h2 className="text-3xl font-black text-adorix-dark mb-8">
                             Send Message
