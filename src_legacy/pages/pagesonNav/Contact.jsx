@@ -95,6 +95,7 @@ const Contact = () => {
                             Send Message
                         </h2>
                         <form className="space-y-6" onSubmit={handleSubmit}>
+
                             <AnimatePresence>
                                 {status === 'error' && (
                                     <motion.div
@@ -163,12 +164,16 @@ const Contact = () => {
                             <button 
                                 type="submit" 
                                 disabled={status === 'sending' || status === 'success'}
-                                className="w-full py-5 bg-adorix-dark hover:bg-black text-white rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed"
+                                className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 group active:scale-[0.98] disabled:opacity-90 disabled:cursor-not-allowed ${
+                                    status === 'success' 
+                                        ? 'bg-green-500 text-white shadow-lg shadow-green-500/30' 
+                                        : 'bg-adorix-dark hover:bg-black text-white'
+                                }`}
                             >
                                 {status === 'sending' ? (
                                     <>Sending <Sparkles className="w-5 h-5 animate-pulse ml-2" /></>
                                 ) : status === 'success' ? (
-                                    'Message Received! 🚀'
+                                    <><CheckCircle2 className="w-6 h-6" /> Message Received!</>
                                 ) : status === 'error' ? (
                                     'Failed to Send. Try Again.'
                                 ) : (
