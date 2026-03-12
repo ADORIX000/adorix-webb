@@ -13,17 +13,19 @@ export default function RootLayout({
     children,
 }) {
     return (
-        <ClerkProvider
-            appearance={{
-                layout: {
-                    logoPlacement: 'inside',
-                    showOptionalFields: false,
-                }
-            }}
-        >
-            <html lang="en">
-                <body className={inter.className} suppressHydrationWarning>{children}</body>
-            </html>
-        </ClerkProvider>
+        <html lang="en">
+            <body className={inter.className} suppressHydrationWarning>
+                <ClerkProvider
+                    appearance={{
+                        layout: {
+                            logoPlacement: 'inside',
+                            showOptionalFields: false,
+                        }
+                    }}
+                >
+                    {children}
+                </ClerkProvider>
+            </body>
+        </html>
     )
 }

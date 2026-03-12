@@ -30,9 +30,15 @@ const LoginContent = () => {
 
     const onSignInSubmit = async (e) => {
         e.preventDefault();
-        console.log('SignIn Submit:', { emailAddress, isLoaded });
+        console.log('SignIn Submit triggered', { emailAddress, isLoaded });
+        
         if (!isLoaded) {
-            console.warn('Clerk is not loaded yet');
+            console.warn('SignIn Submit blocked: Clerk is not loaded', {
+                hasSignIn: !!signIn,
+                hasSetActive: !!setActive,
+                key: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.substring(0, 10) + '...'
+            });
+            setError('Authentication service is still loading. Please wait a moment and try again.');
             return;
         }
 
@@ -60,7 +66,8 @@ const LoginContent = () => {
                 throw new Error('Email verification is not available for this account.');
             }
         } catch (err) {
-            setError(err.errors?.[0]?.message || 'Login failed. Please verify your email.');
+            console.error('SignIn Error:', err);
+            setError(err.errors?.[0]?.message || err.message || 'Login failed. Please verify your email.');
         } finally {
             setLoading(false);
         }
@@ -68,7 +75,12 @@ const LoginContent = () => {
 
     const onVerifySubmit = async (e) => {
         e.preventDefault();
-        if (!isLoaded) return;
+        console.log('Verify Submit triggered', { code, isLoaded });
+
+        if (!isLoaded) {
+            setError('Authentication service is still loading. Please wait a moment and try again.');
+            return;
+        }
 
         setLoading(true);
         setError('');
@@ -92,7 +104,8 @@ const LoginContent = () => {
                 setError('Verification failed.');
             }
         } catch (err) {
-            setError(err.errors?.[0]?.message || 'Invalid code. Please try again.');
+            console.error('Verify Error:', err);
+            setError(err.errors?.[0]?.message || err.message || 'Invalid code. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -100,12 +113,20 @@ const LoginContent = () => {
 
     const signInWithGoogle = () => {
         console.log('Google SignIn Clicked', { isLoaded });
-        if (!isLoaded) return;
-        signIn.authenticateWithRedirect({
-            strategy: 'oauth_google',
-            redirectUrl: '/accs',
-            redirectUrlComplete: '/accs',
-        });
+        if (!isLoaded) {
+            setError('Authentication service is still loading. Please wait a moment and try again.');
+            return;
+        }
+        try {
+            signIn.authenticateWithRedirect({
+                strategy: 'oauth_google',
+                redirectUrl: '/accs',
+                redirectUrlComplete: '/accs',
+            });
+        } catch (err) {
+            console.error('Google SignIn Error:', err);
+            setError('Failed to initiate Google login. Please try again.');
+        }
     };
 
     if (!mounted) return null;
