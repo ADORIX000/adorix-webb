@@ -23,7 +23,16 @@ export async function POST(request) {
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { message: 'Missing required fields: name, email, or message.' },
+        { message: 'Missing required fields: name, email, or message.', error: 'INVALID_INPUT' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Basic email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { message: 'Invalid email format.', error: 'INVALID_EMAIL' },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -69,10 +78,20 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error('Nodemailer Error:', error);
-    // Return error with CORS headers attached
+    
+    // Distinguish between service issues and other errors
+    const isServiceError = error.code === 'ECONNECTION' || 
+                          error.code === 'ETIMEDOUT' || 
+                          error.syscall === 'getaddrinfo' ||
+                          error.command === 'CONN';
+
+    const statusCode = isServiceError ? 503 : 500;
+    const errorCode = isServiceError ? 'EMAIL_SERVICE_DOWN' : 'SERVER_ERROR';
+    const message = isServiceError ? 'Email service is currently unreachable.' : 'An internal server error occurred.';
+
     return NextResponse.json(
-      { message: 'Failed to send email.', error: error.message },
-      { status: 500, headers: corsHeaders }
+      { message, error: errorCode, detail: error.message },
+      { status: statusCode, headers: corsHeaders }
     );
   }
 }
