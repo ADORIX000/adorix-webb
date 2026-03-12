@@ -15,6 +15,7 @@ const Contact = () => {
         message: ''
     });
     const [status, setStatus] = useState('idle'); // idle, sending, success, error
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -38,10 +39,29 @@ const Contact = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to send message');
+                let msg = 'An unexpected error occurred. Please try again.';
+                
+                switch (errorData.error) {
+                    case 'INVALID_EMAIL':
+                        msg = 'Invalid Email: Please enter a valid email address.';
+                        break;
+                    case 'INVALID_INPUT':
+                        msg = 'Invalid Input: Please ensure all fields are correctly filled.';
+                        break;
+                    case 'EMAIL_SERVICE_DOWN':
+                        msg = 'Service Error: Our email provider (Zoho) is temporarily unreachable.';
+                        break;
+                    case 'SERVER_ERROR':
+                        msg = 'Server Error: Something went wrong on our end. Please try again later.';
+                        break;
+                    default:
+                        msg = errorData.message || msg;
+                }
+                throw new Error(msg);
             }
             
             setStatus('success');
+            setErrorMessage('');
             setFormData({
                 name: '',
                 email: '',
@@ -52,6 +72,7 @@ const Contact = () => {
         } catch (error) {
             console.error("Email submission error:", error);
             setStatus('error');
+            setErrorMessage(error.message || 'Network Issue: Please check your internet connection.');
             setTimeout(() => setStatus('idle'), 6000);
         }
     };
@@ -143,7 +164,7 @@ const Contact = () => {
                                         className="mb-4 p-4 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3 text-red-700 font-medium shadow-sm"
                                     >
                                         <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-                                        <p>Failed to send email. Please check your connection or try again later.</p>
+                                        <p>{errorMessage}</p>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
