@@ -5,7 +5,7 @@ const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
-const contactRoutes = require("./routes/contactRoutes");
+const contactRoutes = require("./routes/contact.routes");
 
 const app = express();
 

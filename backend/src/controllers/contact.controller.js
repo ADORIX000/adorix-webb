@@ -1,66 +1,39 @@
-/**
- * Handles contact form submissions
- */
-const sendContactMessage = async (req, res) => {
-    try {
-        const { name, email, subject, message, honeypot } = req.body;
+const nodemailer = require('nodemailer');
 
-        // 1. Honeypot check
-        if (honeypot) {
-            console.warn(`Spam attempt blocked via honeypot from IP: ${req.ip}`);
-            // Silently return success to the bot
-            return res.status(200).json({
-                success: true,
-                message: "Message sent successfully!"
-            });
-        }
+exports.sendContactMessage = async (req, res) => {
+  const { name, email, subject, message } = req.body;
 
-        // 2. Simple backend validation
-        if (!name || !email || !message) {
-            return res.status(400).json({
-                success: false,
-                message: "Name, email and message are required."
-            });
-        }
+  // 1. Create a Transporter for Zoho
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.zoho.com', 
+    port: 587,
+    secure: false, // use STARTTLS
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            return res.status(400).json({
-                success: false,
-                message: "Invalid email format."
-            });
-        }
+  // 2. Define Email Content
+  const mailOptions = {
+    from: `"Adorix Contact" <${process.env.EMAIL_USER}>`, // Explicitly define name and email
+    to: 'info@adorixit.com',
+    replyTo: email, // Allow replying directly to the sender
+    subject: `New Contact Form: ${subject}`,
+    html: `
+      <h3>New Message from Adorix Website</h3>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Message:</strong> ${message}</p>
+    `,
+  };
 
-        if (message.trim().length < 10) {
-            return res.status(400).json({
-                success: false,
-                message: "Message must be at least 10 characters long."
-            });
-        }
-
-        // 3. Process the message (Simulated)
-        console.log(`New contact message received:
-            Name: ${name}
-            Email: ${email}
-            Subject: ${subject}
-            Message: ${message}
-        `);
-
-        // In a real app, you'd send an email or save to DB here
-        
-        res.status(200).json({
-            success: true,
-            message: "Message sent successfully!"
-        });
-
-    } catch (error) {
-        console.error("Error in sendContactMessage:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error."
-        });
-    }
-};
-
-module.exports = {
-    sendContactMessage
+  // 3. Send the Email
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: 'Email sent successfully!' });
+  } catch (error) {
+    console.error("Nodemailer Error:", error);
+    res.status(500).json({ message: 'Failed to send email.' });
+  }
 };
