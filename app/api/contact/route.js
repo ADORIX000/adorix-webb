@@ -21,17 +21,23 @@ export async function POST(request) {
 
     const { name, email, subject, message } = await request.json();
 
-    // 1. Configure the Zoho SMTP transport
+    if (!name || !email || !message) {
+      return NextResponse.json(
+        { message: 'Missing required fields: name, email, or message.' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // 1. Configure the Zoho SMTP transport (use smtp.zoho.com on 587 for broader compatibility)
     const transporter = nodemailer.createTransport({
-      host: 'smtppro.zoho.com', // Using Pro as requested
-      port: 465,
-      secure: true, // Use SSL
+      host: 'smtp.zoho.com',
+      port: 587,
+      secure: false, // Use STARTTLS on port 587
       auth: {
-        user: 'info@adorixit.com',
-        pass: process.env.EMAIL_PASS, // Use app-specific password from .env
+        user: process.env.EMAIL_USER || 'info@adorixit.com',
+        pass: process.env.EMAIL_PASS,
       },
     });
-
 
     // 2. Define Email Content
     const mailOptions = {
