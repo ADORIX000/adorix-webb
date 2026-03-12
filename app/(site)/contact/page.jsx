@@ -28,9 +28,16 @@ const Contact = () => {
         setStatus('sending');
 
         // Use environment variable for API URL or fallback to production domain
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://adorixit.com";
-        const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-        const backendUrl = isLocalhost ? "http://localhost:5000" : API_BASE_URL;
+        // Use 'www' version to avoid apex-to-www redirects which break CORS preflight
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://www.adorixit.com";
+        
+        // Detect local development environment even with custom hostnames (like dashboard.adorixit.com)
+        const isLocal = typeof window !== 'undefined' && 
+            (window.location.hostname === 'localhost' || 
+             window.location.hostname === '127.0.0.1' || 
+             window.location.port !== '');
+
+        const backendUrl = isLocal ? "http://localhost:5000" : API_BASE_URL;
 
         try {
             const response = await fetch(`${backendUrl}/api/contact`, {
