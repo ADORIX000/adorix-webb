@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon } from 'lucide-react';
-import { useUser, useAuth, SignOutButton } from '@clerk/nextjs';
+import { useUser, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
   const { isSignedIn, user } = useUser();
@@ -13,7 +13,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Handle scroll effect
+  // Keep one animation style for all pages: expand at top, compact on scroll.
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`w-full fixed top-0 z-50 transition-all duration-300 ${isScrolled || pathname === '/login' || pathname === '/signup'
+        className={`w-full fixed top-0 z-50 transition-all duration-300 ${isScrolled
           ? 'h-16 bg-white border-b border-gray-200/50 shadow-sm'
           : 'h-24 bg-transparent border-b border-transparent'
           }`}

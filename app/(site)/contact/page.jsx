@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Send, Sparkles, CheckCircle2, AlertCircle
 } from 'lucide-react';
-import axios from 'axios';
 import TypingText from '@/components/home/TypingText';
 
 const Contact = () => {
@@ -34,7 +33,17 @@ const Contact = () => {
         const backendUrl = isLocalhost ? "http://localhost:5000" : API_BASE_URL;
 
         try {
-            await axios.post(`${backendUrl}/api/contact`, formData);
+            const response = await fetch(`${backendUrl}/api/contact`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
             
             setStatus('success');
             setFormData({
