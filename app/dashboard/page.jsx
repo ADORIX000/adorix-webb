@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useUser, useClerk } from '@clerk/nextjs';
 import {
     AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -54,8 +53,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Dashboard = () => {
-    const { user, isLoaded } = useUser();
-    const router = useRouter();
+    const { isLoaded } = useUser();
 
     const [data, setData] = useState(generateInitialData);
     const [liveViewers, setLiveViewers] = useState(42);
@@ -100,18 +98,6 @@ const Dashboard = () => {
                         {' · '}
                         <span className="font-mono">{time.toLocaleTimeString()}</span>
                     </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="text-right hidden sm:block">
-                        <p className="text-sm font-semibold text-adorix-dark">{user?.fullName || 'User'}</p>
-                        <p className="text-xs text-gray-400">{user?.primaryEmailAddress?.emailAddress}</p>
-                    </div>
-                    <button
-                        onClick={() => router.push('/profile')}
-                        className="w-10 h-10 rounded-full bg-adorix-primary text-white font-bold text-sm flex items-center justify-center ring-2 ring-adorix-primary/20 hover:ring-adorix-primary/50 transition overflow-hidden"
-                    >
-                        {user?.imageUrl ? <img src={user.imageUrl} className="w-full h-full object-cover" /> : user?.firstName?.charAt(0)}
-                    </button>
                 </div>
             </div>
 

@@ -30,7 +30,6 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
-    { name: 'Profile', path: '/profile', protected: true },
   ];
 
   const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
