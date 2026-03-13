@@ -29,7 +29,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Dashboard', path: '/dashboard', protected: true },
-    { name: 'Campaign Studio', path: '/dashboard/studio', protected: true },
+    { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
     { name: 'Profile', path: '/profile', protected: true },
   ];
 
