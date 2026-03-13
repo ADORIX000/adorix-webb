@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X } from 'lucide-react';
-import TypingText from '@/components/home/TypingText';
+// No TypingText import
 
 const CampaignStudio = () => {
     const router = useRouter();
@@ -56,9 +56,9 @@ const CampaignStudio = () => {
                         transition={{ delay: 0.1 }}
                         className="text-5xl md:text-7xl font-black text-adorix-dark mb-8 tracking-tighter"
                     >
-                        <TypingText text="Launch Your Next" speed={0.05} /> <br />
+                        Launch Your Next <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
-                            <TypingText text="Big Campaign." startDelay={1} speed={0.05} />
+                            Big Campaign.
                         </span>
                     </motion.h1>
                 </div>
@@ -148,7 +148,7 @@ const CampaignStudio = () => {
                                     <p className="text-xs text-emerald-600/80 font-medium">{file.name} • {file.size}</p>
                                 </div>
                                 <button
-                                    onClick={() => router.push('/pricing')}
+                                    onClick={() => router.push('/upgrade/pro')}
                                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-200"
                                 >
                                     Launch Now

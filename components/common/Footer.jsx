@@ -16,7 +16,7 @@ const Footer = () => {
                             ADORIX
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-                            Transforming passive screens into intelligent, interactive experiences with local AI.
+                            The advanced campaign studio for intelligent, interactive experiences.
                         </p>
                         <div className="flex gap-4">
                             <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
@@ -35,8 +35,6 @@ const Footer = () => {
                     <div>
                         <h3 className="font-bold text-lg mb-6">Product</h3>
                         <ul className="space-y-4 text-gray-400 text-sm">
-                            <li><Link href="/features" className="hover:text-adorix-primary transition-colors">Features</Link></li>
-                            <li><Link href="/pricing" className="hover:text-adorix-primary transition-colors">Pricing</Link></li>
                             <li><Link href="/dashboard" className="hover:text-adorix-primary transition-colors">Dashboard</Link></li>
                             <li><Link href="/settings/help" className="hover:text-adorix-primary transition-colors">Help Center</Link></li>
                         </ul>
@@ -46,10 +44,7 @@ const Footer = () => {
                     <div>
                         <h3 className="font-bold text-lg mb-6">Company</h3>
                         <ul className="space-y-4 text-gray-400 text-sm">
-                            <li><Link href="/#team" className="hover:text-adorix-primary transition-colors">About Us</Link></li>
-                            <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Contact</Link></li>
                             <li><Link href="/settings/policies" className="hover:text-adorix-primary transition-colors">Privacy & Terms</Link></li>
-                            <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Support</Link></li>
                         </ul>
                     </div>
 

@@ -32,7 +32,7 @@ const Sidebar = () => {
 
             {/* Brand */}
             <div className="p-8">
-                <Link to="/" className="flex items-center gap-3 group">
+                <Link to="/dashboard" className="flex items-center gap-3 group">
                     <div className="w-8 h-8 bg-adorix-dark rounded-lg flex items-center justify-center text-white font-bold group-hover:bg-adorix-primary transition-colors">
                         A
                     </div>
@@ -51,8 +51,8 @@ const Sidebar = () => {
                             key={item.path}
                             to={item.path}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                                    ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20'
-                                    : 'text-gray-500 hover:bg-gray-50 hover:text-adorix-dark'
+                                ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20'
+                                : 'text-gray-500 hover:bg-gray-50 hover:text-adorix-dark'
                                 }`}
                         >
                             <item.icon className={`w-5 h-5 ${isActive ? 'text-adorix-primary' : 'text-gray-400 group-hover:text-adorix-dark'}`} />
