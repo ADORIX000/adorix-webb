@@ -91,7 +91,7 @@ const Dashboard = () => {
     if (!isLoaded) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+        <div className="min-h-screen bg-transparent pt-24 pb-16">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 mb-6 flex items-center justify-between gap-3">
                 <div>
                     <h1 className="text-2xl font-bold text-adorix-dark">Campaign Monitor</h1>

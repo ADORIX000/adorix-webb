@@ -67,7 +67,7 @@ const Accs = () => {
 
     if (!isLoaded || !isSignedIn) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-white">
+            <div className="flex items-center justify-center min-h-screen bg-transparent">
                 <Loader2 className="w-10 h-10 animate-spin text-adorix-primary" />
             </div>
         )
