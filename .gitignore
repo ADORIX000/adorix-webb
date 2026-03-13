@@ -37,3 +37,6 @@ cypress/screenshots/
 
 # Vercel
 .vercel
+
+# clerk configuration (can include secrets)
+/.clerk/
