@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X, Loader2 } from 'lucide-react';
 import { useSupabase } from '@/hooks/useSupabase';
+import { useUser } from '@clerk/nextjs';
 
 const CampaignStudio = () => {
     const router = useRouter();
     const supabase = useSupabase();
+    const { user } = useUser();
     
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
@@ -95,7 +97,8 @@ const CampaignStudio = () => {
                         age: ageRange,
                         description: description,
                         media_url: publicUrl,
-                        status: 'pending'
+                        status: 'pending',
+                        user_id: user?.id
                     }
                 ]);
 
