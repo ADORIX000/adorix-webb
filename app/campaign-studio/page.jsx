@@ -272,40 +272,65 @@ const CampaignStudio = () => {
                             </div>
                         )}
                     </div>
-
-                    <div className="lg:col-span-5 flex flex-col items-center">
-                        <h3 className="text-adorix-secondary font-bold mb-4 flex items-center gap-2">
+                    <div className="lg:col-span-5 flex flex-col items-center justify-start py-8">
+                        <h3 className="text-adorix-secondary font-bold mb-6 flex items-center gap-2">
                             <Monitor className="w-4 h-4" /> Kiosk Live Preview
                         </h3>
-                        <div className="relative border-8 border-adorix-dark bg-black rounded-[3rem] shadow-2xl w-[320px] h-[600px] overflow-hidden ring-4 ring-gray-200/50">
-                            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-white/10 to-transparent pointer-events-none z-10 rounded-[2.5rem]"></div>
-                            <div className="w-full h-full bg-gray-900 flex items-center justify-center relative">
-                                {previewUrl ? (
-                                    <div className="w-full h-full relative group">
-                                        {file.type.startsWith('video') ? (
-                                            <video
-                                                src={previewUrl}
-                                                className="w-full h-full object-cover"
-                                                autoPlay
-                                                loop
-                                                muted
-                                                playsInline
-                                            />
-                                        ) : (
-                                            <img
-                                                src={previewUrl}
-                                                alt="Preview"
-                                                className="w-full h-full object-cover"
-                                            />
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className="text-center opacity-40 px-6">
-                                        <Smartphone className="w-16 h-16 text-white mx-auto mb-4" />
-                                        <p className="text-white font-medium">Upload content to preview <br /> on Kiosk display</p>
-                                    </div>
-                                )}
+                        
+                        <div className="relative flex flex-col items-center">
+                            {/* Kiosk Body (The Screen Unit) */}
+                            <div className="relative z-20 border-[10px] border-[#1F2B2D] bg-[#0A0F11] rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] w-[300px] h-[520px] overflow-hidden group">
+                                {/* Bezel Glow / Reflection */}
+                                <div className="absolute inset-0 pointer-events-none z-30 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-50"></div>
+                                
+                                {/* The Screen Content */}
+                                <div className="w-full h-full bg-gray-900 flex items-center justify-center relative z-20">
+                                    {previewUrl ? (
+                                        <div className="w-full h-full relative">
+                                            {file?.type?.startsWith('video') ? (
+                                                <video
+                                                    src={previewUrl}
+                                                    className="w-full h-full object-cover"
+                                                    autoPlay
+                                                    loop
+                                                    muted
+                                                    playsInline
+                                                />
+                                            ) : (
+                                                <img
+                                                    src={previewUrl}
+                                                    alt="Preview"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            )}
+                                            {/* Screen Glass Reflection */}
+                                            <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center gap-4 px-8 text-center">
+                                            <div className="w-12 h-12 rounded-full border-2 border-dashed border-gray-700 flex items-center justify-center">
+                                                <Play className="w-5 h-5 text-gray-700" />
+                                            </div>
+                                            <p className="text-xs text-gray-500 font-medium">Select a campaign video to see it live on the kiosk</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
+
+                            {/* Kiosk Stand Neck */}
+                            <div className="relative z-10 -mt-8 w-24 h-24 bg-gradient-to-b from-[#1F2B2D] to-[#141E20] shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)] border-x-4 border-gray-800/20"></div>
+
+                            {/* Kiosk Base / Pedestal */}
+                            <div className="relative z-10 w-52 h-6 bg-gradient-to-b from-[#1F2B2D] via-[#141E20] to-[#0A0F11] rounded-t-3xl shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
+                                {/* Base Highlight */}
+                                <div className="absolute top-0 inset-x-4 h-[1px] bg-white/20 blur-[1px]"></div>
+                            </div>
+
+                            {/* Base Bottom Layer */}
+                            <div className="relative z-0 w-64 h-3 bg-[#0A0F11] rounded-full blur-[0.5px] -mt-1 opacity-80"></div>
+
+                            {/* Floor Shadow */}
+                            <div className="w-72 h-8 bg-black/20 blur-2xl rounded-full -mt-2"></div>
                         </div>
                     </div>
                 </div>
