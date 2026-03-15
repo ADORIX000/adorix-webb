@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
+import Pricing from './pricing/page';
 
 export default function RootPage() {
-    redirect('/login');
+    return <Pricing />;
 }
