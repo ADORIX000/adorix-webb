@@ -22,6 +22,10 @@ const CampaignStudio = () => {
     const [gender, setGender] = useState('');
     const [ageRange, setAgeRange] = useState('');
     const [description, setDescription] = useState('');
+    const [features, setFeatures] = useState('');
+    const [colors, setColors] = useState('');
+    const [price, setPrice] = useState('');
+    const [specs, setSpecs] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState(null); // 'success', 'error'
 
@@ -95,18 +99,37 @@ const CampaignStudio = () => {
                 .getPublicUrl(filePath);
 
             // 3. Insert or Update metadata into 'ads' table
+            
+            // Format the organized description for AI parsing
+            const structuredDescription = `
+### PRODUCT OVERVIEW
+${description}
+
+### KEY FEATURES
+${features}
+
+### AVAILABLE COLORS
+${colors}
+
+### PRICING / OFFERS
+${price}
+
+### TECHNICAL SPECS
+${specs}
+`.trim();
+
             const { error: dbError } = await supabase
                 .from('ads')
                 .upsert(
                     {
+                        user_id: user.id,
                         name: campaignName,
                         gender: gender,
                         age: ageRange,
-                        description: description,
+                        description: structuredDescription,
                         media_url: publicUrl,
-                        status: 'pending',
-                        user_id: user?.id,
-                        video_filename: fileName // Used as unique key for upsert
+                        status: 'active',
+                        video_filename: fileName
                     },
                     { onConflict: 'video_filename' }
                 );
@@ -236,11 +259,43 @@ const CampaignStudio = () => {
                                     </select>
                                 </div>
                                 <textarea
-                                    placeholder="Description about the ad / product"
+                                    placeholder="General Description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none"
+                                    className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-20 resize-none text-sm"
                                 ></textarea>
+                                
+                                <div className="grid grid-cols-2 gap-4">
+                                    <textarea
+                                        placeholder="Key Features (One per line)"
+                                        value={features}
+                                        onChange={(e) => setFeatures(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none text-sm"
+                                    ></textarea>
+                                    <textarea
+                                        placeholder="Available Colors / Variants"
+                                        value={colors}
+                                        onChange={(e) => setColors(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none text-sm"
+                                    ></textarea>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Price / Special Offers" 
+                                        value={price}
+                                        onChange={(e) => setPrice(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-sm" 
+                                    />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Technical Specs (e.g. 5000mAh, 4K)" 
+                                        value={specs}
+                                        onChange={(e) => setSpecs(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-sm" 
+                                    />
+                                </div>
                             </div>
                         </div>
 
