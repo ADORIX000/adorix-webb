@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
+const clerkAuthMiddleware = require('../middlewares/clerkAuth.middleware');
 
-// Protected routes (require valid mock token)
-router.get('/me', authMiddleware, userController.getMe);
-router.put('/me', authMiddleware, userController.updateMe);
+// Protected routes (require valid Clerk session token)
+router.get('/me', clerkAuthMiddleware, userController.getMe);
+router.put('/me', clerkAuthMiddleware, userController.updateMe);
 
 module.exports = router;

@@ -45,6 +45,19 @@ class UserService {
         return data || null;
     }
 
+    async findUserByExternalId(externalId) {
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('external_id', externalId)
+            .single();
+
+        if (error && error.code !== 'PGRST116') {
+            throw new Error(error.message);
+        }
+        return data || null;
+    }
+
     async updateUser(id, updateData) {
         const allowedUpdates = {};
         if (updateData.name !== undefined) allowedUpdates.name = updateData.name;
@@ -62,6 +75,52 @@ class UserService {
             throw new Error(error.message);
         }
         return data;
+    }
+
+    async findOrCreateUserByExternalId(externalId, clerkDetails) {
+        // 1. Try to find the user by external_id
+        const { data: user, error: findError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('external_id', externalId)
+            .single();
+
+        if (findError && findError.code !== 'PGRST116') {
+            throw new Error(findError.message);
+        }
+
+        if (user) {
+            // Update role if it has changed in Clerk
+            if (user.role !== clerkDetails.role) {
+                const { data: updatedUser, error: updateError } = await supabase
+                    .from('users')
+                    .update({ role: clerkDetails.role })
+                    .eq('id', user.id)
+                    .select('*')
+                    .single();
+                
+                if (!updateError) return updatedUser;
+            }
+            return user;
+        }
+
+        // 2. If not found, create the user (JIT Provisioning)
+        const { data: newUser, error: createError } = await supabase
+            .from('users')
+            .insert([{
+                external_id: externalId,
+                name: clerkDetails.name || 'New User',
+                email: clerkDetails.email,
+                role: clerkDetails.role || 'CUSTOMER'
+            }])
+            .select('*')
+            .single();
+
+        if (createError) {
+            throw new Error(createError.message);
+        }
+
+        return newUser;
     }
 }
 
