@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Upload, Monitor, CheckCircle, Play, FileText, X, Loader2 } from 'lucide-react';
+import { Upload, Monitor, CheckCircle, Play, FileText, X, Loader2, Mic } from 'lucide-react';
 import { useSupabase } from '@/hooks/useSupabase';
 import { useUser } from '@clerk/nextjs';
 
@@ -273,7 +273,29 @@ ${specs}
                                     <div className="absolute inset-0 pointer-events-none z-30 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-50"></div>
                                     <div className="w-full h-full bg-gray-900 flex items-center justify-center relative z-20">
                                         {previewUrl ? (
-                                            <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                            <div className="w-full h-full relative">
+                                                <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                                
+                                                {/* Live Indicator Overlay */}
+                                                <div className="absolute top-4 left-4 z-40 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                                                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+                                                    <span className="text-[10px] text-white font-bold tracking-widest uppercase">Live</span>
+                                                </div>
+
+                                                {/* Mic Icon Overlay */}
+                                                <div className="absolute bottom-8 inset-x-0 z-40 flex justify-center">
+                                                    <div className="w-12 h-12 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full flex items-center justify-center shadow-2xl overflow-hidden group">
+                                                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50"></div>
+                                                        <Mic className="w-5 h-5 text-white relative z-10" />
+                                                        {/* Sound wave animation effect */}
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-30">
+                                                            <div className="w-full h-full border-2 border-white rounded-full animate-ping duration-[2000ms]"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+                                            </div>
                                         ) : (
                                             <div className="text-center px-8 opacity-20"><Play className="w-12 h-12 text-white mx-auto mb-2" /><p className="text-[10px] text-white font-bold tracking-widest uppercase">No Signal</p></div>
                                         )}
