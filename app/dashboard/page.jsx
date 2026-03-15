@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useUser, useClerk } from '@clerk/nextjs';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useUser } from '@clerk/nextjs';
+import { useSupabase } from '@/hooks/useSupabase';
 import {
     AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
     BarChart, Bar, CartesianGrid, PieChart, Pie, Cell
@@ -11,30 +12,7 @@ import {
     Play, RefreshCw, MonitorPlay, ChevronRight
 } from 'lucide-react';
 
-const generateInitialData = () =>
-    Array.from({ length: 14 }, (_, i) => ({
-        time: `${9 + i}:00`,
-        viewers: Math.floor(Math.random() * 60) + 30,
-        interactions: Math.floor(Math.random() * 30) + 10,
-        conversions: Math.floor(Math.random() * 15) + 2,
-    }));
-
-const AGE_RANGE_DATA = [
-    { name: '10–15', value: 12, color: '#F59E0B' },
-    { name: '16–29', value: 34, color: '#12B2C1' },
-    { name: '30–39', value: 24, color: '#8B5CF6' },
-    { name: '40–49', value: 16, color: '#0D8A9E' },
-    { name: '50–59', value: 9, color: '#23717B' },
-    { name: '60+', value: 5, color: '#1F2B2D' },
-];
-
-const PERF_METRICS = [
-    { label: 'Audience Reach', val: 91, color: '#12B2C1' },
-    { label: 'Dwell Engagement', val: 78, color: '#0D8A9E' },
-    { label: 'Conversion Rate', val: 64, color: '#8B5CF6' },
-    { label: 'Return Visitor Rate', val: 47, color: '#F59E0B' },
-    { label: 'Content Completion', val: 85, color: '#10B981' },
-];
+const COLORS = ['#12B2C1', '#0D8A9E', '#8B5CF6', '#F59E0B', '#10B981', '#1F2B2D'];
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
@@ -53,50 +31,147 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Dashboard = () => {
-    const { isLoaded } = useUser();
+    const { user, isLoaded } = useUser();
+    const supabase = useSupabase();
 
-    const [data, setData] = useState(generateInitialData);
-    const [liveViewers, setLiveViewers] = useState(42);
+    const [analytics, setAnalytics] = useState([]);
     const [selectedRange, setSelectedRange] = useState('Today');
-    const [time, setTime] = useState(new Date());
+    const [currentTime, setCurrentTime] = useState(new Date());
 
+    // 1. Fetch Initial Data & Setup Real-time
     useEffect(() => {
-        const dataInterval = setInterval(() => {
-            setData(d => {
-                const newPoint = {
-                    time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-                    viewers: Math.floor(Math.random() * 60) + 30,
-                    interactions: Math.floor(Math.random() * 30) + 10,
-                    conversions: Math.floor(Math.random() * 15) + 2,
-                };
-                return [...d.slice(1), newPoint];
-            });
-            setLiveViewers(v => Math.max(10, v + Math.round((Math.random() - 0.45) * 5)));
-        }, 3000);
-        const clockInterval = setInterval(() => setTime(new Date()), 1000);
-        return () => { clearInterval(dataInterval); clearInterval(clockInterval); };
-    }, []);
+        if (!isLoaded || !user || !supabase) return;
+
+        const fetchAnalytics = async () => {
+            const { data, error } = await supabase
+                .from('analytics')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: true });
+
+            if (error) {
+                console.error("Error fetching analytics:", error);
+            } else {
+                setAnalytics(data || []);
+            }
+        };
+
+        fetchAnalytics();
+
+        // Real-time subscription
+        const channel = supabase
+            .channel('realtime-analytics')
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'analytics',
+                    filter: `user_id=eq.${user.id}`
+                },
+                (payload) => {
+                    console.log('Live Analytics Update:', payload.new);
+                    setAnalytics(prev => [...prev, payload.new]);
+                }
+            )
+            .subscribe();
+
+        const clockInterval = setInterval(() => setCurrentTime(new Date()), 1000);
+
+        return () => {
+            supabase.removeChannel(channel);
+            clearInterval(clockInterval);
+        };
+    }, [isLoaded, user, supabase]);
+
+    // 2. Process Data for Charts
+    const processedData = useMemo(() => {
+        // Group by 10-minute intervals for the traffic chart
+        const groups = {};
+        analytics.forEach(row => {
+            const date = new Date(row.created_at);
+            const hour = date.getHours();
+            const minute = Math.floor(date.getMinutes() / 10) * 10;
+            const timeKey = `${hour}:${minute === 0 ? '00' : minute}`;
+            
+            if (!groups[timeKey]) {
+                groups[timeKey] = { time: timeKey, viewers: 0, interactions: 0, conversions: 0 };
+            }
+            groups[timeKey].viewers += 1;
+            if (row.interaction_type === 'click' || row.interaction_type === 'interaction') {
+                groups[timeKey].interactions += 1;
+            }
+        });
+        
+        const chartData = Object.values(groups).sort((a, b) => {
+            const [ha, ma] = a.time.split(':').map(Number);
+            const [hb, mb] = b.time.split(':').map(Number);
+            return ha !== hb ? ha - hb : ma - mb;
+        });
+
+        // Age data
+        const ageGroups = {};
+        analytics.forEach(row => {
+            const age = row.viewer_age || 'Unknown';
+            ageGroups[age] = (ageGroups[age] || 0) + 1;
+        });
+        const ageData = Object.entries(ageGroups).map(([name, value], i) => ({
+            name,
+            value: Math.round((value / analytics.length) * 100) || 0,
+            color: COLORS[i % COLORS.length]
+        }));
+
+        return { chartData, ageData };
+    }, [analytics]);
 
     const STATS = [
-        { label: 'Total Impressions', val: '14,205', icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', border: 'border-l-adorix-primary', sub: '+12% vs yesterday' },
-        { label: 'Live Visitors', val: liveViewers, icon: Activity, accent: 'bg-red-50 text-red-500', border: 'border-l-red-400', sub: 'Currently at kiosk', live: true },
-        { label: 'Avg. Dwell Time', val: '14.2s', icon: Clock, accent: 'bg-violet-50 text-violet-500', border: 'border-l-violet-400', sub: '+1.4s increase' },
-        { label: 'Engagement Rate', val: '28%', icon: Zap, accent: 'bg-amber-50 text-amber-500', border: 'border-l-amber-400', sub: 'High performance' },
+        { 
+            label: 'Total Impressions', 
+            val: analytics.length.toLocaleString(), 
+            icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', 
+            border: 'border-l-adorix-primary', 
+            sub: 'Lifetime views' 
+        },
+        { 
+            label: 'Live Visitors', 
+            val: analytics.filter(a => (new Date() - new Date(a.created_at)) < 300000).length, 
+            icon: Activity, accent: 'bg-red-50 text-red-500', 
+            border: 'border-l-red-400', 
+            sub: 'Active in last 5m', live: true 
+        },
+        { 
+            label: 'Engagement Rate', 
+            val: analytics.length > 0 ? `${Math.round((analytics.filter(a => a.interaction_type !== 'view').length / analytics.length) * 100)}%` : '0%', 
+            icon: Zap, accent: 'bg-amber-50 text-amber-500', 
+            border: 'border-l-amber-400', 
+            sub: 'Interaction vs View' 
+        },
+        { 
+            label: 'Avg. Duration', 
+            val: analytics.length > 0 ? `${Math.round(analytics.reduce((acc, curr) => acc + (curr.view_duration || 0), 0) / analytics.length)}s` : '0s', 
+            icon: Clock, accent: 'bg-violet-50 text-violet-500', 
+            border: 'border-l-violet-400', 
+            sub: 'Per session average' 
+        },
     ];
 
     const ranges = ['Today', '7 Days', '30 Days', 'All Time'];
 
-    if (!isLoaded) return null;
+    if (!isLoaded) return (
+        <div className="min-h-screen flex items-center justify-center">
+            <RefreshCw className="w-8 h-8 text-adorix-primary animate-spin" />
+        </div>
+    );
 
     return (
         <div className="min-h-screen bg-transparent pt-24 pb-16">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 mb-6 flex items-center justify-between gap-3">
                 <div>
-                    <h1 className="text-2xl font-bold text-adorix-dark">Campaign Monitor</h1>
+                    <h1 className="text-2xl font-bold text-adorix-dark">Real-time Campaign Monitor</h1>
                     <p className="text-sm text-gray-400 mt-0.5">
-                        {time.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                        {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                         {' · '}
-                        <span className="font-mono">{time.toLocaleTimeString()}</span>
+                        <span className="font-mono">{currentTime.toLocaleTimeString()}</span>
                     </p>
                 </div>
             </div>
@@ -107,7 +182,7 @@ const Dashboard = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                             <div>
                                 <h3 className="text-base font-bold text-adorix-dark">Audience Traffic</h3>
-                                <p className="text-xs text-gray-400 mt-0.5">Visitors · Interactions · Conversions</p>
+                                <p className="text-xs text-gray-400 mt-0.5">Live view frequency</p>
                             </div>
                             <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
                                 {ranges.map(r => (
@@ -119,51 +194,63 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="h-48 sm:h-64">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                                    <defs>
-                                        <linearGradient id="gViewer" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#12B2C1" stopOpacity={0.25} />
-                                            <stop offset="95%" stopColor="#12B2C1" stopOpacity={0} />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                                    <XAxis dataKey="time" stroke="#9CA3AF" fontSize={11} tickLine={false} axisLine={false} />
-                                    <YAxis stroke="#9CA3AF" fontSize={11} tickLine={false} axisLine={false} />
-                                    <Tooltip content={<CustomTooltip />} />
-                                    <Area type="monotone" dataKey="viewers" stroke="#12B2C1" strokeWidth={2} fill="url(#gViewer)" dot={false} />
-                                    <Area type="monotone" dataKey="interactions" stroke="#0D8A9E" strokeWidth={2} fill="transparent" dot={false} />
-                                    <Area type="monotone" dataKey="conversions" stroke="#8B5CF6" strokeWidth={2} fill="transparent" dot={false} />
-                                </AreaChart>
-                            </ResponsiveContainer>
+                            {processedData.chartData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={processedData.chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                                        <defs>
+                                            <linearGradient id="gViewer" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#12B2C1" stopOpacity={0.25} />
+                                                <stop offset="95%" stopColor="#12B2C1" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
+                                        <XAxis dataKey="time" stroke="#9CA3AF" fontSize={11} tickLine={false} axisLine={false} />
+                                        <YAxis stroke="#9CA3AF" fontSize={11} tickLine={false} axisLine={false} />
+                                        <Tooltip content={<CustomTooltip />} />
+                                        <Area type="monotone" dataKey="viewers" stroke="#12B2C1" strokeWidth={2} fill="url(#gViewer)" dot={false} />
+                                        <Area type="monotone" dataKey="interactions" stroke="#8B5CF6" strokeWidth={2} fill="transparent" dot={false} />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <div className="h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                                    <TrendingUp className="w-8 h-8 opacity-20" />
+                                    <p className="text-xs font-medium">Waiting for campaign data...</p>
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     <div className="space-y-4">
                         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                            <h3 className="text-sm font-bold text-adorix-dark mb-0.5">Interaction by Age</h3>
-                            <div className="flex items-center gap-4">
-                                <div className="relative w-24 h-24 flex-shrink-0">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie data={AGE_RANGE_DATA} cx="50%" cy="50%" innerRadius={28} outerRadius={46} dataKey="value" strokeWidth={0} paddingAngle={3}>
-                                                {AGE_RANGE_DATA.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                                            </Pie>
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="flex-1 space-y-2">
-                                    {AGE_RANGE_DATA.map(d => (
-                                        <div key={d.name} className="flex items-center justify-between gap-2">
-                                            <div className="flex items-center gap-1.5 font-bold">
-                                                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                                                <span className="text-[11px] text-gray-500">{d.name}</span>
+                            <h3 className="text-sm font-bold text-adorix-dark mb-4">Audience Demographics</h3>
+                            {processedData.ageData.length > 0 ? (
+                                <div className="flex items-center gap-4">
+                                    <div className="relative w-24 h-24 flex-shrink-0">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie data={processedData.ageData} cx="50%" cy="50%" innerRadius={28} outerRadius={46} dataKey="value" strokeWidth={0} paddingAngle={3}>
+                                                    {processedData.ageData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                                                </Pie>
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="flex-1 space-y-2">
+                                        {processedData.ageData.map(d => (
+                                            <div key={d.name} className="flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-1.5 font-bold">
+                                                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                                                    <span className="text-[11px] text-gray-500">{d.name}</span>
+                                                </div>
+                                                <span className="text-[11px] font-semibold text-adorix-dark">{d.value}%</span>
                                             </div>
-                                            <span className="text-[11px] font-semibold text-adorix-dark">{d.value}%</span>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="py-10 text-center text-gray-400 text-xs italic">
+                                    No demographic data yet
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -182,7 +269,9 @@ const Dashboard = () => {
                                 )}
                             </div>
                             <p className="text-xs text-gray-500 font-medium">{s.label}</p>
-                            <p className="text-2xl font-bold text-adorix-dark mt-1">{s.val}</p>
+                            <p className="text-2xl font-bold text-adorix-dark mt-1">
+                                {s.val}
+                            </p>
                             <p className="text-xs text-gray-400 mt-1">{s.sub}</p>
                         </div>
                     ))}
@@ -193,3 +282,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
