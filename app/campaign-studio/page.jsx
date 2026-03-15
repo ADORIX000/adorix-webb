@@ -80,7 +80,10 @@ const CampaignStudio = () => {
                 .from('adorix-ads-media')
                 .upload(filePath, rawFile);
 
-            if (uploadError) throw uploadError;
+            if (uploadError) {
+                console.error("Storage Error:", JSON.stringify(uploadError));
+                throw new Error(`Storage: ${uploadError.message || uploadError.error || JSON.stringify(uploadError)}`);
+            }
 
             // 2. Get Public URL
             const { data: { publicUrl } } = supabase.storage
@@ -102,16 +105,19 @@ const CampaignStudio = () => {
                     }
                 ]);
 
-            if (dbError) throw dbError;
+            if (dbError) {
+                console.error("Database Error:", JSON.stringify(dbError));
+                throw new Error(`Database: ${dbError.message || dbError.error || JSON.stringify(dbError)}`);
+            }
 
             setUploadStatus('success');
             // Reset form or redirect
             setTimeout(() => {
-                router.push('/dashboard'); // Or wherever appropriate
+                router.push('/dashboard');
             }, 2000);
 
         } catch (error) {
-            console.error("Upload failed:", error);
+            console.error("Upload failed:", error.message);
             setUploadStatus('error');
             alert(`Upload failed: ${error.message}`);
         } finally {
