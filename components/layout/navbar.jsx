@@ -28,8 +28,11 @@ const Navbar = () => {
   }, [pathname]);
 
   const navLinks = [
+    { name: 'Home', path: '/home', protected: true },
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
+    { name: 'Pricing', path: '/pricing', protected: false },
+    { name: 'Contact', path: '/contact', protected: false },
   ];
 
   const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
@@ -91,13 +94,13 @@ const Navbar = () => {
                   <UserIcon size={18} />
                   <span>Profile</span>
                 </Link>
-                <Link
-                  href="/profile#settings"
-                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary ${pathname === '/settings' ? 'text-adorix-primary font-bold' : 'text-gray-500'}`}
+                <button
+                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
+                  className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
                 >
-                  <Settings size={18} />
-                  <span>Settings</span>
-                </Link>
+                  <LogOut size={18} />
+                  Logout
+                </button>
               </div>
             )}
           </div>
@@ -149,13 +152,13 @@ const Navbar = () => {
                   <UserIcon size={24} />
                   Profile
                 </Link>
-                <Link
-                  href="/profile#settings"
-                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors flex items-center gap-3"
+                <button
+                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
+                  className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
                 >
-                  <Settings size={24} />
-                  Settings
-                </Link>
+                  <LogOut size={24} />
+                  Logout
+                </button>
               </>
             )}
           </div>
