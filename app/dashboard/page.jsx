@@ -19,15 +19,6 @@ const generateInitialData = () =>
         conversions: Math.floor(Math.random() * 15) + 2,
     }));
 
-const AGE_RANGE_DATA = [
-    { name: '10–15', value: 12, color: '#F59E0B' },
-    { name: '16–29', value: 34, color: '#12B2C1' },
-    { name: '30–39', value: 24, color: '#8B5CF6' },
-    { name: '40–49', value: 16, color: '#0D8A9E' },
-    { name: '50–59', value: 9, color: '#23717B' },
-    { name: '60+', value: 5, color: '#1F2B2D' },
-];
-
 const PERF_METRICS = [
     { label: 'Audience Reach', val: 91, color: '#12B2C1' },
     { label: 'Dwell Engagement', val: 78, color: '#0D8A9E' },
@@ -103,7 +94,7 @@ const Dashboard = () => {
 
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 space-y-5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
+                    <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-gray-100 p-5 sm:p-6">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                             <div>
                                 <h3 className="text-base font-bold text-adorix-dark">Audience Traffic</h3>
@@ -139,33 +130,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                            <h3 className="text-sm font-bold text-adorix-dark mb-0.5">Interaction by Age</h3>
-                            <div className="flex items-center gap-4">
-                                <div className="relative w-24 h-24 flex-shrink-0">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie data={AGE_RANGE_DATA} cx="50%" cy="50%" innerRadius={28} outerRadius={46} dataKey="value" strokeWidth={0} paddingAngle={3}>
-                                                {AGE_RANGE_DATA.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                                            </Pie>
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div className="flex-1 space-y-2">
-                                    {AGE_RANGE_DATA.map(d => (
-                                        <div key={d.name} className="flex items-center justify-between gap-2">
-                                            <div className="flex items-center gap-1.5 font-bold">
-                                                <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                                                <span className="text-[11px] text-gray-500">{d.name}</span>
-                                            </div>
-                                            <span className="text-[11px] font-semibold text-adorix-dark">{d.value}%</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
