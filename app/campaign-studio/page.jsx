@@ -111,9 +111,16 @@ const CampaignStudio = () => {
             }, 2000);
 
         } catch (error) {
-            console.error("Upload failed:", error);
+            console.error("Full Error Object:", error);
             setUploadStatus('error');
-            alert(`Upload failed: ${error.message}`);
+            
+            // Extract the most useful message
+            const errorMsg = error.message || error.error_description || JSON.stringify(error);
+            alert(`Upload failed: ${errorMsg}`);
+            
+            if (error.code) console.error("Error Code:", error.code);
+            if (error.details) console.error("Error Details:", error.details);
+            if (error.hint) console.error("Error Hint:", error.hint);
         } finally {
             setIsUploading(false);
         }
