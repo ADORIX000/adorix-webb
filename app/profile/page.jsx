@@ -770,49 +770,100 @@ const ProfilePage = () => {
                                     </div>
                                 </div>
 
-                                <div className="border border-gray-200 rounded-2xl p-8 relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -mr-32 -mt-32 blur-3xl transition-all group-hover:bg-blue-500/10"></div>
-                                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/5 rounded-full -ml-32 -mb-32 blur-3xl transition-all group-hover:bg-emerald-500/10"></div>
-                                    
-                                    <div className="flex flex-col md:flex-row gap-12 relative z-10">
-                                        {/* Left Side: Current Plan */}
-                                        <div className="flex-1 space-y-4">
-                                            <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest">Current Plan</h3>
-                                            <div className="flex items-baseline gap-2">
-                                                <span className="text-3xl font-black text-adorix-dark tracking-tight">Pro Plan</span>
-                                                <span className="text-gray-500 font-medium">- $49/mo</span>
+                                <div className="space-y-6">
+                                    {/* Upgrade Banner */}
+                                    <div className="bg-gradient-to-r from-adorix-dark to-gray-900 rounded-2xl p-6 sm:p-8 relative overflow-hidden text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl shadow-adorix-dark/10">
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+                                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full -ml-20 -mb-20 blur-3xl"></div>
+                                        
+                                        <div className="relative z-10 w-full sm:w-auto">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                                                <h3 className="text-xl font-black tracking-tight">Level up your campaigns</h3>
                                             </div>
-                                            <p className="text-gray-600 text-sm font-medium">
-                                                Includes up to 5 team members, 100GB storage, and priority support.
-                                            </p>
+                                            <p className="text-gray-300 font-medium max-w-md">Upgrade to Adorix Elite for unlimited device connections, premium support, and advanced analytics.</p>
                                         </div>
-
-                                        {/* Right Side: Payment Method */}
-                                        <div className="flex-1 space-y-4 md:border-l md:border-gray-100 md:pl-12">
-                                            <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest">Payment Method</h3>
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-16 h-11 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
-                                                    <span className="font-black text-blue-900 italic tracking-tighter text-lg">VISA</span>
-                                                </div>
-                                                <div>
-                                                    <p className="font-bold text-gray-800 tracking-wide">Visa ending in <span className="font-black">1234</span></p>
-                                                    <p className="text-sm text-gray-500 font-medium mt-0.5">Expires 12/28</p>
-                                                </div>
-                                            </div>
-                                            <div className="pt-2">
-                                                <p className="text-sm text-gray-500 font-medium">Next bill: <span className="font-bold text-gray-800">April 15, 2026</span></p>
-                                            </div>
-                                        </div>
+                                        <button className="relative z-10 w-full sm:w-auto px-8 py-3.5 bg-white text-gray-900 hover:bg-gray-50 rounded-xl font-black transition-all shadow-lg hover:scale-105 whitespace-nowrap">
+                                            Upgrade Now
+                                        </button>
                                     </div>
 
-                                    {/* Action Footer */}
-                                    <div className="mt-10 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-                                        <button className="px-6 py-2.5 bg-gray-50 text-gray-700 border border-gray-200 hover:bg-white hover:border-gray-300 rounded-xl font-bold transition-all text-sm w-full md:w-auto shadow-sm hover:shadow-md">
-                                            Change Plan
-                                        </button>
-                                        <button className="text-adorix-dark hover:text-black hover:bg-gray-50 px-6 py-2.5 rounded-xl font-bold text-sm transition-all border border-gray-200 hover:border-gray-300 w-full sm:w-auto shadow-sm">
-                                            Update Card
-                                        </button>
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        {/* Current Plan Card */}
+                                        <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div>
+                                                    <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-1 shadow-sm">Your Plan</h3>
+                                                    <div className="flex items-baseline gap-2">
+                                                        <span className="text-2xl font-black text-adorix-dark tracking-tight">Pro Plan</span>
+                                                    </div>
+                                                </div>
+                                                <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-black tracking-wide border border-blue-100">
+                                                    Active
+                                                </span>
+                                            </div>
+                                            
+                                            <div className="space-y-4 mb-8">
+                                                <div className="flex items-start gap-3">
+                                                    <div className="mt-0.5 bg-emerald-100 text-emerald-600 p-1 rounded-full"><Check className="w-3 h-3 stroke-[3]" /></div>
+                                                    <p className="text-sm font-medium text-gray-600">Up to <strong className="text-gray-900">5 team members</strong></p>
+                                                </div>
+                                                <div className="flex items-start gap-3">
+                                                    <div className="mt-0.5 bg-emerald-100 text-emerald-600 p-1 rounded-full"><Check className="w-3 h-3 stroke-[3]" /></div>
+                                                    <p className="text-sm font-medium text-gray-600"><strong className="text-gray-900">100GB</strong> storage included</p>
+                                                </div>
+                                                <div className="flex items-start gap-3">
+                                                    <div className="mt-0.5 bg-emerald-100 text-emerald-600 p-1 rounded-full"><Check className="w-3 h-3 stroke-[3]" /></div>
+                                                    <p className="text-sm font-medium text-gray-600">Priority 24/7 support</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+                                                <div>
+                                                    <p className="text-3xl font-black text-gray-900 tracking-tighter">$49<span className="text-base text-gray-400 font-bold">/mo</span></p>
+                                                </div>
+                                                <button className="text-sm font-bold text-gray-500 hover:text-gray-900 underline underline-offset-4 decoration-2 decoration-gray-200 hover:decoration-gray-400 transition-colors">
+                                                    View all features
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Payment Info Card */}
+                                        <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow flex flex-col">
+                                            <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Payment Method</h3>
+                                            
+                                            <div className="flex items-center gap-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl mb-6 group cursor-pointer hover:border-gray-300 hover:bg-white transition-all">
+                                                <div className="w-14 h-10 bg-white border border-gray-200 rounded text-center flex items-center justify-center shadow-sm">
+                                                    <span className="font-black text-blue-900 italic tracking-tighter text-sm">VISA</span>
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="font-bold text-gray-800">Visa ending in <span className="font-black">1234</span></p>
+                                                    <p className="text-sm font-medium text-gray-500 mt-0.5">Expires 12/28</p>
+                                                </div>
+                                                <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-adorix-dark p-2 transition-all">
+                                                    <Settings className="w-4 h-4" />
+                                                </button>
+                                            </div>
+
+                                            <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 mb-6">
+                                                <div className="flex items-start gap-3">
+                                                    <Calendar className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+                                                    <div>
+                                                        <p className="text-sm font-bold text-gray-900">Next billing date</p>
+                                                        <p className="text-sm font-medium text-gray-600 mt-0.5">Your next charge of $49.00 will be applied on <strong className="text-gray-900">April 15, 2026</strong>.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-auto flex flex-col gap-3">
+                                                <button className="w-full py-2.5 bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-xl font-bold transition-all text-sm border border-gray-200">
+                                                    Update Payment Method
+                                                </button>
+                                                <button className="w-full py-2.5 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-bold transition-all text-sm">
+                                                    View Billing History
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
