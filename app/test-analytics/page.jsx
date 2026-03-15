@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { useSupabase } from '@/hooks/useSupabase';
-import { Play, MousePointer2, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Play, MousePointer2, AlertCircle, CheckCircle2, Loader2, Trash2 } from 'lucide-react';
 
 export default function TestAnalytics() {
     const { user, isLoaded } = useUser();
@@ -32,6 +32,28 @@ export default function TestAnalytics() {
 
         fetchAds();
     }, [isLoaded, user, supabase]);
+
+    const resetData = async () => {
+        if (!user || !supabase) return;
+        if (!confirm("Are you sure you want to delete ALL analytics data? This cannot be undone.")) return;
+
+        setStatus('loading');
+        setErrorMsg('');
+
+        const { error } = await supabase
+            .from('analytics')
+            .delete()
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error("Reset failed:", error);
+            setErrorMsg(error.message);
+            setStatus('error');
+        } else {
+            setStatus('success');
+            setTimeout(() => setStatus('idle'), 2000);
+        }
+    };
 
     const simulateEvent = async (type) => {
         if (!user || !supabase) return;
@@ -108,6 +130,17 @@ export default function TestAnalytics() {
                                 <MousePointer2 className="w-8 h-8 text-violet-500 mb-3 group-hover:scale-110 transition" />
                                 <span className="font-bold text-adorix-dark">Simulate Click</span>
                                 <span className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">Adds +1 Interaction</span>
+                            </button>
+                        </div>
+
+                        <div className="flex justify-center">
+                            <button
+                                onClick={resetData}
+                                disabled={status === 'loading'}
+                                className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-red-500 hover:bg-red-50 rounded-lg transition"
+                            >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Clear All Analytics Data
                             </button>
                         </div>
 
