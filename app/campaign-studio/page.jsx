@@ -71,14 +71,18 @@ const CampaignStudio = () => {
         setUploadStatus(null);
 
         try {
-            // 1. Upload file to Supabase Storage
-            const fileExt = rawFile.name.split('.').pop();
-            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-            const filePath = `ads/${fileName}`;
+            // 1. Format filename according to requirements: {age}_{gender}.mp4
+            let normalizedAge = ageRange.toLowerCase();
+            if (normalizedAge === '60-above') normalizedAge = 'above-60';
+            
+            const fileName = `${normalizedAge}_${gender.toLowerCase()}.mp4`;
+            const filePath = fileName; // Uploading to root as per screenshot
 
             const { data: uploadData, error: uploadError } = await supabase.storage
                 .from('adorix-ads-media')
-                .upload(filePath, rawFile);
+                .upload(filePath, rawFile, {
+                    upsert: true // Allow overwriting the ad for that category
+                });
 
             if (uploadError) {
                 console.error("Storage Error:", JSON.stringify(uploadError));
