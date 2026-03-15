@@ -6,8 +6,7 @@ import { useUser, useClerk } from '@clerk/nextjs';
 import {
     User, Settings, CreditCard, Shield, Bell, Activity, Camera, Mail, Phone,
     MapPin, Briefcase, Calendar, TrendingUp, Zap, Download,
-    Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-    FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, Eye, EyeOff, ChevronRight, BadgeCheck, LogOut as LogOutIcon,
+    FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, Eye, EyeOff, ChevronRight, BadgeCheck, LogOut as LogOutIcon, Key,
     Link as LinkIcon, Linkedin, Twitter, MessageSquare, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,10 +18,16 @@ const ProfilePage = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
     const [isUploadingCover, setIsUploadingCover] = useState(false);
     const [coverImage, setCoverImage] = useState(null);
+    
+    // Password state
+    const [passwords, setPasswords] = useState({ current: '', new: '', confirm: '' });
+    const [passwordError, setPasswordError] = useState('');
+    const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const fileInputRef = useRef(null);
     const coverInputRef = useRef(null);
 
@@ -98,6 +103,37 @@ const ProfilePage = () => {
             console.error('Error removing profile image:', error);
         } finally {
             setIsUploadingImage(false);
+        }
+    };
+
+    const handlePasswordChange = async (e) => {
+        e.preventDefault();
+        setPasswordError('');
+        
+        if (passwords.new !== passwords.confirm) {
+            setPasswordError("New passwords don't match");
+            return;
+        }
+
+        if (passwords.new.length < 8) {
+            setPasswordError("Password must be at least 8 characters");
+            return;
+        }
+
+        try {
+            setIsChangingPassword(true);
+            await user.updatePassword({
+                currentPassword: passwords.current,
+                newPassword: passwords.new
+            });
+            setShowToast(true);
+            setPasswords({ current: '', new: '', confirm: '' });
+            setTimeout(() => setShowToast(false), 3000);
+        } catch (error) {
+            console.error('Error changing password:', error);
+            setPasswordError(error.errors?.[0]?.longMessage || "Failed to update password");
+        } finally {
+            setIsChangingPassword(false);
         }
     };
 
@@ -521,6 +557,106 @@ const ProfilePage = () => {
                             </div>
                         </motion.div>
                     )}
+
+                    {activeTab === 'password' && (
+                        <motion.div
+                            key="password"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto"
+                        >
+                            <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                                <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center">
+                                    <Lock className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Security Settings</h2>
+                                    <p className="text-gray-500 font-medium mt-1">Ensure your account is using a long, random password to stay secure.</p>
+                                </div>
+                            </div>
+
+                            <form onSubmit={handlePasswordChange} className="space-y-6">
+                                {passwordError && (
+                                    <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-bold flex items-center gap-2">
+                                        <AlertTriangle className="w-4 h-4" /> {passwordError}
+                                    </div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Current Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Lock className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.current}
+                                            onChange={(e) => setPasswords({...passwords, current: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                        <button 
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                                        >
+                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">New Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Key className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.new}
+                                            onChange={(e) => setPasswords({...passwords, new: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Confirm New Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Check className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.confirm}
+                                            onChange={(e) => setPasswords({...passwords, confirm: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 font-medium mt-2 flex items-center gap-1">
+                                        <Shield className="w-3 h-3 text-emerald-500" /> Password must be at least 8 characters long.
+                                    </p>
+                                </div>
+
+                                <div className="pt-6 mt-6 border-t border-gray-100 flex justify-end">
+                                    <button
+                                        type="submit"
+                                        disabled={isChangingPassword || !passwords.current || !passwords.new || !passwords.confirm}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                    >
+                                        {isChangingPassword ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />}
+                                        {isChangingPassword ? 'Updating...' : 'Update Password'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
 
                 {/* Success Toast */}
@@ -536,6 +672,106 @@ const ProfilePage = () => {
                                 <Check className="w-5 h-5" />
                             </div>
                             Account settings updated successfully!
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'password' && (
+                        <motion.div
+                            key="password"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto"
+                        >
+                            <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                                <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center">
+                                    <Lock className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Security Settings</h2>
+                                    <p className="text-gray-500 font-medium mt-1">Ensure your account is using a long, random password to stay secure.</p>
+                                </div>
+                            </div>
+
+                            <form onSubmit={handlePasswordChange} className="space-y-6">
+                                {passwordError && (
+                                    <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-bold flex items-center gap-2">
+                                        <AlertTriangle className="w-4 h-4" /> {passwordError}
+                                    </div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Current Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Lock className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.current}
+                                            onChange={(e) => setPasswords({...passwords, current: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                        <button 
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                                        >
+                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">New Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Key className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.new}
+                                            onChange={(e) => setPasswords({...passwords, new: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Confirm New Password</label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Check className="h-5 w-5 text-gray-400" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? "text" : "password"}
+                                            value={passwords.confirm}
+                                            onChange={(e) => setPasswords({...passwords, confirm: e.target.value})}
+                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                            placeholder="••••••••"
+                                            required
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-500 font-medium mt-2 flex items-center gap-1">
+                                        <Shield className="w-3 h-3 text-emerald-500" /> Password must be at least 8 characters long.
+                                    </p>
+                                </div>
+
+                                <div className="pt-6 mt-6 border-t border-gray-100 flex justify-end">
+                                    <button
+                                        type="submit"
+                                        disabled={isChangingPassword || !passwords.current || !passwords.new || !passwords.confirm}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                                    >
+                                        {isChangingPassword ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />}
+                                        {isChangingPassword ? 'Updating...' : 'Update Password'}
+                                    </button>
+                                </div>
+                            </form>
                         </motion.div>
                     )}
                 </AnimatePresence>
