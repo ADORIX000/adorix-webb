@@ -590,14 +590,14 @@ const ProfilePage = () => {
                                     </div>
                                 )}
 
-                                {!user?.passwordEnabled && (
+                                {user?.passwordEnabled !== true && (
                                     <div className="p-4 bg-blue-50/50 border border-blue-100 text-blue-700 rounded-xl text-sm font-medium flex gap-3">
                                         <Shield className="w-5 h-5 text-blue-500 shrink-0" />
                                         You currently sign in using a social account or email link. Set a password below to also be able to sign in with your email and a password.
                                     </div>
                                 )}
 
-                                {user?.passwordEnabled && (
+                                {user?.passwordEnabled === true && (
                                     <div className="space-y-2">
                                         <label className="text-sm font-bold text-gray-700 tracking-wide">Current Password</label>
                                         <div className="relative">
@@ -663,7 +663,7 @@ const ProfilePage = () => {
                                 <div className="pt-6 mt-6 border-t border-gray-100 flex justify-end">
                                     <button
                                         type="submit"
-                                        disabled={isChangingPassword || (user?.passwordEnabled && !passwords.current) || !passwords.new || !passwords.confirm}
+                                        disabled={Boolean(isChangingPassword || (user?.passwordEnabled === true && !passwords.current) || !passwords.new || !passwords.confirm)}
                                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                                     >
                                         {isChangingPassword ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />}
