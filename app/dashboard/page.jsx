@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { useSupabase } from '@/hooks/useSupabase';
