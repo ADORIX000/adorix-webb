@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignOutUrl={process.env.NEXT_PUBLIC_LANDING_PAGE_URL || "https://adorix-landingpage.vercel.app/"}>
       <html lang="en" suppressHydrationWarning>
                 <body className={inter.className} suppressHydrationWarning>
                     {children}
