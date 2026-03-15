@@ -120,18 +120,25 @@ const ProfilePage = () => {
             return;
         }
 
+        if (user?.passwordEnabled && !passwords.current) {
+            setPasswordError("Current password is required");
+            return;
+        }
+
         try {
             setIsChangingPassword(true);
-            await user.updatePassword({
-                currentPassword: passwords.current,
-                newPassword: passwords.new
-            });
+            const payload = { newPassword: passwords.new };
+            if (user?.passwordEnabled && passwords.current) {
+                payload.currentPassword = passwords.current;
+            }
+            
+            await user.updatePassword(payload);
             setShowToast(true);
             setPasswords({ current: '', new: '', confirm: '' });
             setTimeout(() => setShowToast(false), 3000);
         } catch (error) {
             console.error('Error changing password:', error);
-            setPasswordError(error.errors?.[0]?.longMessage || "Failed to update password");
+            setPasswordError(error.errors?.[0]?.longMessage || error.message || "Failed to update password. Please check your current password.");
         } finally {
             setIsChangingPassword(false);
         }
@@ -583,29 +590,38 @@ const ProfilePage = () => {
                                     </div>
                                 )}
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Current Password</label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Lock className="h-5 w-5 text-gray-400" />
-                                        </div>
-                                        <input
-                                            type={showPassword ? "text" : "password"}
-                                            value={passwords.current}
-                                            onChange={(e) => setPasswords({...passwords, current: e.target.value})}
-                                            className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
-                                            placeholder="••••••••"
-                                            required
-                                        />
-                                        <button 
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
-                                        >
-                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                                        </button>
+                                {!user?.passwordEnabled && (
+                                    <div className="p-4 bg-blue-50/50 border border-blue-100 text-blue-700 rounded-xl text-sm font-medium flex gap-3">
+                                        <Shield className="w-5 h-5 text-blue-500 shrink-0" />
+                                        You currently sign in using a social account or email link. Set a password below to also be able to sign in with your email and a password.
                                     </div>
-                                </div>
+                                )}
+
+                                {user?.passwordEnabled && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide">Current Password</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Lock className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                value={passwords.current}
+                                                onChange={(e) => setPasswords({...passwords, current: e.target.value})}
+                                                className="w-full pl-11 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                placeholder="••••••••"
+                                                required={!!user?.passwordEnabled}
+                                            />
+                                            <button 
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                                            >
+                                                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="space-y-2">
                                     <label className="text-sm font-bold text-gray-700 tracking-wide">New Password</label>
@@ -647,7 +663,7 @@ const ProfilePage = () => {
                                 <div className="pt-6 mt-6 border-t border-gray-100 flex justify-end">
                                     <button
                                         type="submit"
-                                        disabled={isChangingPassword || !passwords.current || !passwords.new || !passwords.confirm}
+                                        disabled={isChangingPassword || (user?.passwordEnabled && !passwords.current) || !passwords.new || !passwords.confirm}
                                         className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                                     >
                                         {isChangingPassword ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />}
