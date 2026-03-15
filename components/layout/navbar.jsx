@@ -28,8 +28,11 @@ const Navbar = () => {
   }, [pathname]);
 
   const navLinks = [
+    { name: 'Home', path: '/home', protected: true },
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
+    { name: 'Pricing', path: '/pricing', protected: false },
+    { name: 'Contact', path: '/contact', protected: false },
   ];
 
   const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
@@ -92,7 +95,7 @@ const Navbar = () => {
                   <span>{user?.fullName || user?.firstName || 'Account'}</span>
                 </Link>
                 <button
-                  onClick={() => signOut()}
+                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
                   className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
                 >
                   <LogOut size={18} />
@@ -150,7 +153,7 @@ const Navbar = () => {
                   Profile
                 </Link>
                 <button
-                  onClick={() => signOut()}
+                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
                   className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
                 >
                   <LogOut size={24} />
