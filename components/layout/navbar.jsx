@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, LogOut, User as UserIcon } from 'lucide-react';
+import { Menu, X, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { useUser, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
@@ -89,10 +89,10 @@ const Navbar = () => {
               <div className="flex items-center gap-6">
                 <Link
                   href="/profile"
-                  className="flex items-center gap-2 text-adorix-dark hover:text-adorix-primary transition-colors"
+                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary ${pathname === '/profile' ? 'text-adorix-primary font-bold' : 'text-adorix-dark'}`}
                 >
                   <UserIcon size={18} />
-                  <span>{user?.fullName || user?.firstName || 'Account'}</span>
+                  <span>Profile</span>
                 </Link>
                 <button
                   onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}

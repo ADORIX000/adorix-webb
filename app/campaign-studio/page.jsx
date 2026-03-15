@@ -3,17 +3,31 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X } from 'lucide-react';
-// No TypingText import
+import { Upload, Monitor, Smartphone, CheckCircle, Play, FileText, X, Loader2 } from 'lucide-react';
+import { useSupabase } from '@/hooks/useSupabase';
+import { useUser } from '@clerk/nextjs';
 
 const CampaignStudio = () => {
     const router = useRouter();
+    const supabase = useSupabase();
+    const { user } = useUser();
+    
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+    const [rawFile, setRawFile] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Form State
+    const [campaignName, setCampaignName] = useState('');
+    const [gender, setGender] = useState('');
+    const [ageRange, setAgeRange] = useState('');
+    const [description, setDescription] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState(null); // 'success', 'error'
 
     const handleFileSelect = (selectedFile) => {
         if (selectedFile) {
+            setRawFile(selectedFile);
             setFile({
                 name: selectedFile.name,
                 size: (selectedFile.size / (1024 * 1024)).toFixed(1) + " MB",
@@ -42,8 +56,67 @@ const CampaignStudio = () => {
     const clearSelection = (e) => {
         e.stopPropagation();
         setFile(null);
+        setRawFile(null);
         if (previewUrl) URL.revokeObjectURL(previewUrl);
         setPreviewUrl(null);
+    };
+
+    const handleUpload = async () => {
+        if (!rawFile || !campaignName || !gender || !ageRange) {
+            alert("Please fill in all required fields and select a file.");
+            return;
+        }
+
+        setIsUploading(true);
+        setUploadStatus(null);
+
+        try {
+            // 1. Upload file to Supabase Storage
+            const fileExt = rawFile.name.split('.').pop();
+            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const filePath = `ads/${fileName}`;
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('adorix-ads-media')
+                .upload(filePath, rawFile);
+
+            if (uploadError) throw uploadError;
+
+            // 2. Get Public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('adorix-ads-media')
+                .getPublicUrl(filePath);
+
+            // 3. Insert metadata into 'ads' table
+            const { error: dbError } = await supabase
+                .from('ads')
+                .insert([
+                    {
+                        name: campaignName,
+                        gender: gender,
+                        age: ageRange,
+                        description: description,
+                        media_url: publicUrl,
+                        status: 'pending',
+                        user_id: user?.id
+                    }
+                ]);
+
+            if (dbError) throw dbError;
+
+            setUploadStatus('success');
+            // Reset form or redirect
+            setTimeout(() => {
+                router.push('/dashboard'); // Or wherever appropriate
+            }, 2000);
+
+        } catch (error) {
+            console.error("Upload failed:", error);
+            setUploadStatus('error');
+            alert(`Upload failed: ${error.message}`);
+        } finally {
+            setIsUploading(false);
+        }
     };
 
     return (
@@ -70,7 +143,7 @@ const CampaignStudio = () => {
                             ref={fileInputRef}
                             onChange={onFileChange}
                             className="hidden"
-                            accept="video/*,image/*"
+                            accept="video/mp4"
                         />
                         <div
                             className={`bg-white border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group ${file ? 'border-emerald-200 bg-emerald-50/20' : 'border-adorix-primary/30 hover:bg-adorix-primary/5'
@@ -98,6 +171,7 @@ const CampaignStudio = () => {
                                     <button
                                         onClick={clearSelection}
                                         className="text-xs font-semibold text-red-500 hover:text-red-700 flex items-center gap-1 mx-auto mt-2"
+                                        disabled={isUploading}
                                     >
                                         <X className="w-3 h-3" /> Remove File
                                     </button>
@@ -105,7 +179,7 @@ const CampaignStudio = () => {
                             ) : (
                                 <>
                                     <h3 className="text-lg font-bold text-adorix-dark">Upload Advertisement</h3>
-                                    <p className="text-adorix-secondary mb-6">Drag & drop MP4, JPG, or PNG</p>
+                                    <p className="text-adorix-secondary mb-6">Drag & drop MP4</p>
                                     <button className="bg-adorix-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-adorix-secondary transition shadow-lg shadow-adorix-primary/20">
                                         Browse Files
                                     </button>
@@ -116,25 +190,43 @@ const CampaignStudio = () => {
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-adorix-primary/10">
                             <h3 className="font-bold text-adorix-dark mb-4 border-b border-gray-100 pb-2">Campaign Settings</h3>
                             <div className="space-y-4">
-                                <input type="text" placeholder="Campaign Name" className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary" />
+                                <input 
+                                    type="text" 
+                                    placeholder="Campaign Name" 
+                                    value={campaignName}
+                                    onChange={(e) => setCampaignName(e.target.value)}
+                                    className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary" 
+                                />
                                 <div className="grid grid-cols-2 gap-4">
-                                    <select className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none">
+                                    <select 
+                                        value={gender}
+                                        onChange={(e) => setGender(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none"
+                                    >
                                         <option value="">Select Gender</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="All">All</option>
                                     </select>
-                                    <select className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none">
+                                    <select 
+                                        value={ageRange}
+                                        onChange={(e) => setAgeRange(e.target.value)}
+                                        className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none"
+                                    >
                                         <option value="">Select Age Range</option>
-                                        <option>10-15</option>
-                                        <option>16-29</option>
-                                        <option>30-39</option>
-                                        <option>40-49</option>
-                                        <option>50-59</option>
-                                        <option>60-above</option>
+                                        <option value="10-15">10-15</option>
+                                        <option value="16-29">16-29</option>
+                                        <option value="30-39">30-39</option>
+                                        <option value="40-49">40-49</option>
+                                        <option value="50-59">50-59</option>
+                                        <option value="60-above">60-above</option>
+                                        <option value="All">All Ages</option>
                                     </select>
                                 </div>
                                 <textarea
                                     placeholder="Description about the ad / product"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
                                     className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none"
                                 ></textarea>
                             </div>
@@ -144,14 +236,26 @@ const CampaignStudio = () => {
                             <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
                                 <CheckCircle className="w-5 h-5 text-emerald-600" />
                                 <div className="flex-1">
-                                    <p className="font-bold text-emerald-800 tracking-tight">Ready to Publish</p>
+                                    <p className="font-bold text-emerald-800 tracking-tight">
+                                        {uploadStatus === 'success' ? 'Campaign Launched!' : 'Ready to Publish'}
+                                    </p>
                                     <p className="text-xs text-emerald-600/80 font-medium">{file.name} • {file.size}</p>
                                 </div>
                                 <button
-                                    onClick={() => router.push('/upgrade/pro')}
-                                    className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-200"
+                                    onClick={handleUpload}
+                                    disabled={isUploading}
+                                    className="bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-200 flex items-center gap-2 disabled:opacity-70"
                                 >
-                                    Launch Now
+                                    {isUploading ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Launching...
+                                        </>
+                                    ) : uploadStatus === 'success' ? (
+                                        'Launched'
+                                    ) : (
+                                        'Launch Now'
+                                    )}
                                 </button>
                             </div>
                         )}
@@ -199,3 +303,4 @@ const CampaignStudio = () => {
 };
 
 export default CampaignStudio;
+
