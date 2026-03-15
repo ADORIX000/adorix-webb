@@ -7,7 +7,8 @@ import {
     User, Settings, CreditCard, Shield, Bell, Activity, Camera, Mail, Phone,
     MapPin, Briefcase, Calendar, TrendingUp, Zap, Download,
     Copy, Check, Edit2, Save, X, Loader2, Sparkles, Globe, Terminal,
-    FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, Eye, EyeOff, ChevronRight, BadgeCheck, LogOut as LogOutIcon
+    FileKey, Trash2, RefreshCcw, Upload, Plus, Lock, Eye, EyeOff, ChevronRight, BadgeCheck, LogOut as LogOutIcon,
+    Link as LinkIcon, Linkedin, Twitter, MessageSquare, AlertTriangle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -281,134 +282,242 @@ const ProfilePage = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm"
+                            className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm space-y-10"
                         >
-                            <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
-                                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
-                                    <User className="w-6 h-6" />
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Personal Information</h2>
-                                    <p className="text-gray-500 font-medium mt-1">Manage your basic profile details and preferences.</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {/* Profile Fields */}
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Full Name</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <User className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                defaultValue={user?.fullName || ''}
-                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                                placeholder="John Doe"
-                                            />
-                                        </div>
+                            <div className="flex items-center justify-between pb-6 border-b border-gray-100">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-inner">
+                                        <User className="w-6 h-6" />
                                     </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Email Address</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Mail className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="email"
-                                                defaultValue={user?.primaryEmailAddress?.emailAddress || ''}
-                                                disabled
-                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-100/50 border border-gray-200 rounded-2xl text-gray-500 font-medium cursor-not-allowed outline-none"
-                                            />
-                                            <span className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-bold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">
-                                                <Check className="w-3 h-3" /> Verified
-                                            </span>
-                                        </div>
-                                        <p className="text-xs text-gray-500 font-medium">Email cannot be changed directly. Contact support for assistance.</p>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Phone Number</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Phone className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="tel"
-                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                                placeholder="+1 (555) 000-0000"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Organization Details */}
-                                <div className="space-y-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Organization / Company</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Briefcase className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                                placeholder="Company Name"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Role / Title</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <BadgeCheck className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
-                                                placeholder="e.g. Marketing Manager"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Timezone</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <Globe className="h-5 w-5 text-gray-400" />
-                                            </div>
-                                            <select className="w-full pl-11 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
-                                                <option>Pacific Time (PT)</option>
-                                                <option>Eastern Time (ET)</option>
-                                                <option>Central European Time (CET)</option>
-                                                <option>Greenwich Mean Time (GMT)</option>
-                                            </select>
-                                            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                                <ChevronRight className="h-5 w-5 text-gray-400 rotate-90" />
-                                            </div>
-                                        </div>
+                                    <div>
+                                        <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Account Information</h2>
+                                        <p className="text-gray-500 font-medium mt-1">Manage your personal and professional profile details.</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="mt-10 pt-8 border-t border-gray-100 flex items-center justify-between">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+                                {/* Left Column: Personal Information */}
+                                <div className="space-y-8">
+                                    <div>
+                                        <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                                            <span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">1</span>
+                                            Personal Details
+                                        </h3>
+                                        <div className="space-y-5">
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Full Name</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <User className="h-5 w-5 text-gray-400" />
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        defaultValue={user?.fullName || ''}
+                                                        className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                        placeholder="John Doe"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Email Address</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Mail className="h-5 w-5 text-gray-400" />
+                                                    </div>
+                                                    <input
+                                                        type="email"
+                                                        defaultValue={user?.primaryEmailAddress?.emailAddress || ''}
+                                                        disabled
+                                                        className="w-full pl-11 pr-4 py-3 bg-gray-100/50 border border-gray-200 rounded-xl text-gray-500 font-medium cursor-not-allowed outline-none"
+                                                    />
+                                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-1 rounded-md uppercase tracking-wider">
+                                                        <Check className="w-3 h-3" /> Verified
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Phone Number</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Phone className="h-5 w-5 text-gray-400" />
+                                                    </div>
+                                                    <input
+                                                        type="tel"
+                                                        className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                        placeholder="+1 (555) 000-0000"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Location</label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                            <MapPin className="h-5 w-5 text-gray-400" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                            placeholder="City, Country"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Language</label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                            <MessageSquare className="h-5 w-5 text-gray-400" />
+                                                        </div>
+                                                        <select className="w-full pl-11 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                                                            <option>English (US)</option>
+                                                            <option>Spanish</option>
+                                                            <option>French</option>
+                                                            <option>German</option>
+                                                        </select>
+                                                        <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                                            <ChevronRight className="h-4 w-4 text-gray-400 stroke-[3] rotate-90" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Column: Professional Information */}
+                                <div className="space-y-8">
+                                    <div>
+                                        <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                                            <span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">2</span>
+                                            Professional Profile
+                                        </h3>
+                                        <div className="space-y-5">
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Company</label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                            <Briefcase className="h-5 w-5 text-gray-400" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                            placeholder="Acme Corp"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-sm font-bold text-gray-700 tracking-wide">Job Title</label>
+                                                    <div className="relative">
+                                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                            <BadgeCheck className="h-5 w-5 text-gray-400" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                            placeholder="Marketing Manager"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Website / Portfolio</label>
+                                                <div className="relative">
+                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                        <Globe className="h-5 w-5 text-gray-400" />
+                                                    </div>
+                                                    <input
+                                                        type="url"
+                                                        className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                        placeholder="https://yourwebsite.com"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Bio / Description</label>
+                                                <div className="relative">
+                                                    <textarea
+                                                        rows="3"
+                                                        className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none"
+                                                        placeholder="Write a short bio about yourself and your role..."
+                                                    ></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-2">
+                                                <label className="text-sm font-bold text-gray-700 tracking-wide">Social Links</label>
+                                                <div className="flex gap-3">
+                                                    <div className="relative flex-1">
+                                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                            <Linkedin className="h-4 w-4 text-gray-400" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                            placeholder="LinkedIn URL"
+                                                        />
+                                                    </div>
+                                                    <div className="relative flex-1">
+                                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                            <Twitter className="h-4 w-4 text-gray-400" />
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
+                                                            placeholder="Twitter handle"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="pt-8 mt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <p className="text-sm text-gray-500 font-medium flex items-center gap-2">
-                                    <Shield className="w-4 h-4 text-emerald-500" /> Your connection is secure
+                                    <Shield className="w-4 h-4 text-emerald-500" /> Auto-saving enabled for draft changes
                                 </p>
-                                <button
-                                    onClick={() => {
-                                        setIsSaving(true);
-                                        setTimeout(() => { setIsSaving(false); setShowToast(true); setTimeout(() => setShowToast(false), 3000); }, 1500);
-                                    }}
-                                    className="flex items-center gap-2 px-8 py-3.5 bg-adorix-dark text-white rounded-2xl font-black hover:bg-black transition-all shadow-xl shadow-adorix-dark/20 hover:shadow-2xl hover:-translate-y-1"
-                                >
-                                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                                    {isSaving ? 'Saving...' : 'Save Changes'}
-                                </button>
+                                <div className="flex gap-3 w-full sm:w-auto">
+                                    <button
+                                        type="button"
+                                        className="px-6 py-3 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all flex-1 sm:flex-none text-center"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsSaving(true);
+                                            setTimeout(() => { setIsSaving(false); setShowToast(true); setTimeout(() => setShowToast(false), 3000); }, 1500);
+                                        }}
+                                        className="flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 flex-1 sm:flex-none"
+                                    >
+                                        {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                                        {isSaving ? 'Saving...' : 'Save Profile'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Danger Zone */}
+                            <div className="mt-12 p-6 bg-red-50/50 border border-red-100 rounded-2xl">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                    <div>
+                                        <h4 className="text-red-600 font-bold text-lg flex items-center gap-2">
+                                            <AlertTriangle className="w-5 h-5" /> Danger Zone
+                                        </h4>
+                                        <p className="text-gray-600 text-sm font-medium mt-1">Permanently delete your account and all associated data.</p>
+                                    </div>
+                                    <button className="px-5 py-2.5 bg-white border border-red-200 text-red-600 rounded-xl font-bold flex items-center gap-2 shadow-sm hover:bg-red-50 transition-colors whitespace-nowrap">
+                                        <Trash2 className="w-4 h-4" /> Delete Account
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     )}
