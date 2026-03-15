@@ -274,6 +274,161 @@ const ProfilePage = () => {
                             ))}
                         </motion.div>
                     )}
+
+                    {activeTab === 'account' && (
+                        <motion.div
+                            key="account"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm"
+                        >
+                            <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-100">
+                                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
+                                    <User className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Personal Information</h2>
+                                    <p className="text-gray-500 font-medium mt-1">Manage your basic profile details and preferences.</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {/* Profile Fields */}
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Full Name</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <User className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                defaultValue={user?.fullName || ''}
+                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                                placeholder="John Doe"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Email Address</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Mail className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="email"
+                                                defaultValue={user?.primaryEmailAddress?.emailAddress || ''}
+                                                disabled
+                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-100/50 border border-gray-200 rounded-2xl text-gray-500 font-medium cursor-not-allowed outline-none"
+                                            />
+                                            <span className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1 text-xs font-bold text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">
+                                                <Check className="w-3 h-3" /> Verified
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-gray-500 font-medium">Email cannot be changed directly. Contact support for assistance.</p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Phone Number</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Phone className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="tel"
+                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                                placeholder="+1 (555) 000-0000"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Organization Details */}
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Organization / Company</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Briefcase className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                                placeholder="Company Name"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Role / Title</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <BadgeCheck className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <input
+                                                type="text"
+                                                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                                                placeholder="e.g. Marketing Manager"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-700 tracking-wide uppercase">Timezone</label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <Globe className="h-5 w-5 text-gray-400" />
+                                            </div>
+                                            <select className="w-full pl-11 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl text-gray-900 font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                                                <option>Pacific Time (PT)</option>
+                                                <option>Eastern Time (ET)</option>
+                                                <option>Central European Time (CET)</option>
+                                                <option>Greenwich Mean Time (GMT)</option>
+                                            </select>
+                                            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                                <ChevronRight className="h-5 w-5 text-gray-400 rotate-90" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-10 pt-8 border-t border-gray-100 flex items-center justify-between">
+                                <p className="text-sm text-gray-500 font-medium flex items-center gap-2">
+                                    <Shield className="w-4 h-4 text-emerald-500" /> Your connection is secure
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        setIsSaving(true);
+                                        setTimeout(() => { setIsSaving(false); setShowToast(true); setTimeout(() => setShowToast(false), 3000); }, 1500);
+                                    }}
+                                    className="flex items-center gap-2 px-8 py-3.5 bg-adorix-dark text-white rounded-2xl font-black hover:bg-black transition-all shadow-xl shadow-adorix-dark/20 hover:shadow-2xl hover:-translate-y-1"
+                                >
+                                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+                                    {isSaving ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Success Toast */}
+                <AnimatePresence>
+                    {showToast && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+                            className="fixed bottom-8 right-8 bg-gray-900 border border-gray-800 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 z-50 font-medium"
+                        >
+                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                <Check className="w-5 h-5" />
+                            </div>
+                            Account settings updated successfully!
+                        </motion.div>
+                    )}
                 </AnimatePresence>
             </div>
         </div>
