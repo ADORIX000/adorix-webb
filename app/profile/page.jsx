@@ -163,11 +163,19 @@ const ProfilePage = () => {
                             <div className="relative w-40 h-40 group/avatar">
                                 <div className="absolute inset-0 rounded-full bg-white p-1 shadow-2xl flex-shrink-0">
                                     <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50 relative">
-                                        <img
-                                            src={user?.imageUrl || `https://ui-avatars.com/api/?name=${user?.fullName}&background=0D8A9E&color=fff&size=200`}
-                                            alt="Avatar"
-                                            className={`w-full h-full object-cover transition-opacity ${isUploadingImage ? 'opacity-50' : 'opacity-100'}`}
-                                        />
+                                        {user?.hasImage ? (
+                                            <img
+                                                src={user?.imageUrl}
+                                                alt="Avatar"
+                                                className={`w-full h-full object-cover transition-opacity ${isUploadingImage ? 'opacity-50' : 'opacity-100'}`}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-gradient-to-br from-adorix-primary to-blue-600 flex items-center justify-center">
+                                                <span className="text-white text-6xl font-black uppercase">
+                                                    {user?.firstName?.charAt(0) || user?.fullName?.charAt(0) || '?'}
+                                                </span>
+                                            </div>
+                                        )}
 
                                         {isUploadingImage && (
                                             <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center z-10 transition-opacity duration-300">
