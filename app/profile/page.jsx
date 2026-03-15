@@ -20,13 +20,26 @@ const ProfilePage = () => {
     const [copied, setCopied] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [isUploadingCover, setIsUploadingCover] = useState(false);
+    const [coverImage, setCoverImage] = useState(null);
     const fileInputRef = useRef(null);
+    const coverInputRef = useRef(null);
 
     useEffect(() => {
         if (isLoaded && !user) {
             // Handle not signed in if needed, middleware should handle it
         }
     }, [isLoaded, user]);
+
+    useEffect(() => {
+        // Load cover image from local storage on mount
+        if (typeof window !== 'undefined') {
+            const savedCover = localStorage.getItem('adorix_cover_image');
+            if (savedCover) {
+                setCoverImage(savedCover);
+            }
+        }
+    }, []);
 
     const handleCopyApiKey = () => {
         navigator.clipboard.writeText('adorix_sk_live_1234567890abcdef');
@@ -50,6 +63,24 @@ const ProfilePage = () => {
                 fileInputRef.current.value = '';
             }
         }
+    };
+
+    const handleCoverUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setIsUploadingCover(true);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result;
+            setCoverImage(base64String);
+            localStorage.setItem('adorix_cover_image', base64String);
+            setIsUploadingCover(false);
+            if (coverInputRef.current) {
+                coverInputRef.current.value = '';
+            }
+        };
+        reader.readAsDataURL(file);
     };
 
     const tabs = [
@@ -77,7 +108,27 @@ const ProfilePage = () => {
                     className="relative bg-white rounded-[2rem] mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10"
                 >
                     <div className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group">
-                        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                        {coverImage ? (
+                            <img src={coverImage} alt="Cover" className="w-full h-full object-cover absolute inset-0 z-0" />
+                        ) : (
+                            <div className="absolute inset-0 opacity-20 z-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                        )}
+                        <div className="absolute inset-0 bg-black/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <button 
+                                onClick={() => !isUploadingCover && coverInputRef.current?.click()}
+                                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white font-medium transition-all"
+                            >
+                                {isUploadingCover ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
+                                {isUploadingCover ? 'Uploading...' : 'Update Cover'}
+                            </button>
+                        </div>
+                        <input
+                            type="file"
+                            hidden
+                            ref={coverInputRef}
+                            accept="image/*"
+                            onChange={handleCoverUpload}
+                        />
                     </div>
 
                     <div className="px-10 pb-10">
