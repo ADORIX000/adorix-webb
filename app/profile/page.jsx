@@ -83,6 +83,23 @@ const ProfilePage = () => {
         reader.readAsDataURL(file);
     };
 
+    const handleRemoveCover = () => {
+        setCoverImage(null);
+        localStorage.removeItem('adorix_cover_image');
+    };
+
+    const handleRemoveProfileImage = async (e) => {
+        e.stopPropagation();
+        try {
+            setIsUploadingImage(true);
+            await user.setProfileImage({ file: null });
+        } catch (error) {
+            console.error('Error removing profile image:', error);
+        } finally {
+            setIsUploadingImage(false);
+        }
+    };
+
     const tabs = [
         { id: 'overview', label: 'Overview', icon: Activity },
         { id: 'account', label: 'Account Info', icon: User },
@@ -113,14 +130,24 @@ const ProfilePage = () => {
                         ) : (
                             <div className="absolute inset-0 opacity-20 z-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
                         )}
-                        <div className="absolute inset-0 bg-black/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        {/* Elegant Cover Actions */}
+                        <div className="absolute bottom-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                             <button 
                                 onClick={() => !isUploadingCover && coverInputRef.current?.click()}
-                                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl text-white font-medium transition-all"
+                                className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-gray-800 backdrop-blur-md rounded-full text-sm font-semibold transition-all shadow-lg border border-gray-100/50 hover:scale-105"
                             >
-                                {isUploadingCover ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
-                                {isUploadingCover ? 'Uploading...' : 'Update Cover'}
+                                {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+                                <span>{coverImage ? 'Change Cover' : 'Add Cover'}</span>
                             </button>
+                            {coverImage && (
+                                <button 
+                                    onClick={handleRemoveCover}
+                                    className="p-2.5 bg-white/90 hover:bg-red-50 text-gray-500 hover:text-red-500 backdrop-blur-md rounded-full transition-all shadow-lg border border-gray-100/50 hover:scale-105"
+                                    title="Remove Cover"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            )}
                         </div>
                         <input
                             type="file"
@@ -142,21 +169,32 @@ const ProfilePage = () => {
                                             className={`w-full h-full object-cover transition-opacity ${isUploadingImage ? 'opacity-50' : 'opacity-100'}`}
                                         />
 
-                                        {/* Upload Overlay */}
-                                        <div
-                                            className={`absolute inset-0 bg-black/40 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 ${isUploadingImage ? 'opacity-100' : 'opacity-0 group-hover/avatar:opacity-100'}`}
-                                            onClick={() => !isUploadingImage && fileInputRef.current?.click()}
-                                        >
-                                            {isUploadingImage ? (
-                                                <Loader2 className="w-8 h-8 text-white animate-spin" />
-                                            ) : (
-                                                <>
-                                                    <Camera className="w-8 h-8 text-white mb-1" />
-                                                    <span className="text-white text-xs font-semibold tracking-wider uppercase">Update</span>
-                                                </>
-                                            )}
-                                        </div>
+                                        {isUploadingImage && (
+                                            <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center z-10 transition-opacity duration-300">
+                                                <Loader2 className="w-8 h-8 text-adorix-dark animate-spin" />
+                                            </div>
+                                        )}
                                     </div>
+                                </div>
+
+                                {/* Floating Action Buttons for Profile Picture */}
+                                <div className="absolute bottom-1 -right-2 flex flex-col gap-2 z-20 opacity-0 group-hover/avatar:opacity-100 transition-all duration-300 translate-x-2 group-hover/avatar:translate-x-0">
+                                    <button
+                                        onClick={() => !isUploadingImage && fileInputRef.current?.click()}
+                                        className="p-2.5 bg-white text-gray-700 hover:text-adorix-dark hover:bg-gray-50 rounded-full shadow-xl border border-gray-100/80 transition-transform hover:scale-110 flex items-center justify-center group/btn"
+                                        title="Update Profile Picture"
+                                    >
+                                        <Camera className="w-4 h-4 transition-transform group-hover/btn:scale-110" />
+                                    </button>
+                                    {user?.hasImage && (
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleRemoveProfileImage(e); }}
+                                            className="p-2.5 bg-white text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full shadow-xl border border-gray-100/80 transition-transform hover:scale-110 flex items-center justify-center group/btn"
+                                            title="Remove Profile Picture"
+                                        >
+                                            <Trash2 className="w-4 h-4 transition-transform group-hover/btn:scale-110" />
+                                        </button>
+                                    )}
                                 </div>
                                 <input
                                     type="file"
