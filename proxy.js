@@ -7,7 +7,7 @@ const isProtectedRoute = createRouteMatcher([
   '/accs(.*)',
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
+export const proxy = clerkMiddleware(async (auth, req) => {
   // Allow /api/contact to be fully public
   if (req.nextUrl.pathname.startsWith('/api/contact')) {
     return;

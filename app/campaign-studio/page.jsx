@@ -150,7 +150,13 @@ ${specs}
         } catch (error) {
             console.error("Upload failed:", error.message);
             setUploadStatus('error');
-            alert(`Upload failed: ${error.message}`);
+            
+            let displayError = error.message;
+            if (error.message.includes('row-level security policy')) {
+                displayError = "This campaign slot might already be owned by another user or requires special permissions. Please check if this demographic is already active.";
+            }
+            
+            alert(`Upload failed: ${displayError}`);
         } finally {
             setIsUploading(false);
         }

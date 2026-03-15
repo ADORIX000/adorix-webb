@@ -147,7 +147,7 @@ const TechStack = () => {
                 }`}>
                 {TECH_STACK.map((tech, index) => {
                     // Calculate wave offset for each item - ONLY on desktop
-                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    const waveOffset = isMobile ? 0 : (Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40).toFixed(2);
 
                     return (
                         <a

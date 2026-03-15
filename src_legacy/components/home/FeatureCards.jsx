@@ -77,19 +77,25 @@ const SupersonicStream = ({ isPaused }) => (
 
             {/* Advanced Speed Lines with Parallax */}
             <g>
-                {[...Array(8)].map((_, i) => (
-                    <motion.line
-                        key={i}
-                        x1="120" x2="-20"
-                        y1={20 + i * 8} y2={20 + i * 8}
-                        stroke="var(--adorix-primary)"
-                        strokeWidth={0.5 + Math.random()}
-                        strokeDasharray="20 40"
-                        opacity={0.2 + Math.random() * 0.3}
-                        animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
-                        transition={{ duration: 0.8 + Math.random() * 0.5, repeat: Infinity, ease: "linear" }}
-                    />
-                ))}
+                {[...Array(8)].map((_, i) => {
+                    const strokeWidthValue = 0.5 + ((i * 13.33) % 1);
+                    const opacityValue = 0.2 + (((i * 17.77) % 1) * 0.3);
+                    const durationValue = 0.8 + (((i * 23.33) % 1) * 0.5);
+                    
+                    return (
+                        <motion.line
+                            key={i}
+                            x1="120" x2="-20"
+                            y1={20 + i * 8} y2={20 + i * 8}
+                            stroke="var(--adorix-primary)"
+                            strokeWidth={strokeWidthValue.toFixed(2)}
+                            strokeDasharray="20 40"
+                            opacity={opacityValue.toFixed(2)}
+                            animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
+                            transition={{ duration: durationValue.toFixed(2), repeat: Infinity, ease: "linear" }}
+                        />
+                    );
+                })}
             </g>
 
             {/* Simplified but Dynamic Browser Window */}
@@ -125,23 +131,30 @@ const SupersonicStream = ({ isPaused }) => (
             </motion.g>
 
             {/* High-speed streak particles */}
-            {[...Array(6)].map((_, i) => (
-                <motion.rect
-                    key={`p-${i}`}
-                    width={10 + Math.random() * 20}
-                    height="0.8"
-                    fill="var(--adorix-accent)"
-                    opacity="0.4"
-                    animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
-                    transition={{
-                        duration: 0.5 + Math.random() * 0.5,
-                        repeat: Infinity,
-                        delay: Math.random(),
-                        ease: "linear"
-                    }}
-                    y={15 + Math.random() * 70}
-                />
-            ))}
+            {[...Array(6)].map((_, i) => {
+                const widthValue = 10 + (((i * 19.99) % 1) * 20);
+                const durationValue = 0.5 + (((i * 27.77) % 1) * 0.5);
+                const delayValue = ((i * 3.33) % 1).toFixed(2);
+                const yValue = (15 + (((i * 31.11) % 1) * 70)).toFixed(2);
+                
+                return (
+                    <motion.rect
+                        key={`p-${i}`}
+                        width={widthValue.toFixed(2)}
+                        height="0.8"
+                        fill="var(--adorix-accent)"
+                        opacity="0.4"
+                        animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
+                        transition={{
+                            duration: durationValue.toFixed(2),
+                            repeat: Infinity,
+                            delay: parseFloat(delayValue),
+                            ease: "linear"
+                        }}
+                        y={yValue}
+                    />
+                );
+            })}
         </svg>
     </div>
 );
