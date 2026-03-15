@@ -28,6 +28,68 @@ const ProfilePage = () => {
     const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+    // Account Info State
+    const [accountInfo, setAccountInfo] = useState({
+        fullName: '',
+        phoneNumber: '',
+        location: '',
+        language: 'English (US)',
+        company: '',
+        jobTitle: '',
+        website: '',
+        bio: '',
+        linkedin: '',
+        twitter: ''
+    });
+
+    useEffect(() => {
+        if (user) {
+            setAccountInfo({
+                fullName: user.fullName || '',
+                phoneNumber: user.unsafeMetadata?.phoneNumber || '',
+                location: user.unsafeMetadata?.location || '',
+                language: user.unsafeMetadata?.language || 'English (US)',
+                company: user.unsafeMetadata?.company || '',
+                jobTitle: user.unsafeMetadata?.jobTitle || '',
+                website: user.unsafeMetadata?.website || '',
+                bio: user.unsafeMetadata?.bio || '',
+                linkedin: user.unsafeMetadata?.linkedin || '',
+                twitter: user.unsafeMetadata?.twitter || ''
+            });
+        }
+    }, [user]);
+
+    const handleSaveAccountInfo = async () => {
+        try {
+            setIsSaving(true);
+            const parts = accountInfo.fullName.trim().split(' ');
+            const firstName = parts[0] || '';
+            const lastName = parts.slice(1).join(' ') || '';
+            
+            await user.update({
+                firstName,
+                lastName,
+                unsafeMetadata: {
+                    phoneNumber: accountInfo.phoneNumber,
+                    location: accountInfo.location,
+                    language: accountInfo.language,
+                    company: accountInfo.company,
+                    jobTitle: accountInfo.jobTitle,
+                    website: accountInfo.website,
+                    bio: accountInfo.bio,
+                    linkedin: accountInfo.linkedin,
+                    twitter: accountInfo.twitter
+                }
+            });
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        } catch (error) {
+            console.error('Error updating account info:', error);
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const fileInputRef = useRef(null);
     const coverInputRef = useRef(null);
 
@@ -356,7 +418,8 @@ const ProfilePage = () => {
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        defaultValue={user?.fullName || ''}
+                                                        value={accountInfo.fullName}
+                                                        onChange={(e) => setAccountInfo({...accountInfo, fullName: e.target.value})}
                                                         className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                         placeholder="John Doe"
                                                     />
@@ -389,6 +452,8 @@ const ProfilePage = () => {
                                                     </div>
                                                     <input
                                                         type="tel"
+                                                        value={accountInfo.phoneNumber}
+                                                        onChange={(e) => setAccountInfo({...accountInfo, phoneNumber: e.target.value})}
                                                         className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                         placeholder="+1 (555) 000-0000"
                                                     />
@@ -404,6 +469,8 @@ const ProfilePage = () => {
                                                         </div>
                                                         <input
                                                             type="text"
+                                                            value={accountInfo.location}
+                                                            onChange={(e) => setAccountInfo({...accountInfo, location: e.target.value})}
                                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                             placeholder="City, Country"
                                                         />
@@ -415,7 +482,7 @@ const ProfilePage = () => {
                                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                             <MessageSquare className="h-5 w-5 text-gray-400" />
                                                         </div>
-                                                        <select className="w-full pl-11 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
+                                                        <select value={accountInfo.language} onChange={(e) => setAccountInfo({...accountInfo, language: e.target.value})} className="w-full pl-11 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none appearance-none cursor-pointer">
                                                             <option>English (US)</option>
                                                             <option>Spanish</option>
                                                             <option>French</option>
@@ -448,6 +515,8 @@ const ProfilePage = () => {
                                                         </div>
                                                         <input
                                                             type="text"
+                                                            value={accountInfo.company}
+                                                            onChange={(e) => setAccountInfo({...accountInfo, company: e.target.value})}
                                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                             placeholder="Acme Corp"
                                                         />
@@ -461,6 +530,8 @@ const ProfilePage = () => {
                                                         </div>
                                                         <input
                                                             type="text"
+                                                            value={accountInfo.jobTitle}
+                                                            onChange={(e) => setAccountInfo({...accountInfo, jobTitle: e.target.value})}
                                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                             placeholder="Marketing Manager"
                                                         />
@@ -476,6 +547,8 @@ const ProfilePage = () => {
                                                     </div>
                                                     <input
                                                         type="url"
+                                                        value={accountInfo.website}
+                                                        onChange={(e) => setAccountInfo({...accountInfo, website: e.target.value})}
                                                         className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                         placeholder="https://yourwebsite.com"
                                                     />
@@ -487,6 +560,8 @@ const ProfilePage = () => {
                                                 <div className="relative">
                                                     <textarea
                                                         rows="3"
+                                                        value={accountInfo.bio}
+                                                        onChange={(e) => setAccountInfo({...accountInfo, bio: e.target.value})}
                                                         className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none resize-none"
                                                         placeholder="Write a short bio about yourself and your role..."
                                                     ></textarea>
@@ -502,6 +577,8 @@ const ProfilePage = () => {
                                                         </div>
                                                         <input
                                                             type="text"
+                                                            value={accountInfo.linkedin}
+                                                            onChange={(e) => setAccountInfo({...accountInfo, linkedin: e.target.value})}
                                                             className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                             placeholder="LinkedIn URL"
                                                         />
@@ -512,6 +589,8 @@ const ProfilePage = () => {
                                                         </div>
                                                         <input
                                                             type="text"
+                                                            value={accountInfo.twitter}
+                                                            onChange={(e) => setAccountInfo({...accountInfo, twitter: e.target.value})}
                                                             className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 text-sm font-medium focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
                                                             placeholder="Twitter handle"
                                                         />
@@ -536,11 +615,9 @@ const ProfilePage = () => {
                                         Cancel
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            setIsSaving(true);
-                                            setTimeout(() => { setIsSaving(false); setShowToast(true); setTimeout(() => setShowToast(false), 3000); }, 1500);
-                                        }}
-                                        className="flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 flex-1 sm:flex-none"
+                                        onClick={handleSaveAccountInfo}
+                                        disabled={isSaving}
+                                        className="flex items-center justify-center gap-2 px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/10 hover:-translate-y-0.5 flex-1 sm:flex-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                                         {isSaving ? 'Saving...' : 'Save Profile'}
