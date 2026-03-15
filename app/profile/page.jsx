@@ -19,6 +19,8 @@ const ProfilePage = () => {
     const [showToast, setShowToast] = useState(false);
     const [copied, setCopied] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         if (isLoaded && !user) {
@@ -30,6 +32,24 @@ const ProfilePage = () => {
         navigator.clipboard.writeText('adorix_sk_live_1234567890abcdef');
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setIsUploadingImage(true);
+            await user.setProfileImage({ file });
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            // In a real app, you might show toast notification here
+        } finally {
+            setIsUploadingImage(false);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
     };
 
     const tabs = [
@@ -62,14 +82,38 @@ const ProfilePage = () => {
 
                     <div className="px-10 pb-10">
                         <div className="flex flex-col md:flex-row items-end gap-8 -mt-16 relative z-10">
-                            <div className="w-40 h-40 rounded-full bg-white p-1 shadow-2xl flex-shrink-0">
-                                <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50">
-                                    <img
-                                        src={user?.imageUrl || `https://ui-avatars.com/api/?name=${user?.fullName}&background=0D8A9E&color=fff&size=200`}
-                                        alt="Avatar"
-                                        className="w-full h-full object-cover"
-                                    />
+                            <div className="relative w-40 h-40 group/avatar">
+                                <div className="absolute inset-0 rounded-full bg-white p-1 shadow-2xl flex-shrink-0">
+                                    <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50 relative">
+                                        <img
+                                            src={user?.imageUrl || `https://ui-avatars.com/api/?name=${user?.fullName}&background=0D8A9E&color=fff&size=200`}
+                                            alt="Avatar"
+                                            className={`w-full h-full object-cover transition-opacity ${isUploadingImage ? 'opacity-50' : 'opacity-100'}`}
+                                        />
+
+                                        {/* Upload Overlay */}
+                                        <div
+                                            className={`absolute inset-0 bg-black/40 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 ${isUploadingImage ? 'opacity-100' : 'opacity-0 group-hover/avatar:opacity-100'}`}
+                                            onClick={() => !isUploadingImage && fileInputRef.current?.click()}
+                                        >
+                                            {isUploadingImage ? (
+                                                <Loader2 className="w-8 h-8 text-white animate-spin" />
+                                            ) : (
+                                                <>
+                                                    <Camera className="w-8 h-8 text-white mb-1" />
+                                                    <span className="text-white text-xs font-semibold tracking-wider uppercase">Update</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
+                                <input
+                                    type="file"
+                                    hidden
+                                    ref={fileInputRef}
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                />
                             </div>
 
                             <div className="flex-1 pb-2 text-center md:text-left">
