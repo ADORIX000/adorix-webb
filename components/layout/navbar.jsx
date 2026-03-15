@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, LogOut, User as UserIcon } from 'lucide-react';
+import { Menu, X, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { useUser, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
@@ -86,18 +86,18 @@ const Navbar = () => {
               <div className="flex items-center gap-6">
                 <Link
                   href="/profile"
-                  className="flex items-center gap-2 text-adorix-dark hover:text-adorix-primary transition-colors"
+                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary ${pathname === '/profile' ? 'text-adorix-primary font-bold' : 'text-adorix-dark'}`}
                 >
                   <UserIcon size={18} />
-                  <span>{user?.fullName || user?.firstName || 'Account'}</span>
+                  <span>Profile</span>
                 </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
+                <Link
+                  href="/profile#settings"
+                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary ${pathname === '/settings' ? 'text-adorix-primary font-bold' : 'text-gray-500'}`}
                 >
-                  <LogOut size={18} />
-                  Logout
-                </button>
+                  <Settings size={18} />
+                  <span>Settings</span>
+                </Link>
               </div>
             )}
           </div>
@@ -149,13 +149,13 @@ const Navbar = () => {
                   <UserIcon size={24} />
                   Profile
                 </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
+                <Link
+                  href="/profile#settings"
+                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors flex items-center gap-3"
                 >
-                  <LogOut size={24} />
-                  Logout
-                </button>
+                  <Settings size={24} />
+                  Settings
+                </Link>
               </>
             )}
           </div>
