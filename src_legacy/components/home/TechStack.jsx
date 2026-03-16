@@ -109,8 +109,10 @@ const TechStack = () => {
     const containerRef = useRef(null);
     const [scrollY, setScrollY] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1024); // lg breakpoint
         };
@@ -141,13 +143,13 @@ const TechStack = () => {
                 Tech Stack
             </h2>
 
-            <div className={`max-w-7xl mx-auto px-4 ${isMobile
+            <div className={`max-w-7xl mx-auto px-4 ${isMounted && isMobile
                 ? 'grid grid-cols-3 sm:grid-cols-4 gap-6 md:gap-8 justify-items-center'
                 : 'flex flex-wrap justify-center items-center gap-6'
                 }`}>
                 {TECH_STACK.map((tech, index) => {
-                    // Calculate wave offset for each item - ONLY on desktop
-                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    // Calculate wave offset for each item - ONLY on desktop AND after mounting
+                    const waveOffset = (!isMounted || isMobile) ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
 
                     return (
                         <a
