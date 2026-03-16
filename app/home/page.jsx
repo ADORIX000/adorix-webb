@@ -16,7 +16,7 @@ export default function HomePage() {
     <div className="relative w-full overflow-hidden mt-16">
 
       {/* HERO SECTION */}
-      <section className="relative pt-32 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+      <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
 
         {/* Heading */}
         <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
@@ -38,18 +38,18 @@ export default function HomePage() {
           Track real attention, interact with voice, and serve personalized content in real-time.
         </motion.p>
 
-        {/* Modded Authenticated Buttons */}
+        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-5 justify-center items-center mt-4"
         >
-          <Link href="/dashboard" className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
-            Go to Dashboard <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+          <Link href="/signup" className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
+            Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
           </Link>
-          <Link href="/campaign-studio" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
-            Campaign Studio
+          <Link href="/dashboard" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
+            View Live Demo
           </Link>
         </motion.div>
       </section>
@@ -108,10 +108,10 @@ export default function HomePage() {
 
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Ready to capture real attention?</h2>
-            {/* Modded Authenticated Bottom CTA */}
-            <Link href="/campaign-studio" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
+            <Link href="/signup" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
               Deploy Your First Campaign
             </Link>
+            <p className="mt-8 text-gray-500 text-sm">No credit card required for demo.</p>
           </div>
         </div>
       </section>

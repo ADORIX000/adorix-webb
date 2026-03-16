@@ -33,9 +33,7 @@ const Sidebar = () => {
 
             <div className="p-8">
                 <Link href="/dashboard" className="flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-adorix-dark rounded-lg flex items-center justify-center text-white font-bold group-hover:bg-adorix-primary transition-colors">
-                        A
-                    </div>
+                    <img src="/logo.png" alt="Adorix Logo" className="w-8 h-8 object-contain rounded-lg group-hover:scale-110 transition-transform shadow-lg shadow-adorix-primary/20" />
                     <span className="text-xl font-bold text-adorix-dark tracking-tight">ADORIX</span>
                 </Link>
             </div>

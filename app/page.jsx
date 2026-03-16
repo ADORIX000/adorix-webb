@@ -1,5 +1,5 @@
-import Pricing from './pricing/page';
+import HomePage from './home/page';
 
 export default function RootPage() {
-    return <Pricing />;
+    return <HomePage />;
 }

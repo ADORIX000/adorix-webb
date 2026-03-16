@@ -3,6 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import AuthenticatedNavbar from '@/components/layout/AuthenticatedNavbar'
 import GradientWrapper from '@/components/layout/GradientWrapper'
+import Footer from '@/components/common/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,13 +16,14 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-                <body className={inter.className} suppressHydrationWarning>
-                    <GradientWrapper>
-                      <AuthenticatedNavbar />
-                      {children}
-                    </GradientWrapper>
-                </body>
-            </html>
-        </ClerkProvider>
-    )
+        <body className={inter.className} suppressHydrationWarning>
+          <GradientWrapper>
+            <AuthenticatedNavbar />
+            {children}
+            <Footer />
+          </GradientWrapper>
+        </body>
+      </html>
+    </ClerkProvider>
+  )
 }

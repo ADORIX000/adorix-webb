@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useUser, useClerk } from '@clerk/nextjs';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
     User, Settings, CreditCard, Shield, Bell, Activity, Camera, Mail, Phone,
     MapPin, Briefcase, Calendar, TrendingUp, Zap, Download,
@@ -11,13 +12,32 @@ import {
     Key, Link as LinkIcon, Linkedin, Twitter, MessageSquare, AlertTriangle, PlayCircle, Timer, MousePointer2, Database
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Suspense } from 'react';
 
-const ProfilePage = () => {
+const ProfileContent = () => {
     const { user, isLoaded } = useUser();
     const { signOut } = useClerk();
+    const searchParams = useSearchParams();
+    const router = useRouter();
 
     // UI State
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview');
+
+    // Sync tab with URL if needed
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab && ['overview', 'account', 'security', 'system', 'billing'].includes(tab)) {
+            setActiveTab(tab);
+        }
+    }, [searchParams]);
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        // Update URL without refresh to maintain consistency
+        const params = new URLSearchParams(searchParams);
+        params.set('tab', tabId);
+        router.push(`/profile?${params.toString()}`, { scroll: false });
+    };
     const [isSaving, setIsSaving] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -537,7 +557,7 @@ const ProfilePage = () => {
                                 {tabs.map((tab) => (
                                     <button
                                         key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
+                                        onClick={() => handleTabChange(tab.id)}
                                         className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-black text-sm transition-all group ${activeTab === tab.id
                                             ? 'bg-adorix-dark text-white shadow-xl shadow-adorix-dark/20 translate-x-1'
                                             : 'text-gray-400 hover:text-adorix-dark hover:bg-gray-50'
@@ -595,6 +615,14 @@ const ProfilePage = () => {
                 </AnimatePresence>
             </div>
         </div>
+    );
+};
+
+const ProfilePage = () => {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-transparent flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-adorix-primary" /></div>}>
+            <ProfileContent />
+        </Suspense>
     );
 };
 

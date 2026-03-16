@@ -157,7 +157,7 @@ const TechStack = () => {
                             rel="noopener noreferrer"
                             className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 hover:scale-110 relative"
                             style={{
-                                transform: `translateY(${waveOffset}px)`,
+                                transform: `translateY(${waveOffset.toFixed(4)}px)`,
                                 transition: 'transform 0.3s ease-out'
                             }}
                         >
