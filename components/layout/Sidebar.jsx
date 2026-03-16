@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -33,35 +34,43 @@ const Sidebar = () => {
 
             <div className="p-8">
                 <Link href="/dashboard" className="flex items-center gap-3 group">
-                    <img src="/logo.png" alt="Adorix Logo" className="w-8 h-8 object-contain rounded-lg group-hover:scale-110 transition-transform shadow-lg shadow-adorix-primary/20" />
+                    <Image
+                        src="/icon.png"
+                        alt="Adorix Logo"
+                        width={32}
+                        height={32}
+                        className="rounded-lg group-hover:scale-110 transition-transform"
+                    />
                     <span className="text-xl font-bold text-adorix-dark tracking-tight">ADORIX</span>
-                </Link>
-            </div>
+                </Link >
+            </div >
 
             {/* Main Menu */}
-            <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
+            < nav className="flex-1 px-4 space-y-2 overflow-y-auto" >
                 <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Menu</p>
 
-                {menuItems.map((item) => {
-                    const isActive = pathname === item.path;
-                    return (
-                        <Link
-                            key={item.path}
-                            href={item.path}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                                ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20'
-                                : 'text-gray-500 hover:bg-gray-50 hover:text-adorix-dark'
-                                }`}
-                        >
-                            <item.icon className={`w-5 h-5 ${isActive ? 'text-adorix-primary' : 'text-gray-400 group-hover:text-adorix-dark'}`} />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    );
-                })}
-            </nav>
+                {
+                    menuItems.map((item) => {
+                        const isActive = pathname === item.path;
+                        return (
+                            <Link
+                                key={item.path}
+                                href={item.path}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                                    ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20'
+                                    : 'text-gray-500 hover:bg-gray-50 hover:text-adorix-dark'
+                                    }`}
+                            >
+                                <item.icon className={`w-5 h-5 ${isActive ? 'text-adorix-primary' : 'text-gray-400 group-hover:text-adorix-dark'}`} />
+                                <span className="font-medium">{item.label}</span>
+                            </Link>
+                        );
+                    })
+                }
+            </nav >
 
             {/* Bottom Menu */}
-            <div className="p-4 border-t border-gray-100">
+            < div className="p-4 border-t border-gray-100" >
                 <div className="space-y-2">
                     {bottomItems.map((item) => (
                         <Link
@@ -92,9 +101,9 @@ const Sidebar = () => {
                         <p className="text-xs text-gray-400">Pro Plan</p>
                     </div>
                 </div>
-            </div>
+            </div >
 
-        </div>
+        </div >
     );
 };
 

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Twitter, Linkedin, Github } from 'lucide-react';
 import { useUser } from '@clerk/nextjs';
 
@@ -18,7 +19,13 @@ const Footer = () => {
                     {/* Brand & Socials */}
                     <div className="space-y-6">
                         <Link href="/" className="text-3xl font-bold tracking-tight text-white flex items-center gap-2 group">
-                            <img src="/logo.png" alt="Adorix Logo" className="w-10 h-10 object-contain rounded-lg group-hover:scale-110 transition-transform" />
+                            <Image
+                                src="/icon.png"
+                                alt="Adorix Logo"
+                                width={40}
+                                height={40}
+                                className="rounded-lg group-hover:scale-110 transition-transform"
+                            />
                             ADORIX
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-xs">

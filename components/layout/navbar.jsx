@@ -1,9 +1,11 @@
 'use client';
 
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon, Settings } from 'lucide-react';
+import Image from 'next/image';
 import { useUser, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
@@ -50,9 +52,15 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
-            <img src="/logo.png" alt="Adorix Logo" className="w-8 h-8 object-contain rounded-lg group-hover:scale-110 transition-transform" />
-            ADORIX
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <Image
+              src="/icon.png"
+              alt="Adorix Logo"
+              width={32}
+              height={32}
+              className="rounded-lg group-hover:scale-110 transition-transform"
+            />
+            <span className="text-2xl font-bold tracking-tight text-adorix-dark">ADORIX</span>
           </Link>
 
           {/* Desktop Links */}

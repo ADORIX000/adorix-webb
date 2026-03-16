@@ -42,8 +42,8 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link to="/dashboard" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
-            <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
+          <Link to="/dashboard" className="flex items-center gap-2 group">
+             <img src="/icon.png" alt="Adorix Logo" className="w-8 h-8 object-contain rounded-lg group-hover:scale-110 transition-transform" />
             ADORIX
           </Link>
 
