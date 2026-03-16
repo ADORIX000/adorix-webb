@@ -54,3 +54,26 @@ body {
     /* adorix-accent */
     color: #ffffff;
 }
+
+/* 4. Clerk Auth Components Overrides */
+[class*="cl-badge"],
+[class*="cl-Badge"],
+[class*="cl-lastUsed"],
+.cl-badge,
+.cl-internal-phgxy1 {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Hard-hiding the badge inside the continue with google button */
+button[data-provider="google"] .cl-badge,
+.cl-socialButtonsBlockButton span[class*="badge"],
+.cl-socialButtonsBlockButton span[class*="Badge"],
+.cl-socialButtonsBlockButton div[class*="badge"],
+.cl-socialButtonsBlockButton span[class*="LastUsed"],
+.cl-socialButtonsBlockButton div[class*="LastUsed"] {
+    display: none !important;
+}
