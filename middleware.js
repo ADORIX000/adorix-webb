@@ -1,47 +1,27 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
-<<<<<<< HEAD
   '/home(.*)',
-=======
->>>>>>> redirect
   '/dashboard(.*)',
   '/profile(.*)',
   '/accs(.*)',
 ]);
 
-<<<<<<< HEAD
-<<<<<<<< HEAD:proxy.js
-export const proxy = clerkMiddleware(async (auth, req) => {
-  // Allow /api/contact to be fully public
-========
 export default clerkMiddleware(async (auth, req) => {
   // Public routes: API routes that should be accessible without authentication
->>>>>>>> redirect:middleware.js
   if (req.nextUrl.pathname.startsWith('/api/contact')) {
     return;
   }
 
   // Protected routes: Check if the current route matches our protected list and enforce auth
   if (isProtectedRoute(req)) await auth.protect();
-=======
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth().protect();
->>>>>>> redirect
 });
 
 export const config = {
   matcher: [
-<<<<<<< HEAD
     // Skip Next.js internals and all static files, unless found in search params
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
 };
-=======
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',
-  ],
-};
->>>>>>> redirect
