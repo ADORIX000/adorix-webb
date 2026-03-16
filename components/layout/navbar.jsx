@@ -2,168 +2,117 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X, LogOut, User as UserIcon } from 'lucide-react';
-import { useUser, useAuth, SignOutButton } from '@clerk/nextjs';
+import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, LayoutDashboard, PenTool, Home } from 'lucide-react';
 
 const Navbar = () => {
-  const { isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+    const [scrolled, setScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Handle scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
+    const navLinks = [
+        { name: 'Home', href: '/', icon: Home },
+        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+        { name: 'Studio', href: '/campaign-studio', icon: PenTool },
+    ];
 
-  const navLinks = [
-    { name: 'Dashboard', path: '/dashboard', protected: true },
-    { name: 'Campaign Studio', path: '/dashboard/studio', protected: true },
-    { name: 'Profile', path: '/profile', protected: true },
-  ];
-
-  const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
-
-  return (
-    <>
-      <nav
-        className={`w-full fixed top-0 z-50 transition-all duration-300 ${isScrolled || pathname === '/login' || pathname === '/signup'
-          ? 'h-16 bg-white border-b border-gray-200/50 shadow-sm'
-          : 'h-24 bg-transparent border-b border-transparent'
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
-
-          {/* Logo */}
-          <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
-            <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
-            ADORIX
-          </Link>
-
-          {/* Desktop Links */}
-          <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
-            {visibleLinks.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={`transition-colors hover:text-adorix-primary relative group ${pathname === link.path ? 'text-adorix-primary font-bold' : ''}`}
-              >
-                {link.name}
-                <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === link.path ? 'scale-x-100' : ''}`} />
-              </Link>
-            ))}
-          </div>
-
-          {/* Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
-            {!isSignedIn ? (
-              <>
-                <Link
-                  href="/login"
-                  className={`transition-colors hover:text-adorix-primary relative group ${pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
-                >
-                  Log In
-                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/login' ? 'scale-x-100' : ''}`} />
+    return (
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+            scrolled ? 'bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 shadow-sm' : 'bg-transparent py-5'
+        }`}>
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2 group">
+                    <div className="w-10 h-10 bg-adorix-primary rounded-xl flex items-center justify-center shadow-lg shadow-adorix-primary/20 group-hover:scale-110 transition-transform">
+                        <span className="text-white font-black text-xl">A</span>
+                    </div>
+                    <span className="text-2xl font-bold text-adorix-dark hidden sm:block">Adorix</span>
                 </Link>
-                <Link
-                  href="/signup"
-                  className="bg-adorix-dark text-white px-6 py-2 rounded-full hover:bg-adorix-primary transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link) => (
+                        <Link 
+                            key={link.name} 
+                            href={link.href}
+                            className="text-gray-600 hover:text-adorix-primary font-medium transition-colors"
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    
+                    <div className="h-6 w-[1px] bg-gray-200" />
+                    
+                    <SignedIn>
+                        <UserButton afterSignOutUrl="/" />
+                    </SignedIn>
+                    <SignedOut>
+                        <SignInButton mode="modal">
+                            <button className="px-5 py-2.5 bg-adorix-primary text-white font-bold rounded-xl hover:bg-[#085a66] transition shadow-md shadow-adorix-primary/10">
+                                Sign In
+                            </button>
+                        </SignInButton>
+                    </SignedOut>
+                </div>
+
+                {/* Mobile Menu Toggle */}
+                <button 
+                    className="md:hidden p-2 text-gray-600"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 >
-                  Sign Up
-                </Link>
-              </>
-            ) : (
-              <div className="flex items-center gap-6">
-                <Link
-                  href="/profile"
-                  className="flex items-center gap-2 text-adorix-dark hover:text-adorix-primary transition-colors"
-                >
-                  <UserIcon size={18} />
-                  <span>{user?.fullName || user?.firstName || 'Account'}</span>
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
-                >
-                  <LogOut size={18} />
-                  Logout
+                    {mobileMenuOpen ? <X /> : <Menu />}
                 </button>
-              </div>
-            )}
-          </div>
+            </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden text-gray-600"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
-          {visibleLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="flex flex-col items-center gap-8 mt-2 w-full max-w-xs">
-            {!isSignedIn ? (
-              <>
-                <Link
-                  href="/login"
-                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
-                >
-                  Log In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="w-full bg-adorix-dark text-white text-center py-4 rounded-xl text-xl font-bold hover:bg-adorix-primary transition-colors"
-                >
-                  Sign Up
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/profile"
-                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors flex items-center gap-3"
-                >
-                  <UserIcon size={24} />
-                  Profile
-                </Link>
-                <button
-                  onClick={() => signOut()}
-                  className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
-                >
-                  <LogOut size={24} />
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </>
-  );
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="md:hidden bg-white border-b border-gray-100 overflow-hidden"
+                    >
+                        <div className="px-6 py-6 flex flex-col gap-4">
+                            {navLinks.map((link) => (
+                                <Link 
+                                    key={link.name} 
+                                    href={link.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center gap-3 text-lg font-medium text-gray-700 hover:text-adorix-primary"
+                                >
+                                    <link.icon className="w-5 h-5" />
+                                    {link.name}
+                                </Link>
+                            ))}
+                            <div className="pt-4 border-t border-gray-100">
+                                <SignedIn>
+                                    <div className="flex items-center gap-3">
+                                        <UserButton afterSignOutUrl="/" />
+                                        <span className="font-medium text-gray-700">Account</span>
+                                    </div>
+                                </SignedIn>
+                                <SignedOut>
+                                    <SignInButton mode="modal">
+                                        <button className="w-full py-3 bg-adorix-primary text-white font-bold rounded-xl">
+                                            Sign In
+                                        </button>
+                                    </SignInButton>
+                                </SignedOut>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
 };
 
 export default Navbar;
