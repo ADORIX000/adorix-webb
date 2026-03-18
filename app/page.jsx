@@ -1,5 +1,5 @@
-import HomePage from './home/page';
+import ProfilePage from './profile/page';
 
 export default function RootPage() {
-    return <HomePage />;
+    return <ProfilePage />;
 }

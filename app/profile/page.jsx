@@ -20,6 +20,8 @@ const ProfilePage = () => {
     const [copied, setCopied] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [emailToVerify, setEmailToVerify] = useState('');
     const fileInputRef = useRef(null);
 
     const handleImageUpload = async (e) => {
@@ -50,16 +52,16 @@ const ProfilePage = () => {
 
     const tabs = [
         { id: 'overview', label: 'Overview', icon: Activity },
-        { id: 'account', label: 'Account Info', icon: User },
-        { id: 'password', label: 'Password', icon: Lock },
+        { id: 'account', label: 'Account Settings', icon: User },
+        { id: 'security', label: 'Security & Privacy', icon: Shield },
+        { id: 'preferences', label: 'System Preferences', icon: Settings },
         { id: 'billing', label: 'Billing', icon: CreditCard },
     ];
 
     const stats = [
-        { label: 'Active Campaigns', value: '12', change: '+3 this month', icon: Zap, color: 'blue' },
-        { label: 'Total Devices', value: '5', change: '2 online now', icon: Activity, color: 'emerald' },
-        { label: 'Engagement Rate', value: '84%', change: '+12% vs last month', icon: TrendingUp, color: 'purple' },
-        { label: 'Total Spend', value: '$4,250', change: '75% of budget', icon: CreditCard, color: 'orange' },
+        { label: 'AD PLAY TIME', value: '1,420', change: '+3% this month', icon: Zap, color: 'blue' },
+        { label: 'AVERAGE TIME', value: '42s', change: '+2s since last week', icon: Activity, color: 'emerald' },
+        { label: 'ENGAGEMENT', value: '92%', change: '+5% vs last month', icon: TrendingUp, color: 'purple' },
     ];
 
     if (!isLoaded) return null;
@@ -73,7 +75,7 @@ const ProfilePage = () => {
                     className="relative bg-white rounded-[2rem] mb-8 shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10"
                 >
                     <div className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group">
-                        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
                     </div>
 
                     <div className="px-10 pb-10">
@@ -122,194 +124,372 @@ const ProfilePage = () => {
                     </div>
                 </motion.div>
 
-                <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-2 mb-8 border border-white shadow-sm flex gap-2 overflow-x-auto no-scrollbar">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-8 py-3.5 rounded-2xl font-black transition-all duration-300 relative ${activeTab === tab.id
-                                ? 'bg-adorix-dark text-white shadow-xl shadow-adorix-dark/20'
-                                : 'text-gray-500 hover:text-adorix-dark hover:bg-white'
-                                }`}
-                        >
-                            <tab.icon className={`w-4 h-4`} />
-                            <span className="tracking-tight">{tab.label}</span>
-                        </button>
-                    ))}
-                </div>
-
-                <AnimatePresence mode="wait">
-                    {activeTab === 'overview' && (
-                        <motion.div
-                            key="overview"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                        >
-                            {stats.map((stat, i) => (
-                                <div key={i} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all group">
-                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                        stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' :
-                                            stat.color === 'purple' ? 'bg-purple-50 text-purple-600' :
-                                                'bg-orange-50 text-orange-600'}`}>
-                                        <stat.icon className="w-7 h-7" />
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    <div className="flex-1 w-full min-h-[500px]">
+                        <AnimatePresence mode="wait">
+                            {activeTab === 'overview' && (
+                                <motion.div
+                                    key="overview"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="space-y-8"
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h2 className="text-4xl font-black text-adorix-dark tracking-tight">Analytics</h2>
+                                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Performance Hub</span>
                                     </div>
-                                    <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mb-1">{stat.label}</p>
-                                    <h3 className="text-3xl font-black text-adorix-dark mb-2 tracking-tighter">{stat.value}</h3>
-                                    <span className="text-xs font-black text-emerald-500 bg-emerald-50 px-2 py-1 rounded-lg">{stat.change}</span>
-                                </div>
-                            ))}
-                        </motion.div>
-                    )}
 
-                    {activeTab === 'account' && (
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {stats.map((stat, i) => (
+                                            <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm transition-all hover:shadow-md group flex flex-col items-center text-center">
+                                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-8 ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
+                                                    stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' :
+                                                        'bg-purple-50 text-purple-600'}`}>
+                                                    <stat.icon className="w-8 h-8" />
+                                                </div>
+                                                <p className="text-gray-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-3">{stat.label}</p>
+                                                <h3 className="text-4xl font-black text-adorix-dark mb-1 tracking-tighter">{stat.value}</h3>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {activeTab === 'account' && (
+                                <div className="space-y-6">
+                                    <motion.div
+                                        key="account"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm"
+                                    >
+                                        <div className="flex items-center gap-4 mb-10">
+                                            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                                                <User className="w-6 h-6" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl font-black text-adorix-dark leading-tight">Account Information</h3>
+                                                <p className="text-gray-500 font-medium tracking-tight">Manage your professional profile details.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                            {/* Column 1: Personal Details */}
+                                            <div className="space-y-8">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-black text-gray-400">1</div>
+                                                    <h4 className="font-black text-adorix-dark text-lg">Personal Details</h4>
+                                                </div>
+                                                
+                                                <div className="space-y-6">
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-adorix-dark px-1">Full Name</label>
+                                                        <input 
+                                                            type="text" 
+                                                            defaultValue={user?.fullName} 
+                                                            className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all"
+                                                            placeholder="Your full name"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-adorix-dark px-1">Phone Number</label>
+                                                        <input 
+                                                            type="text" 
+                                                            className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all"
+                                                            placeholder="Phone"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Column 2: Professional Info */}
+                                            <div className="space-y-8">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-black text-gray-400">2</div>
+                                                    <h4 className="font-black text-adorix-dark text-lg">Professional Info</h4>
+                                                </div>
+
+                                                <div className="space-y-6">
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-adorix-dark px-1">Company</label>
+                                                        <input 
+                                                            type="text" 
+                                                            className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all"
+                                                            placeholder="Enter company name"
+                                                        />
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-adorix-dark px-1">Bio</label>
+                                                        <textarea 
+                                                            rows="4"
+                                                            className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all resize-none"
+                                                            placeholder="Write a short professional bio..."
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-12 pt-8 border-t border-gray-50 flex justify-end">
+                                            <button className="px-10 py-4 bg-adorix-dark text-white rounded-2xl font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20 flex items-center gap-2">
+                                                <Save className="w-5 h-5" /> Save Changes
+                                            </button>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Email Management Card */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center gap-6">
+                                            <div className="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-600 border border-teal-100/50">
+                                                <Mail className="w-7 h-7" />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xl font-black text-adorix-dark leading-tight">Email Management</h4>
+                                                <p className="text-gray-400 font-bold mt-1">
+                                                    {user?.primaryEmailAddress?.emailAddress || (user?.emailAddresses && user.emailAddresses[0]?.emailAddress) || "No email available"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => {
+                                                setEmailToVerify(user?.primaryEmailAddress?.emailAddress || '');
+                                                setIsEmailModalOpen(true);
+                                            }}
+                                            className="px-6 py-3 bg-gray-50 hover:bg-gray-100 text-adorix-dark rounded-xl font-black transition-all flex items-center gap-2 group"
+                                        >
+                                            Change Email 
+                                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                        </button>
+                                    </motion.div>
+                                </div>
+                            )}
+
+                            {activeTab === 'security' && (
+                                <motion.div
+                                    key="security"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl"
+                                >
+                                    <h3 className="text-2xl font-black text-adorix-dark mb-8">Security Settings</h3>
+                                    <div className="space-y-6">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Current Password</label>
+                                            <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">New Password</label>
+                                            <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
+                                        </div>
+                                        <button className="w-full py-4 bg-adorix-dark text-white rounded-2xl font-black hover:scale-[1.02] transition-all shadow-xl shadow-adorix-dark/20">
+                                            Update Security Password
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {activeTab === 'preferences' && (
+                                <motion.div
+                                    key="preferences"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm"
+                                >
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                                            <Settings className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-2xl font-black text-adorix-dark">System Preferences</h3>
+                                            <p className="text-gray-500 font-medium tracking-tight">Configure your global application behavior.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                                        {[
+                                            { title: 'Smart Notifications', desc: 'Choose updates to receive', icon: Bell, color: 'orange' },
+                                            { title: 'Appearance', desc: 'Dark & Light modes', icon: Zap, color: 'yellow' },
+                                            { title: 'Language', desc: 'English (United Kingdom)', icon: Globe, color: 'blue' },
+                                        ].map((item, i) => (
+                                            <div key={i} className="bg-white p-8 rounded-[2rem] border border-gray-50 shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col items-center text-center">
+                                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${
+                                                    item.color === 'orange' ? 'bg-orange-50 text-orange-500' :
+                                                    item.color === 'yellow' ? 'bg-yellow-50 text-yellow-500' :
+                                                    'bg-blue-50 text-blue-500'
+                                                }`}>
+                                                    <item.icon className="w-7 h-7" />
+                                                </div>
+                                                <h4 className="font-black text-adorix-dark mb-1">{item.title}</h4>
+                                                <p className="text-xs text-gray-400 font-bold uppercase tracking-tight">{item.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {activeTab === 'billing' && (
+                                <motion.div
+                                    key="billing"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="space-y-8"
+                                >
+                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
+                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+                                            <div>
+                                                <h3 className="text-2xl font-black text-adorix-dark">Payment Methods</h3>
+                                                <p className="text-gray-500 font-medium mt-1">Manage your cards and billing details.</p>
+                                            </div>
+                                            <button className="px-6 py-3 bg-blue-50 text-blue-600 rounded-xl font-black hover:bg-blue-100 transition-all flex items-center gap-2">
+                                                <Plus className="w-5 h-5" /> Add New Card
+                                            </button>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="p-8 rounded-[2rem] border-2 border-adorix-dark bg-adorix-dark text-white shadow-2xl relative overflow-hidden group">
+                                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                                                    <CreditCard className="w-32 h-32" />
+                                                </div>
+                                                <div className="relative z-10">
+                                                    <div className="flex justify-between items-start mb-12">
+                                                        <div className="w-12 h-8 bg-white/20 rounded-lg backdrop-blur-md" />
+                                                        <BadgeCheck className="w-6 h-6 text-blue-400" />
+                                                    </div>
+                                                    <p className="text-xl font-black tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
+                                                    <div className="flex justify-between items-end">
+                                                        <div>
+                                                            <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Card Holder</p>
+                                                            <p className="font-bold">{user?.fullName}</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Expires</p>
+                                                            <p className="font-bold">12/26</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="p-8 rounded-[2rem] border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-gray-400 gap-4 hover:border-gray-200 hover:bg-gray-50/50 transition-all cursor-pointer group">
+                                                <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                    <Plus className="w-8 h-8" />
+                                                </div>
+                                                <p className="font-black text-sm uppercase tracking-widest">Add Primary Method</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
+                                        <h3 className="text-xl font-black text-adorix-dark mb-8">Billing History</h3>
+                                        <div className="space-y-4">
+                                            {[1, 2, 3].map((i) => (
+                                                <div key={i} className="flex items-center justify-between p-6 rounded-2xl hover:bg-gray-50 transition-all group">
+                                                    <div className="flex items-center gap-6">
+                                                        <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-white transition-colors">
+                                                            <Download className="w-5 h-5" />
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-black text-adorix-dark">Invoice #ADX-2026-00{i}</p>
+                                                            <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">March 12, 2026</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="font-black text-adorix-dark">$49.00</p>
+                                                        <p className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-md inline-block">PAID</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
+                    <div className="w-full lg:w-80 flex-shrink-0">
+                        <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] p-4 border border-white shadow-xl shadow-adorix-dark/5 space-y-2">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`w-full flex items-center justify-between px-6 py-5 rounded-[1.5rem] font-bold transition-all duration-300 group ${activeTab === tab.id
+                                        ? 'bg-adorix-dark text-white shadow-lg shadow-adorix-dark/20 translate-x-1'
+                                        : 'text-gray-500 hover:text-adorix-dark hover:bg-white'
+                                        }`}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-gray-400 group-hover:text-adorix-primary'}`} />
+                                        <span className="tracking-tight text-sm">{tab.label}</span>
+                                    </div>
+                                    <ChevronRight className={`w-4 h-4 transition-transform ${activeTab === tab.id ? 'translate-x-1 opacity-100' : 'opacity-0'}`} />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Email Management Modal */}
+            <AnimatePresence>
+                {isEmailModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
                         <motion.div
-                            key="account"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsEmailModalOpen(false)}
+                            className="absolute inset-0 bg-adorix-dark/40 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative z-10 overflow-hidden"
                         >
-                            <h3 className="text-2xl font-black text-adorix-dark mb-8">Account Information</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <h3 className="text-3xl font-black text-adorix-dark mb-8">Email Management</h3>
+                            
+                            <div className="space-y-8">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">First Name</label>
-                                    <input 
-                                        type="text" 
-                                        defaultValue={user?.firstName} 
-                                        className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Last Name</label>
-                                    <input 
-                                        type="text" 
-                                        defaultValue={user?.lastName} 
-                                        className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2 md:col-span-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Email Address</label>
                                     <input 
                                         type="email" 
-                                        value={user?.primaryEmailAddress?.emailAddress} 
-                                        disabled
-                                        className="w-full px-6 py-4 bg-gray-100 border border-transparent rounded-2xl text-gray-400 font-bold cursor-not-allowed"
+                                        value={emailToVerify}
+                                        onChange={(e) => setEmailToVerify(e.target.value)}
+                                        className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-[1.5rem] text-gray-900 font-bold outline-none transition-all text-lg"
+                                        placeholder="Enter your email"
                                     />
                                 </div>
-                            </div>
-                            <div className="mt-10 pt-10 border-t border-gray-50 flex justify-end">
-                                <button className="px-10 py-4 bg-adorix-dark text-white rounded-2xl font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20 flex items-center gap-2">
-                                    <Save className="w-5 h-5" /> Save Changes
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
 
-                    {activeTab === 'password' && (
-                        <motion.div
-                            key="password"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl"
-                        >
-                            <h3 className="text-2xl font-black text-adorix-dark mb-8">Security Settings</h3>
-                            <div className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Current Password</label>
-                                    <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">New Password</label>
-                                    <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
-                                </div>
-                                <button className="w-full py-4 bg-adorix-dark text-white rounded-2xl font-black hover:scale-[1.02] transition-all shadow-xl shadow-adorix-dark/20">
-                                    Update Security Password
-                                </button>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'billing' && (
-                        <motion.div
-                            key="billing"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="space-y-8"
-                        >
-                            <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-                                    <div>
-                                        <h3 className="text-2xl font-black text-adorix-dark">Payment Methods</h3>
-                                        <p className="text-gray-500 font-medium mt-1">Manage your cards and billing details.</p>
-                                    </div>
-                                    <button className="px-6 py-3 bg-blue-50 text-blue-600 rounded-xl font-black hover:bg-blue-100 transition-all flex items-center gap-2">
-                                        <Plus className="w-5 h-5" /> Add New Card
+                                <div className="flex items-center justify-end gap-6 pt-4">
+                                    <button 
+                                        onClick={() => setIsEmailModalOpen(false)}
+                                        className="text-gray-400 font-black hover:text-gray-600 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button 
+                                        onClick={() => {
+                                            // Handle verification logic
+                                            setIsEmailModalOpen(false);
+                                        }}
+                                        className="px-10 py-5 bg-adorix-dark text-white rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20"
+                                    >
+                                        Verify Email
                                     </button>
                                 </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="p-8 rounded-[2rem] border-2 border-adorix-dark bg-adorix-dark text-white shadow-2xl relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
-                                            <CreditCard className="w-32 h-32" />
-                                        </div>
-                                        <div className="relative z-10">
-                                            <div className="flex justify-between items-start mb-12">
-                                                <div className="w-12 h-8 bg-white/20 rounded-lg backdrop-blur-md" />
-                                                <BadgeCheck className="w-6 h-6 text-blue-400" />
-                                            </div>
-                                            <p className="text-xl font-black tracking-[0.2em] mb-8">•••• •••• •••• 4242</p>
-                                            <div className="flex justify-between items-end">
-                                                <div>
-                                                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Card Holder</p>
-                                                    <p className="font-bold">{user?.fullName}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Expires</p>
-                                                    <p className="font-bold">12/26</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="p-8 rounded-[2rem] border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-gray-400 gap-4 hover:border-gray-200 hover:bg-gray-50/50 transition-all cursor-pointer group">
-                                        <div className="w-16 h-16 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                            <Plus className="w-8 h-8" />
-                                        </div>
-                                        <p className="font-black text-sm uppercase tracking-widest">Add Primary Method</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm">
-                                <h3 className="text-xl font-black text-adorix-dark mb-8">Billing History</h3>
-                                <div className="space-y-4">
-                                    {[1, 2, 3].map((i) => (
-                                        <div key={i} className="flex items-center justify-between p-6 rounded-2xl hover:bg-gray-50 transition-all group">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-white transition-colors">
-                                                    <Download className="w-5 h-5" />
-                                                </div>
-                                                <div>
-                                                    <p className="font-black text-adorix-dark">Invoice #ADX-2026-00{i}</p>
-                                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">March 12, 2026</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <p className="font-black text-adorix-dark">$49.00</p>
-                                                <p className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-md inline-block">PAID</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
                         </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
