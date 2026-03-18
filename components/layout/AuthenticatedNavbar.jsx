@@ -6,7 +6,7 @@ import Navbar from './navbar';
 export default function AuthenticatedNavbar() {
   const { isLoaded, isSignedIn } = useUser();
 
-  if (!isLoaded || !isSignedIn) {
+  if (!isLoaded) {
     return null;
   }
 

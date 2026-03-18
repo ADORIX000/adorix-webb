@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Hyper-Premium Advanced Animation Components (High Visibility v2.2) ---
@@ -51,128 +51,111 @@ const BioMesh = ({ isPaused }) => {
     );
 };
 
-const SupersonicStream = ({ isPaused }) => {
-    const [isMounted, setIsMounted] = useState(false);
-    useEffect(() => { setIsMounted(true); }, []);
+const SupersonicStream = ({ isPaused }) => (
+    <div className="relative w-full h-full flex items-center justify-center bg-white rounded-2xl overflow-hidden">
+        <svg viewBox="0 0 100 100" className="w-full h-full p-4">
+            <defs>
+                <filter id="speedBlur">
+                    <feGaussianBlur stdDeviation="1.5" />
+                </filter>
+            </defs>
 
-    // Pre-compute stable random values so they never differ between SSR and CSR
-    const speedLines = useMemo(() => [
-        { sw: 0.72, op: 0.28, dur: 0.93 },
-        { sw: 1.15, op: 0.41, dur: 1.21 },
-        { sw: 0.61, op: 0.35, dur: 1.08 },
-        { sw: 1.38, op: 0.22, dur: 0.87 },
-        { sw: 0.88, op: 0.47, dur: 1.14 },
-        { sw: 0.54, op: 0.31, dur: 0.95 },
-        { sw: 1.22, op: 0.44, dur: 1.30 },
-        { sw: 0.90, op: 0.38, dur: 1.05 },
-    ], []);
+            {/* Warp Speed Tunnel Effect */}
+            <g opacity="0.15">
+                {[...Array(3)].map((_, i) => (
+                    <motion.circle
+                        key={i}
+                        cx="50" cy="50" r="10"
+                        fill="none"
+                        stroke="var(--adorix-primary)"
+                        strokeWidth="0.5"
+                        animate={{ r: [10, 80], opacity: [0.6, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.5, ease: "easeOut" }}
+                    />
+                ))}
+            </g>
 
-    const streakParticles = useMemo(() => [
-        { w: 22.4, dur: 0.87, delay: 0.12, y: 48 },
-        { w: 14.8, dur: 0.73, delay: 0.55, y: 32 },
-        { w: 27.1, dur: 0.95, delay: 0.28, y: 67 },
-        { w: 18.3, dur: 0.61, delay: 0.74, y: 21 },
-        { w: 24.9, dur: 0.82, delay: 0.41, y: 55 },
-        { w: 11.6, dur: 0.68, delay: 0.89, y: 78 },
-    ], []);
-
-    return (
-        <div className="relative w-full h-full flex items-center justify-center bg-white rounded-2xl overflow-hidden">
-            <svg viewBox="0 0 100 100" className="w-full h-full p-4">
-                <defs>
-                    <filter id="speedBlur">
-                        <feGaussianBlur stdDeviation="1.5" />
-                    </filter>
-                </defs>
-
-                {/* Warp Speed Tunnel Effect */}
-                <g opacity="0.15">
-                    {[...Array(3)].map((_, i) => (
-                        <motion.circle
+            {/* Advanced Speed Lines with Parallax */}
+            <g>
+                {[...Array(8)].map((_, i) => {
+                    const randomWidth = [0.8, 1.2, 0.6, 1.4, 0.9, 1.1, 0.7, 1.3][i];
+                    const randomOpacity = [0.3, 0.45, 0.25, 0.4, 0.35, 0.5, 0.3, 0.4][i];
+                    const randomDuration = [1.0, 1.2, 0.9, 1.3, 1.1, 1.0, 1.2, 0.8][i];
+                    return (
+                        <motion.line
                             key={i}
-                            cx="50" cy="50" r="10"
-                            fill="none"
+                            x1="120" x2="-20"
+                            y1={20 + i * 8} y2={20 + i * 8}
                             stroke="var(--adorix-primary)"
-                            strokeWidth="0.5"
-                            animate={{ r: [10, 80], opacity: [0.6, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.5, ease: "easeOut" }}
+                            strokeWidth={randomWidth}
+                            strokeDasharray="20 40"
+                            opacity={randomOpacity}
+                            animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
+                            transition={{ duration: randomDuration, repeat: Infinity, ease: "linear" }}
                         />
-                    ))}
-                </g>
+                    );
+                })}
+            </g>
 
-                {/* Advanced Speed Lines with Parallax - only rendered client-side to avoid hydration mismatch */}
-                {isMounted && (
-                    <g>
-                        {speedLines.map((line, i) => (
-                            <motion.line
-                                key={i}
-                                x1="120" x2="-20"
-                                y1={20 + i * 8} y2={20 + i * 8}
-                                stroke="var(--adorix-primary)"
-                                strokeWidth={line.sw}
-                                strokeDasharray="20 40"
-                                opacity={line.op}
-                                animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
-                                transition={{ duration: line.dur, repeat: Infinity, ease: "linear" }}
-                            />
-                        ))}
-                    </g>
-                )}
+            {/* Simplified but Dynamic Browser Window */}
+            <motion.g
+                animate={!isPaused ? {
+                    y: [0, -3, 0],
+                    rotate: [-1, 1, -1]
+                } : { y: 0 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+                {/* Window Glow */}
+                <circle cx="50" cy="50" r="25" fill="var(--adorix-primary)" opacity="0.05" filter="url(#speedBlur)" />
 
-                {/* Simplified but Dynamic Browser Window */}
-                <motion.g
-                    animate={!isPaused ? {
-                        y: [0, -3, 0],
-                        rotate: [-1, 1, -1]
-                    } : { y: 0 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                >
-                    {/* Window Glow */}
-                    <circle cx="50" cy="50" r="25" fill="var(--adorix-primary)" opacity="0.05" filter="url(#speedBlur)" />
+                <rect x="25" y="32" width="50" height="36" rx="4" fill="white" stroke="var(--adorix-primary)" strokeWidth="1" shadow="0 10px 15px -3px rgb(0 0 0 / 0.1)" />
+                <rect x="25" y="32" width="50" height="8" rx="4" fill="var(--adorix-dark)" />
 
-                    <rect x="25" y="32" width="50" height="36" rx="4" fill="white" stroke="var(--adorix-primary)" strokeWidth="1" />
-                    <rect x="25" y="32" width="50" height="8" rx="4" fill="var(--adorix-dark)" />
+                {/* Dynamic Content Lines */}
+                <rect x="30" y="46" width="30" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
+                <rect x="30" y="52" width="20" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
+                <motion.rect
+                    x="30" y="58" width="15" height="2" fill="var(--adorix-accent)" rx="1"
+                    animate={{ width: [15, 35, 15] }} transition={{ duration: 2, repeat: Infinity }}
+                />
 
-                    {/* Dynamic Content Lines */}
-                    <rect x="30" y="46" width="30" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
-                    <rect x="30" y="52" width="20" height="2" fill="var(--adorix-primary)" opacity="0.3" rx="1" />
-                    <motion.rect
-                        x="30" y="58" width="15" height="2" fill="var(--adorix-accent)" rx="1"
-                        animate={{ width: [15, 35, 15] }} transition={{ duration: 2, repeat: Infinity }}
-                    />
+                {/* Advanced Lightning Strike */}
+                <motion.path
+                    d="M 62 42 L 54 54 L 59 54 L 56 66 L 66 52 L 61 52 Z"
+                    fill="var(--adorix-accent)"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1 }}
+                />
+            </motion.g>
 
-                    {/* Advanced Lightning Strike */}
-                    <motion.path
-                        d="M 62 42 L 54 54 L 59 54 L 56 66 L 66 52 L 61 52 Z"
-                        fill="var(--adorix-accent)"
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: [0.6, 1, 0.6] }}
-                        transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1 }}
-                    />
-                </motion.g>
-
-                {/* High-speed streak particles - only rendered client-side */}
-                {isMounted && streakParticles.map((p, i) => (
+            {/* High-speed streak particles */}
+            {[...Array(6)].map((_, i) => {
+                const randomWidth = [15, 25, 12, 30, 18, 22][i];
+                const randomDuration = [0.6, 0.8, 0.5, 0.9, 0.7, 0.6][i];
+                const randomDelay = [0.1, 0.3, 0.5, 0.2, 0.4, 0.6][i];
+                const randomY = [25, 45, 65, 35, 55, 75][i];
+                return (
                     <motion.rect
                         key={`p-${i}`}
-                        width={p.w}
+                        width={randomWidth}
                         height="0.8"
                         fill="var(--adorix-accent)"
                         opacity="0.4"
                         animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
                         transition={{
-                            duration: p.dur,
+                            duration: randomDuration,
                             repeat: Infinity,
-                            delay: p.delay,
+                            delay: randomDelay,
                             ease: "linear"
                         }}
-                        y={p.y}
+                        y={randomY}
                     />
-                ))}
-            </svg>
-        </div>
-    );
-};
+                );
+            })}
+        </svg>
+    </div>
+);
 
 const QuantumVault = ({ isPaused }) => {
     return (

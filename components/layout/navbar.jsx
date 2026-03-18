@@ -1,9 +1,11 @@
 'use client';
 
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon, Settings } from 'lucide-react';
+import Image from 'next/image';
 import { useUser, useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
@@ -28,12 +30,14 @@ const Navbar = () => {
   }, [pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/home', protected: true },
+    { name: 'Home', path: '/home', protected: false },
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
     { name: 'Pricing', path: '/pricing', protected: false },
     { name: 'Contact', path: '/contact', protected: false },
   ];
+
+  const isHomeActive = pathname === '/home' || pathname === '/';
 
   const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
 
@@ -48,23 +52,32 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/dashboard" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
-            <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
-            ADORIX
+          <Link href="/dashboard" className="flex items-center gap-2 group">
+            <Image
+              src="/icon.png"
+              alt="Adorix Logo"
+              width={32}
+              height={32}
+              className="rounded-lg group-hover:scale-110 transition-transform"
+            />
+            <span className="text-2xl font-bold tracking-tight text-adorix-dark">ADORIX</span>
           </Link>
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
-            {visibleLinks.map((link) => (
-              <Link
-                key={link.path}
-                href={link.path}
-                className={`transition-colors hover:text-adorix-primary relative group ${pathname === link.path ? 'text-adorix-primary font-bold' : ''}`}
-              >
-                {link.name}
-                <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === link.path ? 'scale-x-100' : ''}`} />
-              </Link>
-            ))}
+            {visibleLinks.map((link) => {
+              const isActive = link.path === '/home' ? isHomeActive : pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  className={`transition-colors hover:text-adorix-primary relative group ${isActive ? 'text-adorix-primary font-bold' : ''}`}
+                >
+                  {link.name}
+                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${isActive ? 'scale-x-100' : ''}`} />
+                </Link>
+              );
+            })}
           </div>
 
 
@@ -81,19 +94,21 @@ const Navbar = () => {
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-adorix-dark text-white px-6 py-2 rounded-full hover:bg-adorix-primary transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+                  className={`transition-colors hover:text-adorix-primary relative group ${pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
                 >
                   Sign Up
+                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/signup' ? 'scale-x-100' : ''}`} />
                 </Link>
               </>
             ) : (
               <div className="flex items-center gap-6">
                 <Link
                   href="/profile"
-                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary ${pathname === '/profile' ? 'text-adorix-primary font-bold' : 'text-adorix-dark'}`}
+                  className={`flex items-center gap-2 transition-colors hover:text-adorix-primary relative group ${pathname === '/profile' ? 'text-adorix-primary font-bold' : 'text-adorix-dark'}`}
                 >
                   <UserIcon size={18} />
                   <span>Profile</span>
+                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/profile' ? 'scale-x-100' : ''}`} />
                 </Link>
                 <button
                   onClick={() => signOut({ redirectUrl: 'https://adorixit.com/' })}
@@ -119,15 +134,18 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
-          {visibleLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {visibleLinks.map((link) => {
+            const isActive = link.path === '/home' ? isHomeActive : pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`text-2xl font-bold transition-colors ${isActive ? 'text-adorix-primary' : 'text-gray-800 hover:text-adorix-primary'}`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
           <div className="flex flex-col items-center gap-8 mt-2 w-full max-w-xs">
             {!isSignedIn ? (
               <>
@@ -139,7 +157,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   href="/signup"
-                  className="w-full bg-adorix-dark text-white text-center py-4 rounded-xl text-xl font-bold hover:bg-adorix-primary transition-colors"
+                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
                 >
                   Sign Up
                 </Link>

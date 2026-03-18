@@ -3,8 +3,29 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import AuthenticatedNavbar from '@/components/layout/AuthenticatedNavbar'
 import GradientWrapper from '@/components/layout/GradientWrapper'
+import Footer from '@/components/common/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
+
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
+
+function getClerkFrontendApiFromPublishableKey(key) {
+  if (!key) return undefined
+
+  const encodedPart = key.replace(/^pk_(test|live)_/, '')
+
+  try {
+    const decoded = Buffer.from(encodedPart, 'base64').toString('utf8').trim()
+    return decoded.endsWith('$') ? decoded.slice(0, -1) : decoded
+  } catch {
+    return undefined
+  }
+}
+
+const clerkFrontendApi = getClerkFrontendApiFromPublishableKey(clerkPublishableKey)
+const clerkJSUrl = clerkFrontendApi
+  ? `https://${clerkFrontendApi}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`
+  : undefined
 
 export const metadata = {
   title: 'Adorix - Advanced Campaign Studio',
@@ -13,15 +34,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={clerkPublishableKey} clerkJSUrl={clerkJSUrl}>
       <html lang="en" suppressHydrationWarning>
-                <body className={inter.className} suppressHydrationWarning>
-                    <GradientWrapper>
-                      <AuthenticatedNavbar />
-                      {children}
-                    </GradientWrapper>
-                </body>
-            </html>
-        </ClerkProvider>
-    )
+        <body className={inter.className} suppressHydrationWarning>
+          <GradientWrapper>
+            <AuthenticatedNavbar />
+            {children}
+            <Footer />
+          </GradientWrapper>
+        </body>
+      </html>
+    </ClerkProvider>
+  )
 }

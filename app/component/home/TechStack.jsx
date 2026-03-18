@@ -110,8 +110,11 @@ const TechStack = () => {
     const containerRef = useRef(null);
     const [scrollY, setScrollY] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     useEffect(() => {
+        setIsHydrated(true);
+
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1024); // lg breakpoint
         };
@@ -147,8 +150,10 @@ const TechStack = () => {
                 : 'flex flex-wrap justify-center items-center gap-6'
                 }`}>
                 {TECH_STACK.map((tech, index) => {
-                    // Calculate wave offset for each item - ONLY on desktop
-                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    // Keep first paint deterministic for SSR hydration, then animate on client.
+                    const waveOffset = !isHydrated || isMobile
+                        ? 0
+                        : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
 
                     return (
                         <a

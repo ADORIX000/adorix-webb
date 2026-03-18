@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div className="relative w-full overflow-hidden">
 
-      {/* 2. HERO SECTION */}
+      {/* HERO SECTION */}
       <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
 
         {/* Heading */}

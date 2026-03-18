@@ -1,8 +1,14 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Twitter, Linkedin, Github, Mail, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { Twitter, Linkedin, Github } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
 
 const Footer = () => {
+    const { isSignedIn } = useUser();
+
     return (
         <footer className="bg-adorix-dark text-white pt-20 pb-10 border-t border-white/10">
             <div className="max-w-7xl mx-auto px-6">
@@ -12,7 +18,14 @@ const Footer = () => {
 
                     {/* Brand & Socials */}
                     <div className="space-y-6">
-                        <Link href="/" className="text-3xl font-bold tracking-tight text-white">
+                        <Link href="/" className="text-3xl font-bold tracking-tight text-white flex items-center gap-2 group">
+                            <Image
+                                src="/icon.png"
+                                alt="Adorix Logo"
+                                width={40}
+                                height={40}
+                                className="rounded-lg group-hover:scale-110 transition-transform"
+                            />
                             ADORIX
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
@@ -35,16 +48,43 @@ const Footer = () => {
                     <div>
                         <h3 className="font-bold text-lg mb-6">Product</h3>
                         <ul className="space-y-4 text-gray-400 text-sm">
-                            <li><Link href="/dashboard" className="hover:text-adorix-primary transition-colors">Dashboard</Link></li>
-                            <li><Link href="/settings/help" className="hover:text-adorix-primary transition-colors">Help Center</Link></li>
+                            {/* Always show landing page essentials */}
+                            <li><Link href="/home" className="hover:text-adorix-primary transition-colors">Home & Features</Link></li>
+                            <li><Link href="/pricing" className="hover:text-adorix-primary transition-colors">Pricing</Link></li>
+
+                            {/* App links added for logged-in users */}
+                            {isSignedIn && (
+                                <>
+                                    <li><Link href="/dashboard" className="hover:text-adorix-primary transition-colors">Analytics Dashboard</Link></li>
+                                    <li><Link href="/campaign-studio" className="hover:text-adorix-primary transition-colors">Campaign Studio</Link></li>
+                                    <li><Link href="/dashboard/analytics" className="hover:text-adorix-primary transition-colors">Performance Insights</Link></li>
+                                </>
+                            )}
+                            {!isSignedIn && (
+                                <li><Link href="/signup" className="hover:text-adorix-primary transition-colors">Get Started</Link></li>
+                            )}
                         </ul>
                     </div>
 
-                    {/* Company Links */}
+                    {/* Company & Support */}
                     <div>
-                        <h3 className="font-bold text-lg mb-6">Company</h3>
+                        <h3 className="font-bold text-lg mb-6">Resources</h3>
                         <ul className="space-y-4 text-gray-400 text-sm">
-                            <li><Link href="/settings/policies" className="hover:text-adorix-primary transition-colors">Privacy & Terms</Link></li>
+                            {/* Always show company essentials */}
+                            <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Contact Us</Link></li>
+
+                            {/* Redirecting to Profile Settings as requested */}
+                            <li><Link href="/profile?tab=system" className="hover:text-adorix-primary transition-colors">Help Center</Link></li>
+
+                            {/* User-specific links added for logged-in users */}
+                            {isSignedIn && (
+                                <>
+                                    <li><Link href="/profile?tab=account" className="hover:text-adorix-primary transition-colors">Account Profile</Link></li>
+                                    <li><Link href="/profile?tab=billing" className="hover:text-adorix-primary transition-colors">Billing & Subscription</Link></li>
+                                    <li><Link href="/profile?tab=system" className="hover:text-adorix-primary transition-colors">System Preferences</Link></li>
+                                </>
+                            )}
+                            <li><Link href="/profile?tab=security" className="hover:text-adorix-primary transition-colors">Privacy & Terms</Link></li>
                         </ul>
                     </div>
 
