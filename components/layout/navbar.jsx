@@ -67,6 +67,7 @@ const Navbar = () => {
             ))}
           </div>
 
+
           {/* Auth Buttons */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
             {!isSignedIn ? (
@@ -95,7 +96,7 @@ const Navbar = () => {
                   <span>Profile</span>
                 </Link>
                 <button
-                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
+                  onClick={() => signOut({ redirectUrl: 'https://adorixit.com/' })}
                   className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
                 >
                   <LogOut size={18} />
@@ -153,7 +154,7 @@ const Navbar = () => {
                   Profile
                 </Link>
                 <button
-                  onClick={() => signOut({ redirectUrl: process.env.NEXT_PUBLIC_LANDING_PAGE_URL || 'https://adorix-landingpage.vercel.app/' })}
+                  onClick={() => signOut({ redirectUrl: 'https://adorixit.com/' })}
                   className="text-2xl font-bold text-red-500 hover:text-red-600 transition-colors flex items-center gap-3"
                 >
                   <LogOut size={24} />

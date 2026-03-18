@@ -54,3 +54,13 @@ body {
     /* adorix-accent */
     color: #ffffff;
 }
+
+/* Utility: hide scrollbars while preserving touch/drag scrolling */
+.team-carousel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.team-carousel::-webkit-scrollbar {
+    display: none;
+}
