@@ -519,23 +519,53 @@ const ProfileContent = () => {
                             )}
 
                             {activeTab === 'billing' && (
-                                <motion.div key="billing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto">
-                                    <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-8">
-                                        <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center"><CreditCard className="w-6 h-6" /></div>
-                                        <div>
-                                            <h2 className="text-2xl font-black text-adorix-dark">Billing & Plans</h2>
-                                            <p className="text-gray-500 font-medium">Manage your subscription and invoices.</p>
-                                        </div>
-                                    </div>
-                                    <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-8 bg-white border border-gray-200 rounded flex items-center justify-center"><span className="font-black italic text-blue-900 text-xs">VISA</span></div>
+                                <motion.div key="billing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
+                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto">
+                                        <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-8">
+                                            <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center"><CreditCard className="w-6 h-6" /></div>
                                             <div>
-                                                <p className="font-bold text-adorix-dark">Visa ending in 1234</p>
-                                                <p className="text-xs text-gray-500">Expires 12/28</p>
+                                                <h2 className="text-2xl font-black text-adorix-dark">Billing & Plans</h2>
+                                                <p className="text-gray-500 font-medium">Manage your subscription and invoices.</p>
                                             </div>
                                         </div>
-                                        <button className="text-sm font-bold text-adorix-primary hover:underline">Update</button>
+
+                                        <div className="max-w-xl mx-auto space-y-6">
+                                            <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow flex flex-col">
+                                                <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Payment Method</h3>
+
+                                                <div className="flex items-center gap-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl mb-6 group cursor-pointer hover:border-gray-300 hover:bg-white transition-all">
+                                                    <div className="w-14 h-10 bg-white border border-gray-200 rounded text-center flex items-center justify-center shadow-sm">
+                                                        <span className="font-black text-blue-900 italic tracking-tighter text-sm">VISA</span>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <p className="font-bold text-gray-800">Visa ending in <span className="font-black">1234</span></p>
+                                                        <p className="text-sm font-medium text-gray-500 mt-0.5">Expires 12/28</p>
+                                                    </div>
+                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-adorix-dark p-2 transition-all">
+                                                        <Settings className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+
+                                                <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 mb-6">
+                                                    <div className="flex items-start gap-3">
+                                                        <Calendar className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+                                                        <div>
+                                                            <p className="text-sm font-bold text-gray-900">Next billing date</p>
+                                                            <p className="text-sm font-medium text-gray-600 mt-0.5">Your next charge of $49.00 will be applied on <strong className="text-gray-900">April 15, 2026</strong>.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-auto flex flex-col sm:flex-row gap-3">
+                                                    <button className="flex-1 py-2.5 bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-xl font-bold transition-all text-sm border border-gray-200">
+                                                        Update Payment Method
+                                                    </button>
+                                                    <button className="flex-1 py-2.5 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-bold transition-all text-sm border border-transparent">
+                                                        View Billing History
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
