@@ -3,17 +3,16 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import TypingText from '../component/home/TypingText';
+import WorkflowAnimation from '../component/home/WorkflowAnimation';
+import TechStack from '../component/home/TechStack';
+import FeatureCards from '../component/home/FeatureCards';
+import VisionMission from '../component/home/VisionMission';
+import MeetTeam from '../component/home/MeetTeam';
 
-import TypingText from '../../src_legacy/components/home/TypingText';
-import WorkflowAnimation from '../../src_legacy/components/home/WorkflowAnimation';
-import TechStack from '../../src_legacy/components/home/TechStack';
-import FeatureCards from '../../src_legacy/components/home/FeatureCards';
-import VisionMission from '../../src_legacy/components/home/VisionMission';
-import MeetTeam from '../../src_legacy/components/home/MeetTeam';
-
-export default function HomePage() {
+const Home = () => {
   return (
-    <div className="relative w-full overflow-hidden mt-16">
+    <div className="relative w-full overflow-hidden">
 
       {/* HERO SECTION */}
       <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
@@ -48,22 +47,24 @@ export default function HomePage() {
           <Link href="/signup" className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
             Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
           </Link>
-          <Link href="/dashboard" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
+          <Link href="/login" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
             View Live Demo
           </Link>
         </motion.div>
       </section>
 
-      {/* INTELLIGENT FLOW SECTION */}
+
+
+
       <section className="px-6 max-w-7xl mx-auto mb-10 mt-10 md:mt-32 z-10 relative">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-16 items-center">
 
-          {/* LEFT COLUMN: Diagram */}
+          {/* LEFT COLUMN: Diagram (Larger: 3 cols) */}
           <div className="flex justify-center lg:justify-start lg:col-span-3">
             <WorkflowAnimation />
           </div>
 
-          {/* RIGHT COLUMN: Description */}
+          {/* RIGHT COLUMN: Description (Extremely Simple) */}
           <div className="text-center lg:text-left space-y-6 lg:col-span-2 flex flex-col justify-center items-center lg:items-start">
             <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
               The Intelligent Flow
@@ -79,7 +80,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* MARQUEE */}
+      {/* TECH STACK MARQUEE (Moved here) */}
       <TechStack />
 
       {/* VISION & MISSION SECTION */}
@@ -91,7 +92,7 @@ export default function HomePage() {
       {/* MEET OUR TEAM SECTION */}
       <MeetTeam />
 
-      {/* FINAL CTA */}
+      {/* 5. FINAL CTA */}
       <section className="py-32 px-6 max-w-7xl mx-auto z-10 relative">
         <div className="bg-adorix-dark rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden shadow-2xl">
           {/* Decorative Background Elements */}
@@ -118,4 +119,6 @@ export default function HomePage() {
 
     </div>
   );
-}
+};
+
+export default Home;
