@@ -240,410 +240,307 @@ const ProfileContent = () => {
         { label: 'Engagement', value: '92%', change: 'High Performance', icon: MousePointer2, color: 'purple' },
     ];
 
-    if (!isLoaded) return null;
+    const navigation = {
+        navigate: [
+            { id: 'overview', label: 'Dashboard', icon: Activity },
+            { id: 'account', label: 'Users', icon: User },
+            { id: 'system', label: 'Pages', icon: FileKey },
+            { id: 'billing', label: 'Media Files', icon: Database },
+        ],
+        more: [
+            { id: 'settings', label: 'Settings', icon: Settings },
+            { id: 'language', label: 'Language', icon: Globe },
+            { id: 'security', label: 'Security', icon: Shield },
+            { id: 'help', label: 'Help Center', icon: Bell },
+        ]
+    };
 
     return (
-        <div className="pt-28 px-6 pb-20 min-h-screen bg-transparent">
-            <div className="max-w-7xl mx-auto">
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Main Content Column */}
-                    <div className="lg:col-span-9 space-y-8">
-                        {/* Header Banner */}
-                        <div className="relative">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="relative bg-white rounded-[2rem] shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10 overflow-visible"
-                            >
-                                <div className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group rounded-t-[2rem]">
-                                    {coverImage ? (
-                                        <img src={coverImage} alt="Cover" className="w-full h-full object-cover absolute inset-0 z-0" />
-                                    ) : (
-                                        <div className="absolute inset-0 opacity-20 z-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
-                                    )}
-
-                                    {/* Elegant Cover Actions */}
-                                    <div className="absolute bottom-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                                        <button
-                                            onClick={() => !isUploadingCover && coverInputRef.current?.click()}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-gray-800 backdrop-blur-md rounded-full text-sm font-semibold transition-all shadow-lg border border-gray-100/50 hover:scale-105"
-                                        >
-                                            {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-                                            <span>{coverImage ? 'Change Cover' : 'Add Cover'}</span>
-                                        </button>
-                                        {coverImage && (
-                                            <button
-                                                onClick={handleRemoveCover}
-                                                className="p-2.5 bg-white/90 hover:bg-red-50 text-gray-500 hover:text-red-500 backdrop-blur-md rounded-full transition-all shadow-lg border border-gray-100/50 hover:scale-105"
-                                                title="Remove Cover"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        )}
-                                    </div>
-                                    <input type="file" hidden ref={coverInputRef} accept="image/*" onChange={handleCoverUpload} />
-                                </div>
-
-                                <div className="px-10 pb-10">
-                                    <div className="flex flex-col md:flex-row items-end gap-8 -mt-16 relative z-10">
-                                        <div className="relative w-40 h-40 group/avatar">
-                                            <div className="absolute inset-0 rounded-full bg-white p-1 shadow-2xl flex-shrink-0">
-                                                <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-4 border-gray-50 relative">
-                                                    {user?.hasImage ? (
-                                                        <img src={user?.imageUrl} alt="Avatar" className={`w-full h-full object-cover transition-opacity ${isUploadingImage ? 'opacity-50' : 'opacity-100'}`} />
-                                                    ) : (
-                                                        <div className="w-full h-full bg-gradient-to-br from-adorix-primary to-blue-600 flex items-center justify-center">
-                                                            <span className="text-white text-6xl font-black uppercase">{user?.firstName?.charAt(0) || '?'}</span>
-                                                        </div>
-                                                    )}
-                                                    {isUploadingImage && <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex flex-col items-center justify-center z-10"><Loader2 className="w-8 h-8 text-adorix-dark animate-spin" /></div>}
-                                                </div>
-                                            </div>
-
-                                            {/* Avatar Actions */}
-                                            <div className="absolute bottom-1 -right-2 flex flex-col gap-2 z-20 opacity-0 group-hover/avatar:opacity-100 transition-all duration-300">
-                                                <button onClick={() => !isUploadingImage && fileInputRef.current?.click()} className="p-2.5 bg-white text-gray-700 hover:text-adorix-dark rounded-full shadow-xl border border-gray-100 transition-transform hover:scale-110"><Camera className="w-4 h-4" /></button>
-                                            </div>
-                                            <input type="file" hidden ref={fileInputRef} accept="image/*" onChange={handleImageUpload} />
-                                        </div>
-
-                                        <div className="flex-1 pb-2 text-center md:text-left">
-                                            <h1 className="text-4xl font-black text-adorix-dark tracking-tight flex items-center gap-2 justify-center md:justify-start mb-4">
-                                                {user?.fullName}
-                                                <BadgeCheck className="w-8 h-8 text-blue-500 fill-blue-50" />
-                                            </h1>
-                                            <div className="flex flex-col gap-2 items-center md:items-start">
-                                                <p className="text-gray-500 font-medium flex items-center gap-4 flex-wrap justify-center md:justify-start">
-                                                    <span className="flex items-center gap-1.5"><Mail className="w-4 h-4 text-adorix-primary" /> {user?.primaryEmailAddress?.emailAddress}</span>
-                                                    <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-purple-500" /> Joined {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : ''}</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-
-                            {/* Floating Pencil Fix */}
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="absolute top-44 -translate-y-1/2 right-10 w-14 h-14 bg-white text-adorix-dark rounded-full hover:bg-adorix-light transition-all flex items-center justify-center shadow-2xl border border-gray-100 z-[60] group hover:scale-110 active:scale-95"
-                                title="Edit Profile"
-                            >
-                                <Edit2 className="w-6 h-6" />
-                            </button>
+        <div className="flex min-h-screen bg-[#f8f9fa]">
+            {/* Enterprise Sidebar */}
+            <aside className="w-64 border-r border-gray-200 bg-white flex flex-col fixed inset-y-0 z-50">
+                <div className="p-4 border-b border-gray-100 mb-2">
+                    <div className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                            {user?.hasImage ? (
+                                <img src={user?.imageUrl} alt="Avatar" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full bg-adorix-dark flex items-center justify-center text-white font-bold">{user?.firstName?.charAt(0)}</div>
+                            )}
                         </div>
+                        <div className="min-w-0">
+                            <h4 className="text-sm font-bold text-gray-900 truncate">{user?.fullName || 'User'}</h4>
+                            <p className="text-[10px] text-gray-500 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+                        </div>
+                        <ChevronRight className="w-3 h-3 text-gray-300 ml-auto" />
+                    </div>
+                </div>
 
-                        <AnimatePresence mode="wait">
-                            {activeTab === 'overview' && (
-                                <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-                                        {/* Analytics Column */}
-                                        <div className="lg:col-span-12">
-                                            <div className="flex items-baseline justify-between mb-10 px-2 h-8">
-                                                <h2 className="text-2xl font-black text-adorix-dark tracking-tight leading-none">Analytics</h2>
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none hidden sm:block">Performance Hub</p>
-                                            </div>
-
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                {stats.map((stat, i) => (
-                                                    <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm transition-all group hover:shadow-xl hover:shadow-adorix-dark/5">
-                                                        <div className="flex items-center gap-6">
-                                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
-                                                                }`}>
-                                                                <stat.icon className="w-7 h-7" />
-                                                            </div>
-                                                            <div>
-                                                                <p className="text-gray-400 font-black text-[11px] uppercase tracking-widest mb-1">{stat.label}</p>
-                                                                <h3 className="text-3xl font-black text-adorix-dark tracking-tighter">{stat.value}</h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {activeTab === 'account' && (
-                                <motion.div key="account" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-                                    <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-gray-100 shadow-sm space-y-10">
-                                        <div className="flex items-center justify-between pb-6 border-b border-gray-100">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center"><User className="w-6 h-6" /></div>
-                                                <div>
-                                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight">Account Information</h2>
-                                                    <p className="text-gray-500 font-medium mt-1">Manage your professional profile details.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                                            <div className="space-y-8">
-                                                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2"><span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">1</span> Personal Details</h3>
-                                                <div className="space-y-4">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Full Name</label>
-                                                        <input type="text" value={accountInfo.fullName} onChange={(e) => setAccountInfo({ ...accountInfo, fullName: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" placeholder="Full Name" />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Phone Number</label>
-                                                        <input type="tel" value={accountInfo.phoneNumber} onChange={(e) => setAccountInfo({ ...accountInfo, phoneNumber: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" placeholder="Phone" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="space-y-8">
-                                                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2"><span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">2</span> Professional Info</h3>
-                                                <div className="space-y-4">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Company</label>
-                                                        <input type="text" value={accountInfo.company} onChange={(e) => setAccountInfo({ ...accountInfo, company: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Bio</label>
-                                                        <textarea rows="3" value={accountInfo.bio} onChange={(e) => setAccountInfo({ ...accountInfo, bio: e.target.value })} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary resize-none" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="pt-8 border-t border-gray-100 flex justify-end">
-                                            <button onClick={handleSaveAccountInfo} disabled={isSaving} className="px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all flex items-center gap-2">
-                                                {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                                                Save Changes
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    {/* Email Settings Card */}
-                                    <div className="bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-adorix-primary">
-                                                    <Mail className="w-6 h-6" />
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-black text-adorix-dark">Email Management</h3>
-                                                    <p className="text-sm text-gray-400 font-medium">{user?.primaryEmailAddress?.emailAddress}</p>
-                                                </div>
-                                            </div>
-                                            <button onClick={() => setIsEmailModalOpen(true)} className="px-6 py-3 bg-gray-50 hover:bg-adorix-light text-adorix-dark rounded-xl font-bold transition-all flex items-center gap-2">
-                                                Change Email <ChevronRight className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {activeTab === 'security' && (
-                                <motion.div key="security" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto space-y-8">
-                                        <div className="flex items-center gap-4 pb-6 border-b border-gray-100">
-                                            <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center"><Lock className="w-6 h-6" /></div>
-                                            <div>
-                                                <h2 className="text-2xl font-black text-adorix-dark">Security Settings</h2>
-                                                <p className="text-gray-500 font-medium">Update your password to keep your account secure.</p>
-                                            </div>
-                                        </div>
-                                        <form onSubmit={handlePasswordChange} className="space-y-6">
-                                            {passwordError && <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm font-bold flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> {passwordError}</div>}
-                                            <div className="space-y-4">
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Current Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">New Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-bold text-gray-700">Confirm New Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
-                                                </div>
-                                            </div>
-                                            <div className="flex justify-end pt-4">
-                                                <button type="submit" disabled={isChangingPassword} className="px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all flex items-center gap-2">
-                                                    {isChangingPassword ? <Loader2 className="w-5 h-5 animate-spin" /> : <Shield className="w-5 h-5" />}
-                                                    Update Password
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    {/* Additional Security Cards */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                                        {[
-                                            { label: 'Access Control', sub: 'Manage your credentials and 2FA', icon: Lock },
-                                            { label: 'Privacy Protocol', sub: 'Hide sensitive data from dashboard', icon: Eye }
-                                        ].map((item) => (
-                                            <div key={item.label} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer">
-                                                <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-4 group-hover:bg-adorix-light transition-colors">
-                                                    <item.icon className="w-6 h-6 text-adorix-dark" />
-                                                </div>
-                                                <h3 className="font-black text-adorix-dark mb-1">{item.label}</h3>
-                                                <p className="text-xs text-gray-400 font-medium">{item.sub}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {activeTab === 'system' && (
-                                <motion.div key="system" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-8">
-                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-4xl mx-auto">
-                                        <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-10">
-                                            <div className="w-12 h-12 bg-gray-50 text-adorix-primary rounded-2xl flex items-center justify-center"><Settings className="w-6 h-6" /></div>
-                                            <div>
-                                                <h2 className="text-2xl font-black text-adorix-dark">System Preferences</h2>
-                                                <p className="text-gray-500 font-medium">Configure your global application behavior.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                            {[
-                                                { label: 'Smart Notifications', sub: 'Choose updates to receive', icon: Bell, color: 'text-orange-500', bg: 'bg-orange-50' },
-                                                { label: 'Appearance', sub: 'Dark & Light modes', icon: Zap, color: 'text-yellow-500', bg: 'bg-yellow-50' },
-                                                { label: 'Language', sub: 'English (United Kingdom)', icon: Globe, color: 'text-blue-500', bg: 'bg-blue-50' }
-                                            ].map((item) => (
-                                                <div key={item.label} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary">
-                                                    <div className={`w-14 h-14 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                                        <item.icon className="w-7 h-7" />
-                                                    </div>
-                                                    <h3 className="text-lg font-black text-adorix-dark mb-2">{item.label}</h3>
-                                                    <p className="text-sm text-gray-400 font-medium leading-relaxed">{item.sub}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-
-                            {activeTab === 'billing' && (
-                                <motion.div key="billing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
-                                    <div className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto">
-                                        <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-8">
-                                            <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center"><CreditCard className="w-6 h-6" /></div>
-                                            <div>
-                                                <h2 className="text-2xl font-black text-adorix-dark">Billing & Plans</h2>
-                                                <p className="text-gray-500 font-medium">Manage your subscription and invoices.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="max-w-xl mx-auto space-y-6">
-                                            <div className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow flex flex-col">
-                                                <h3 className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">Payment Method</h3>
-
-                                                <div className="flex items-center gap-4 p-4 border border-gray-100 bg-gray-50/50 rounded-xl mb-6 group cursor-pointer hover:border-gray-300 hover:bg-white transition-all">
-                                                    <div className="w-14 h-10 bg-white border border-gray-200 rounded text-center flex items-center justify-center shadow-sm">
-                                                        <span className="font-black text-blue-900 italic tracking-tighter text-sm">VISA</span>
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-bold text-gray-800">Visa ending in <span className="font-black">1234</span></p>
-                                                        <p className="text-sm font-medium text-gray-500 mt-0.5">Expires 12/28</p>
-                                                    </div>
-                                                    <button className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-adorix-dark p-2 transition-all">
-                                                        <Settings className="w-4 h-4" />
-                                                    </button>
-                                                </div>
-
-                                                <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 mb-6">
-                                                    <div className="flex items-start gap-3">
-                                                        <Calendar className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
-                                                        <div>
-                                                            <p className="text-sm font-bold text-gray-900">Next billing date</p>
-                                                            <p className="text-sm font-medium text-gray-600 mt-0.5">Your next charge of $49.00 will be applied on <strong className="text-gray-900">April 15, 2026</strong>.</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="mt-auto flex flex-col sm:flex-row gap-3">
-                                                    <button className="flex-1 py-2.5 bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-xl font-bold transition-all text-sm border border-gray-200">
-                                                        Update Payment Method
-                                                    </button>
-                                                    <button className="flex-1 py-2.5 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl font-bold transition-all text-sm border border-transparent">
-                                                        View Billing History
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                <div className="flex-1 overflow-y-auto px-3 py-4 space-y-8">
+                    <div>
+                        <h3 className="px-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">Navigate</h3>
+                        <nav className="space-y-1">
+                            {navigation.navigate.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleTabChange(item.id)}
+                                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all group ${
+                                        activeTab === item.id
+                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
+                                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                                    }`}
+                                >
+                                    <item.icon className="w-4 h-4" />
+                                    {item.label}
+                                    <ChevronRight className={`w-3 h-3 ml-auto ${activeTab === item.id ? 'opacity-100' : 'opacity-0'}`} />
+                                </button>
+                            ))}
+                        </nav>
                     </div>
 
-                    {/* Right Sidebar Navigation */}
-                    <aside className="lg:col-span-3 space-y-8 lg:sticky lg:top-28">
-                        <div className="bg-white rounded-[2rem] p-6 shadow-xl shadow-adorix-dark/5 border border-gray-100">
-                            <div className="flex items-center gap-3 mb-8 px-2">
-                                <div className="w-10 h-10 rounded-2xl bg-adorix-light flex items-center justify-center">
-                                    <Settings className="w-5 h-5 text-adorix-primary" />
-                                </div>
-                                <h2 className="text-xl font-black text-adorix-dark tracking-tight">General Settings</h2>
-                            </div>
+                    <div>
+                        <h3 className="px-4 text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">More</h3>
+                        <nav className="space-y-1">
+                            {navigation.more.map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleTabChange(item.id)}
+                                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all group ${
+                                        activeTab === item.id
+                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
+                                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                                    }`}
+                                >
+                                    <item.icon className="w-4 h-4" />
+                                    {item.label}
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+                </div>
 
-                            {/* Main Navigation Tabs */}
-                            <div className="space-y-3 mb-8">
-                                {tabs.map((tab) => (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => handleTabChange(tab.id)}
-                                        className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-black text-sm transition-all group ${activeTab === tab.id
-                                            ? 'bg-adorix-dark text-white shadow-xl shadow-adorix-dark/20 translate-x-1'
-                                            : 'text-gray-400 hover:text-adorix-dark hover:bg-gray-50'
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <tab.icon className={`w-5 h-5 transition-transform group-hover:scale-110 ${activeTab === tab.id ? 'text-white' : 'opacity-50'}`} />
-                                            {tab.label}
+                <div className="p-4 border-t border-gray-100 mt-auto">
+                    <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+                        <LogOutIcon className="w-4 h-4" />
+                        Sign Out
+                    </button>
+                </div>
+            </aside>
+
+            {/* Main Content Pane */}
+            <main className="flex-1 ml-64 p-8">
+                <div className="max-w-6xl mx-auto space-y-8">
+                    {/* Top Section / Header */}
+                    <div className="bg-white rounded-2xl border border-gray-200 p-4 flex items-center justify-between shadow-sm">
+                        <div className="flex items-center gap-4">
+                            <div className="p-2 bg-gray-50 rounded-lg"><User className="w-5 h-5 text-gray-400" /></div>
+                            <h2 className="text-lg font-bold text-gray-900">Users</h2>
+                        </div>
+                        <div className="flex items-center gap-1 bg-gray-50 p-1 rounded-xl">
+                            <button className="px-6 py-2 text-sm font-bold text-gray-500 hover:text-gray-900 rounded-lg">All Users</button>
+                            <button className="px-6 py-2 text-sm font-bold bg-white text-gray-900 shadow-sm rounded-lg border border-gray-100">Settings</button>
+                        </div>
+                        <button className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 shadow-md shadow-blue-100 transition-all">
+                            <Plus className="w-4 h-4" />
+                            Add New User
+                        </button>
+                    </div>
+
+                    {/* Account Management Grid */}
+                    <div className="flex flex-col xl:flex-row gap-8">
+                        {/* Left Column: Avatar & Password */}
+                        <div className="xl:w-1/3 space-y-8">
+                            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-8 border-b border-gray-50 pb-4">Account Management</h3>
+                                <div className="space-y-8">
+                                    <div className="flex flex-col items-center">
+                                        <div className="relative w-full aspect-square max-w-[280px] rounded-2xl overflow-hidden bg-[#fae5e1] border border-gray-100 mb-6 group/profile">
+                                             {user?.hasImage ? (
+                                                <img src={user?.imageUrl} alt="Profile" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-8xl font-black text-white/50">{user?.firstName?.charAt(0)}</div>
+                                            )}
+                                            <button 
+                                                onClick={() => !isUploadingImage && fileInputRef.current?.click()}
+                                                className="absolute top-4 right-4 p-2.5 bg-white/90 backdrop-blur-md rounded-xl text-gray-400 hover:text-red-500 transition-all opacity-0 group-hover/profile:opacity-100 shadow-lg border border-gray-100"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
                                         </div>
-                                        {activeTab === tab.id && <ChevronRight className="w-4 h-4 text-white/50" />}
-                                    </button>
-                                ))}
+                                        <button 
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={isUploadingImage}
+                                            className="w-full py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm"
+                                        >
+                                            {isUploadingImage ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Upload Photo'}
+                                        </button>
+                                        <input type="file" hidden ref={fileInputRef} accept="image/*" onChange={handleImageUpload} />
+                                    </div>
+
+                                    <form onSubmit={handlePasswordChange} className="space-y-4 pt-4 border-t border-gray-50">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-900">Old Password</label>
+                                            <input type="password" value={passwords.current} onChange={(e) => setPasswords({...passwords, current: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" placeholder="********" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-900">New Password</label>
+                                            <input type="password" value={passwords.new} onChange={(e) => setPasswords({...passwords, new: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" placeholder="********" />
+                                        </div>
+                                        <button type="submit" disabled={isChangingPassword} className="w-full py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
+                                            {isChangingPassword ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Change Password'}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </aside>
+
+                        {/* Right Column: Profile Info */}
+                        <div className="flex-1 space-y-8">
+                            <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-8 border-b border-gray-50 pb-4">Profile Information</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Username</label>
+                                        <input type="text" value={user?.username || ''} disabled className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-not-allowed" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">First Name</label>
+                                        <input type="text" value={formData.firstName} onChange={(e) => setFormData({...formData, firstName: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Nickname</label>
+                                        <input type="text" value={accountInfo.fullName?.split(' ')[0]} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Role</label>
+                                        <div className="relative">
+                                            <select className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none appearance-none focus:border-blue-500 transition-all">
+                                                <option>Subscriber</option>
+                                                <option>Member</option>
+                                                <option>Admin</option>
+                                            </select>
+                                            <ChevronRight className="w-4 h-4 absolute right-4 top-1/2 -translate-y-1/2 rotate-90 text-gray-400 pointer-events-none" />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Last Name</label>
+                                        <input type="text" value={formData.lastName} onChange={(e) => setFormData({...formData, lastName: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Display Name Publicly as</label>
+                                        <input type="text" value={user?.fullName || ''} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" />
+                                    </div>
+                                </div>
+
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-12 mb-8 border-b border-gray-50 pb-4">Contact Info</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Email <span className="text-gray-400 font-medium">(required)</span></label>
+                                        <input type="email" value={user?.primaryEmailAddress?.emailAddress} disabled className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-not-allowed" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">WhatsApp</label>
+                                        <input type="text" value={accountInfo.phoneNumber} onChange={(e) => setAccountInfo({...accountInfo, phoneNumber: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" placeholder="@username" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Website</label>
+                                        <input type="text" value={accountInfo.website} onChange={(e) => setAccountInfo({...accountInfo, website: e.target.value})} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" placeholder="https://..." />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Telegram</label>
+                                        <input type="text" className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all" placeholder="@username" />
+                                    </div>
+                                </div>
+
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-12 mb-8 border-b border-gray-50 pb-4">About the User</h3>
+                                <div className="space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-bold text-gray-900 px-1">Biographical Info</label>
+                                        <textarea 
+                                            rows="5" 
+                                            value={accountInfo.bio} 
+                                            onChange={(e) => setAccountInfo({...accountInfo, bio: e.target.value})}
+                                            className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:border-blue-500 transition-all resize-none leading-relaxed" 
+                                            placeholder="Tell us about yourself..."
+                                        />
+                                    </div>
+                                    <div className="flex justify-end pt-4">
+                                        <button 
+                                            onClick={handleSaveAccountInfo}
+                                            disabled={isSaving}
+                                            className="px-10 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all flex items-center gap-2"
+                                        >
+                                            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                                            Update Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Modals & Toast */}
                 <AnimatePresence>
                     {isModalOpen && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-adorix-dark/40 backdrop-blur-md" />
-                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="relative w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden z-10 p-8">
-                                <h2 className="text-2xl font-black mb-6">Edit Basic Profile</h2>
-                                <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-1"><label className="text-xs font-bold text-gray-400 uppercase">First Name</label><input type="text" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none" /></div>
-                                        <div className="space-y-1"><label className="text-xs font-bold text-gray-400 uppercase">Last Name</label><input type="text" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none" /></div>
-                                    </div>
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-gray-900/40 backdrop-blur-md" />
+                            <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10">
+                                <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+                                    <h2 className="text-xl font-bold text-gray-900">Basic Profile</h2>
+                                    <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X className="w-5 h-5 text-gray-400" /></button>
                                 </div>
-                                <div className="mt-8 flex justify-end gap-3">
-                                    <button onClick={() => setIsModalOpen(false)} className="px-6 py-3 font-bold text-gray-500">Cancel</button>
-                                    <button onClick={handleSaveProfile} className="px-8 py-3 bg-adorix-dark text-white rounded-xl font-black">Save Changes</button>
+                                <div className="p-8 space-y-6">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1">First Name</label>
+                                            <input type="text" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} className="w-full px-4 py-2 bg-gray-50 border border-transparent focus:border-gray-100 rounded-xl text-sm font-medium outline-none transition-all" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1">Last Name</label>
+                                            <input type="text" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} className="w-full px-4 py-2 bg-gray-50 border border-transparent focus:border-gray-100 rounded-xl text-sm font-medium outline-none transition-all" />
+                                        </div>
+                                    </div>
+                                    <div className="pt-2 flex flex-col gap-3">
+                                        <button onClick={handleSaveProfile} className="w-full py-3 bg-adorix-dark text-white rounded-xl text-sm font-bold shadow-lg shadow-adorix-dark/10 hover:shadow-adorix-dark/20 transition-all">Save Changes</button>
+                                        <button onClick={() => setIsModalOpen(false)} className="w-full py-3 bg-white text-gray-500 hover:text-gray-700 rounded-xl text-sm font-bold transition-all border border-gray-100">Cancel</button>
+                                    </div>
                                 </div>
                             </motion.div>
                         </div>
                     )}
 
                     {isEmailModalOpen && (
-                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsEmailModalOpen(false)} className="absolute inset-0 bg-adorix-dark/40 backdrop-blur-md" />
-                            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="relative w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden z-10 p-8">
-                                <h2 className="text-2xl font-black mb-6">Email Management</h2>
-                                <input type="email" value={emailData.email} onChange={(e) => setEmailData({ ...emailData, email: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none mb-4" placeholder="New email address" />
-                                <div className="flex justify-end gap-3"><button onClick={() => setIsEmailModalOpen(false)} className="px-6 py-3 font-bold text-gray-500">Cancel</button><button className="px-8 py-3 bg-adorix-dark text-white rounded-xl font-black">Verify Email</button></div>
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsEmailModalOpen(false)} className="absolute inset-0 bg-gray-900/40 backdrop-blur-md" />
+                            <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10">
+                                <div className="p-8 border-b border-gray-50 flex items-center justify-between">
+                                    <h2 className="text-xl font-bold text-gray-900">Email Address</h2>
+                                    <button onClick={() => setIsEmailModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X className="w-5 h-5 text-gray-400" /></button>
+                                </div>
+                                <div className="p-8 space-y-6">
+                                    <div className="space-y-2">
+                                        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-1">New Email Address</label>
+                                        <input type="email" value={emailData.email} onChange={(e) => setEmailData({ ...emailData, email: e.target.value })} className="w-full px-4 py-2.5 bg-gray-50 border border-transparent focus:border-gray-100 rounded-xl text-sm font-medium outline-none transition-all" placeholder="Enter new address" />
+                                        <p className="text-[10px] text-gray-400 font-medium px-1">We'll send a verification link to this address.</p>
+                                    </div>
+                                    <div className="pt-2 flex flex-col gap-3">
+                                        <button className="w-full py-3 bg-adorix-dark text-white rounded-xl text-sm font-bold shadow-lg shadow-adorix-dark/10 hover:shadow-adorix-dark/20 transition-all">Send Verification Code</button>
+                                        <button onClick={() => setIsEmailModalOpen(false)} className="w-full py-3 bg-white text-gray-500 hover:text-gray-700 rounded-xl text-sm font-bold transition-all border border-gray-100">Cancel</button>
+                                    </div>
+                                </div>
                             </motion.div>
                         </div>
                     )}
 
                     {showToast && (
-                        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-adorix-dark text-white px-8 py-4 rounded-2xl font-black shadow-2xl border border-white/10 flex items-center gap-3">
-                            <Check className="w-5 h-5 text-emerald-400" /> Settings Updated Successfully!
+                        <motion.div initial={{ opacity: 0, y: 20, x: '-50%' }} animate={{ opacity: 1, y: 0, x: '-50%' }} exit={{ opacity: 0, y: 20, x: '-50%' }} className="fixed bottom-10 left-1/2 z-[110] bg-gray-900 text-white px-6 py-3.5 rounded-2xl text-sm font-bold shadow-2xl flex items-center gap-3 border border-white/10 whitespace-nowrap">
+                            <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center"><Check className="w-3 h-3 text-white" /></div>
+                            Profile preference updated successfully
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </div>
+            </main>
         </div>
     );
 };
