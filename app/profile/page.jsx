@@ -277,21 +277,49 @@ const ProfilePage = () => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -10 }}
-                                    className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl"
+                                    className="bg-white rounded-[2.5rem] p-12 border border-gray-100 shadow-sm max-w-2xl mx-auto"
                                 >
-                                    <h3 className="text-2xl font-black text-adorix-dark mb-8">Security Settings</h3>
-                                    <div className="space-y-6">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">Current Password</label>
-                                            <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
+                                    <div className="flex items-center gap-5 mb-10 pb-10 border-b border-gray-50">
+                                        <div className="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
+                                            <Lock className="w-7 h-7" />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest px-2">New Password</label>
-                                            <input type="password" placeholder="••••••••" className="w-full px-6 py-4 bg-gray-50 border border-transparent focus:border-adorix-primary/20 rounded-2xl text-gray-900 font-bold outline-none transition-all" />
+                                        <div>
+                                            <h3 className="text-3xl font-black text-adorix-dark leading-tight">Security Settings</h3>
+                                            <p className="text-gray-500 font-medium text-lg tracking-tight">Update your password to keep your account secure.</p>
                                         </div>
-                                        <button className="w-full py-4 bg-adorix-dark text-white rounded-2xl font-black hover:scale-[1.02] transition-all shadow-xl shadow-adorix-dark/20">
-                                            Update Security Password
-                                        </button>
+                                    </div>
+
+                                    <div className="space-y-8">
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-black text-adorix-dark px-1">Current Password</label>
+                                            <input 
+                                                type="password" 
+                                                placeholder="••••••••" 
+                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-black text-adorix-dark px-1">New Password</label>
+                                            <input 
+                                                type="password" 
+                                                placeholder="••••••••" 
+                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-black text-adorix-dark px-1">Confirm New Password</label>
+                                            <input 
+                                                type="password" 
+                                                placeholder="••••••••" 
+                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                            />
+                                        </div>
+
+                                        <div className="pt-6 flex justify-end">
+                                            <button className="px-10 py-5 bg-adorix-dark text-white rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20 flex items-center gap-3 text-lg">
+                                                <Shield className="w-6 h-6" /> Update Password
+                                            </button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
