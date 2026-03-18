@@ -272,56 +272,81 @@ const ProfilePage = () => {
                             )}
 
                             {activeTab === 'security' && (
-                                <motion.div
-                                    key="security"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="bg-white rounded-[2.5rem] p-12 border border-gray-100 shadow-sm max-w-2xl mx-auto"
-                                >
-                                    <div className="flex items-center gap-5 mb-10 pb-10 border-b border-gray-50">
-                                        <div className="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
-                                            <Lock className="w-7 h-7" />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-3xl font-black text-adorix-dark leading-tight">Security Settings</h3>
-                                            <p className="text-gray-500 font-medium text-lg tracking-tight">Update your password to keep your account secure.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-8">
-                                        <div className="space-y-3">
-                                            <label className="text-sm font-black text-adorix-dark px-1">Current Password</label>
-                                            <input 
-                                                type="password" 
-                                                placeholder="••••••••" 
-                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
-                                            />
-                                        </div>
-                                        <div className="space-y-3">
-                                            <label className="text-sm font-black text-adorix-dark px-1">New Password</label>
-                                            <input 
-                                                type="password" 
-                                                placeholder="••••••••" 
-                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
-                                            />
-                                        </div>
-                                        <div className="space-y-3">
-                                            <label className="text-sm font-black text-adorix-dark px-1">Confirm New Password</label>
-                                            <input 
-                                                type="password" 
-                                                placeholder="••••••••" 
-                                                className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
-                                            />
+                                <div className="space-y-8">
+                                    <motion.div
+                                        key="security"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="bg-white rounded-[2.5rem] p-12 border border-gray-100 shadow-sm max-w-2xl mx-auto"
+                                    >
+                                        <div className="flex items-center gap-5 mb-10 pb-10 border-b border-gray-50">
+                                            <div className="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600">
+                                                <Lock className="w-7 h-7" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-3xl font-black text-adorix-dark leading-tight">Security Settings</h3>
+                                                <p className="text-gray-500 font-medium text-lg tracking-tight">Update your password to keep your account secure.</p>
+                                            </div>
                                         </div>
 
-                                        <div className="pt-6 flex justify-end">
-                                            <button className="px-10 py-5 bg-adorix-dark text-white rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20 flex items-center gap-3 text-lg">
-                                                <Shield className="w-6 h-6" /> Update Password
-                                            </button>
+                                        <div className="space-y-8">
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-black text-adorix-dark px-1">Current Password</label>
+                                                <input 
+                                                    type="password" 
+                                                    placeholder="••••••••" 
+                                                    className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                                />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-black text-adorix-dark px-1">New Password</label>
+                                                <input 
+                                                    type="password" 
+                                                    placeholder="••••••••" 
+                                                    className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                                />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-black text-adorix-dark px-1">Confirm New Password</label>
+                                                <input 
+                                                    type="password" 
+                                                    placeholder="••••••••" 
+                                                    className="w-full px-8 py-5 bg-gray-50 border border-transparent focus:border-adorix-primary/20 focus:bg-white rounded-2xl text-gray-900 font-bold outline-none transition-all text-lg" 
+                                                />
+                                            </div>
+
+                                            <div className="pt-6 flex justify-end">
+                                                <button className="px-10 py-5 bg-adorix-dark text-white rounded-[1.5rem] font-black hover:scale-105 transition-all shadow-xl shadow-adorix-dark/20 flex items-center gap-3 text-lg">
+                                                    <Shield className="w-6 h-6" /> Update Password
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </motion.div>
+                                    </motion.div>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"
+                                    >
+                                        <div className="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm transition-all hover:shadow-md cursor-pointer group flex flex-col items-start">
+                                            <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-adorix-dark mb-8 group-hover:bg-adorix-dark group-hover:text-white transition-all">
+                                                <Lock className="w-7 h-7" />
+                                            </div>
+                                            <h4 className="text-2xl font-black text-adorix-dark mb-2">Access Control</h4>
+                                            <p className="text-gray-400 font-bold text-sm leading-snug">Manage your credentials and 2FA</p>
+                                        </div>
+
+                                        <div className="bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm transition-all hover:shadow-md cursor-pointer group flex flex-col items-start">
+                                            <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-adorix-dark mb-8 group-hover:bg-adorix-dark group-hover:text-white transition-all">
+                                                <Eye className="w-7 h-7" />
+                                            </div>
+                                            <h4 className="text-2xl font-black text-adorix-dark mb-2">Privacy Protocol</h4>
+                                            <p className="text-gray-400 font-bold text-sm leading-snug">Hide sensitive data from dashboard</p>
+                                        </div>
+                                    </motion.div>
+                                </div>
                             )}
 
                             {activeTab === 'preferences' && (
