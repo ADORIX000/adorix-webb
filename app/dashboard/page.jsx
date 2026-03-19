@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import { useSupabase } from '@/hooks/useSupabase';
 import {
     AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -31,7 +31,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Dashboard = () => {
-    const { user, isLoaded } = useUser();
+    const { userId, isLoaded } = useAuth();
     const supabase = useSupabase();
 
     const [analytics, setAnalytics] = useState([]);
@@ -40,13 +40,13 @@ const Dashboard = () => {
 
     // 1. Fetch Initial Data & Setup Real-time
     useEffect(() => {
-        if (!isLoaded || !user || !supabase) return;
+        if (!isLoaded || !userId || !supabase) return;
 
         const fetchAnalytics = async () => {
             const { data, error } = await supabase
                 .from('analytics')
                 .select('*')
-                .eq('user_id', user.id)
+                .eq('user_id', userId)
                 .order('created_at', { ascending: true });
 
             if (error) {
@@ -67,7 +67,7 @@ const Dashboard = () => {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'analytics',
-                    filter: `user_id=eq.${user.id}`
+                    filter: `user_id=eq.${userId}`
                 },
                 (payload) => {
                     console.log('Live Analytics Update:', payload.new);
@@ -82,7 +82,7 @@ const Dashboard = () => {
             supabase.removeChannel(channel);
             clearInterval(clockInterval);
         };
-    }, [isLoaded, user, supabase]);
+    }, [isLoaded, userId, supabase]);
 
     // 2. Process Data for Charts
     const processedData = useMemo(() => {
