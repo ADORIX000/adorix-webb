@@ -701,19 +701,21 @@ const ProfileContent = () => {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        <div className="flex flex-col gap-8">
                                             {/* Appearance */}
-                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all border-t-4 border-t-transparent flex flex-col justify-between">
-                                                <div>
-                                                    <div className="w-14 h-14 rounded-2xl bg-yellow-50 text-yellow-500 flex items-center justify-center mb-6">
+                                            <div className="bg-white p-6 md:p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-md">
+                                                <div className="flex items-center gap-5 text-left">
+                                                    <div className="w-14 h-14 rounded-2xl bg-yellow-50 dark:bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 flex flex-shrink-0 items-center justify-center shadow-sm">
                                                         <Zap className="w-7 h-7" />
                                                     </div>
-                                                    <h3 className="text-lg font-black text-adorix-dark mb-2">Appearance</h3>
-                                                    <p className="text-sm text-gray-400 font-medium leading-relaxed mb-6">Change theme to Dark, Light or Auto</p>
+                                                    <div>
+                                                        <h3 className="text-lg font-black text-adorix-dark mb-1">Appearance & Theme</h3>
+                                                        <p className="text-sm text-gray-400 font-medium leading-relaxed">Customize your workspace UI theme</p>
+                                                    </div>
                                                 </div>
-                                                <div className="flex bg-gray-50 p-1.5 rounded-xl justify-between border border-gray-100">
+                                                <div className="flex bg-gray-50 dark:bg-slate-800/50 p-1.5 rounded-xl justify-between border border-gray-100 dark:border-slate-700/50 w-full md:w-[350px]">
                                                     {['light', 'dark', 'auto'].map(t => (
-                                                        <button key={t} onClick={() => setTheme(t)} className={`flex-1 py-2 font-bold text-xs capitalize rounded-lg transition-all ${theme === t ? 'bg-white text-adorix-dark shadow-md border border-gray-200/50' : 'text-gray-400 hover:text-gray-600'}`}>
+                                                        <button key={t} onClick={() => setTheme(t)} className={`flex-1 py-2.5 font-bold text-sm capitalize rounded-lg transition-all ${theme === t ? 'bg-white text-adorix-dark shadow-md shadow-gray-200/50 border border-gray-200/50 dark:bg-slate-700 dark:shadow-none dark:border-slate-600 dark:text-white' : 'text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'}`}>
                                                             {t}
                                                         </button>
                                                     ))}
