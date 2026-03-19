@@ -76,6 +76,35 @@ const ProfileContent = () => {
     const [isChangingPassword, setIsChangingPassword] = useState(false);
     const [showPasswords, setShowPasswords] = useState({ current: false, new: false, confirm: false });
 
+    // Billing State
+    const [paymentCards, setPaymentCards] = useState([
+        { id: '1', type: 'VISA', last4: '1234', expiry: '12/28' }
+    ]);
+    const [isAddingCard, setIsAddingCard] = useState(false);
+    const [newCardDetails, setNewCardDetails] = useState({
+        number: '', name: '', expiryMonth: '', expiryYear: '', cvv: ''
+    });
+
+    const handleDeleteCard = (id) => {
+        setPaymentCards(paymentCards.filter(card => card.id !== id));
+    };
+
+    const handleSaveCard = (e) => {
+        e.preventDefault();
+        if (newCardDetails.number.length >= 15) {
+            setPaymentCards([...paymentCards, {
+                id: Date.now().toString(),
+                type: newCardDetails.number.startsWith('4') ? 'VISA' : (newCardDetails.number.startsWith('5') ? 'Mastercard' : 'Card'),
+                last4: newCardDetails.number.slice(-4),
+                expiry: `${newCardDetails.expiryMonth}/${newCardDetails.expiryYear}`
+            }]);
+            setIsAddingCard(false);
+            setNewCardDetails({ number: '', name: '', expiryMonth: '', expiryYear: '', cvv: '' });
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 3000);
+        }
+    };
+
     // Initial Data Loading
     useEffect(() => {
         if (user) {
@@ -595,24 +624,126 @@ const ProfileContent = () => {
                             )}
 
                             {activeTab === 'billing' && (
-                                <motion.div key="billing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-2xl mx-auto">
+                                <motion.div key="billing" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="bg-white rounded-[2rem] p-10 border border-gray-100 shadow-sm max-w-4xl mx-auto">
                                     <div className="flex items-center gap-4 pb-6 border-b border-gray-100 mb-8">
                                         <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center"><CreditCard className="w-6 h-6" /></div>
                                         <div>
-                                            <h2 className="text-2xl font-black text-adorix-dark">Billing & Plans</h2>
-                                            <p className="text-gray-500 font-medium">Manage your subscription and invoices.</p>
+                                            <h2 className="text-2xl font-black text-adorix-dark">Payment Methods</h2>
+                                            <p className="text-gray-500 font-medium">Manage your saved cards and add new ones.</p>
                                         </div>
                                     </div>
-                                    <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-8 bg-white border border-gray-200 rounded flex items-center justify-center"><span className="font-black italic text-blue-900 text-xs">VISA</span></div>
-                                            <div>
-                                                <p className="font-bold text-adorix-dark">Visa ending in 1234</p>
-                                                <p className="text-xs text-gray-500">Expires 12/28</p>
+
+                                    {!isAddingCard ? (
+                                        <div className="space-y-6">
+                                            <div className="flex justify-between items-center mb-4">
+                                                <h3 className="text-lg font-bold text-gray-800">Saved Cards</h3>
+                                                <button onClick={() => setIsAddingCard(true)} className="flex items-center gap-2 px-5 py-2.5 bg-adorix-dark text-white rounded-xl text-sm font-black hover:bg-black transition-all shadow-md hover:shadow-xl hover:scale-105">
+                                                    <Plus className="w-4 h-4" /> Add New Card
+                                                </button>
+                                            </div>
+
+                                            {paymentCards.length === 0 ? (
+                                                <div className="p-10 bg-gray-50 border border-gray-200 rounded-2xl flex flex-col items-center justify-center text-center">
+                                                    <CreditCard className="w-12 h-12 text-gray-300 mb-4" />
+                                                    <p className="text-gray-500 font-bold">No saved cards found.</p>
+                                                    <p className="text-sm text-gray-400 mt-1">Add a new card to easily make payments.</p>
+                                                </div>
+                                            ) : (
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    {paymentCards.map((card, index) => (
+                                                        <div key={card.id} className="relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 flex items-center justify-between group overflow-hidden shadow-sm hover:shadow-md transition-all">
+                                                            <div className="flex items-center gap-4 relative z-10">
+                                                                <div className="w-16 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+                                                                    <span className="font-black italic text-blue-900 text-sm">{card.type}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <p className="font-bold text-adorix-dark text-lg flex items-center gap-2">
+                                                                        •••• {card.last4}
+                                                                        {index === 0 && <span className="bg-emerald-100 text-emerald-700 text-[10px] uppercase font-black px-2 py-0.5 rounded-full">Primary</span>}
+                                                                    </p>
+                                                                    <p className="text-sm text-gray-500 font-medium mt-0.5">Expires {card.expiry}</p>
+                                                                </div>
+                                                            </div>
+                                                            <button onClick={() => handleDeleteCard(card.id)} className="p-2.5 bg-white text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all shadow-sm border border-gray-100 opacity-0 group-hover:opacity-100 relative z-10" title="Delete Card">
+                                                                <Trash2 className="w-5 h-5" />
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start mt-8">
+                                            {/* Visual Card Display */}
+                                            <div className="relative">
+                                                <div className="w-full aspect-[1.586/1] rounded-[2rem] bg-gradient-to-tr from-blue-700 via-blue-500 to-cyan-400 p-8 text-white shadow-2xl shadow-blue-500/30 flex flex-col justify-between relative overflow-hidden group transition-all hover:scale-[1.02]">
+                                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+                                                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-300/20 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"></div>
+
+                                                    <div className="flex justify-between items-start relative z-10">
+                                                        <div className="w-12 h-9 bg-yellow-200/90 rounded-md border border-yellow-400/50 shadow-inner flex flex-col justify-evenly px-2">
+                                                            <div className="w-full h-px bg-yellow-400/50"></div>
+                                                            <div className="w-full h-px bg-yellow-400/50"></div>
+                                                            <div className="w-full h-px bg-yellow-400/50"></div>
+                                                        </div>
+                                                        <div className="font-black italic text-xl opacity-90 tracking-wider">BANK</div>
+                                                    </div>
+
+                                                    <div className="relative z-10 space-y-6">
+                                                        <div className="text-2xl md:text-3xl font-mono tracking-[0.2em] uppercase font-semibold text-white/90">
+                                                            {newCardDetails.number ? newCardDetails.number.replace(/(\d{4})/g, '$1 ').trim() : '•••• •••• •••• ••••'}
+                                                        </div>
+                                                        <div className="flex justify-between items-end">
+                                                            <div>
+                                                                <p className="text-[10px] uppercase tracking-widest text-white/60 font-bold mb-1">Cardholder Name</p>
+                                                                <p className="font-bold tracking-widest uppercase text-sm truncate max-w-[150px]">{newCardDetails.name || 'YOUR NAME'}</p>
+                                                            </div>
+                                                            <div className="text-right">
+                                                                <p className="text-[10px] uppercase tracking-widest text-white/60 font-bold mb-1">Expires</p>
+                                                                <p className="font-bold tracking-widest font-mono text-sm">{newCardDetails.expiryMonth || 'MM'}/{newCardDetails.expiryYear || 'YY'}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Form */}
+                                            <div className="bg-gray-50/50 p-8 rounded-[2rem] border border-gray-100">
+                                                <h3 className="text-xl font-black text-adorix-dark mb-6">Payment Details</h3>
+                                                <form onSubmit={handleSaveCard} className="space-y-5">
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Card Number</label>
+                                                        <div className="relative">
+                                                            <input type="text" maxLength="16" required value={newCardDetails.number} onChange={e => setNewCardDetails({ ...newCardDetails, number: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 font-mono" placeholder="0000 0000 0000 0000" />
+                                                            <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="space-y-2">
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Cardholder Name</label>
+                                                        <input type="text" required value={newCardDetails.name} onChange={e => setNewCardDetails({ ...newCardDetails, name: e.target.value })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 uppercase" placeholder="JOHN DOE" />
+                                                    </div>
+                                                    <div className="grid grid-cols-3 gap-4">
+                                                        <div className="col-span-1 space-y-2">
+                                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center block">Month</label>
+                                                            <input type="text" maxLength="2" required placeholder="MM" value={newCardDetails.expiryMonth} onChange={e => setNewCardDetails({ ...newCardDetails, expiryMonth: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 text-center font-mono" />
+                                                        </div>
+                                                        <div className="col-span-1 space-y-2">
+                                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center block">Year</label>
+                                                            <input type="text" maxLength="2" required placeholder="YY" value={newCardDetails.expiryYear} onChange={e => setNewCardDetails({ ...newCardDetails, expiryYear: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 text-center font-mono" />
+                                                        </div>
+                                                        <div className="col-span-1 space-y-2">
+                                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center block">CVV</label>
+                                                            <input type="password" maxLength="4" required placeholder="•••" value={newCardDetails.cvv} onChange={e => setNewCardDetails({ ...newCardDetails, cvv: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 text-center font-mono" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex gap-3 pt-4">
+                                                        <button type="button" onClick={() => setIsAddingCard(false)} className="flex-1 py-3.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-black hover:bg-gray-50 transition-all">Cancel</button>
+                                                        <button type="submit" className="flex-[2] py-3.5 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all shadow-lg shadow-adorix-dark/30">Save Card</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                        <button className="text-sm font-bold text-adorix-primary hover:underline">Update</button>
-                                    </div>
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
