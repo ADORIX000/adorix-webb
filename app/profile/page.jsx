@@ -14,6 +14,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Suspense } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { createWorker } from 'tesseract.js';
 
 const ProfileContent = () => {
     const { user, isLoaded } = useUser();
@@ -81,6 +82,67 @@ const ProfileContent = () => {
         { id: '1', type: 'VISA', last4: '1234', expiry: '12/28' }
     ]);
     const [isAddingCard, setIsAddingCard] = useState(false);
+    const [isScanning, setIsScanning] = useState(false);
+    const [isProcessingImage, setIsProcessingImage] = useState(false);
+
+    const handleScanCard = async () => {
+        if (!videoRef.current) return;
+        setIsProcessingImage(true);
+
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = videoRef.current.videoWidth;
+            canvas.height = videoRef.current.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+
+            const worker = await createWorker('eng');
+            const { data: { text } } = await worker.recognize(canvas);
+            await worker.terminate();
+
+            const cleanDigits = text.replace(/[^0-9]/g, '');
+            const match = cleanDigits.match(/\d{15,16}/);
+
+            if (match) {
+                setNewCardDetails(prev => ({ ...prev, number: match[0].substring(0, 16) }));
+                stopScanner();
+                setShowToast(true);
+                setTimeout(() => setShowToast(false), 3000);
+            } else {
+                alert("Could not detect a clear 15 or 16 digit card number. Please align the card in good lighting and try again.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error running card OCR.");
+        } finally {
+            setIsProcessingImage(false);
+        }
+    };
+
+    const videoRef = useRef(null);
+
+    const startScanner = async () => {
+        setIsScanning(true);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            setTimeout(() => {
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
+            }, 100);
+        } catch (err) {
+            console.error("Camera error:", err);
+            alert("Unable to access the camera. Please check your permissions.");
+            setIsScanning(false);
+        }
+    };
+
+    const stopScanner = () => {
+        if (videoRef.current && videoRef.current.srcObject) {
+            videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        }
+        setIsScanning(false);
+    };
     const [newCardDetails, setNewCardDetails] = useState({
         number: '', name: '', expiryMonth: '', expiryYear: '', cvv: ''
     });
@@ -714,8 +776,10 @@ const ProfileContent = () => {
                                                     <div className="space-y-2">
                                                         <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Card Number</label>
                                                         <div className="relative">
-                                                            <input type="text" maxLength="19" required value={newCardDetails.number.replace(/(\d{4})(?=\d)/g, '$1 ')} onChange={e => setNewCardDetails({ ...newCardDetails, number: e.target.value.replace(/\D/g, '').slice(0, 16) })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 font-mono" placeholder="0000 0000 0000 0000" />
-                                                            <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                                            <input type="text" maxLength="19" required value={newCardDetails.number.replace(/(\d{4})(?=\d)/g, '$1 ')} onChange={e => setNewCardDetails({ ...newCardDetails, number: e.target.value.replace(/\D/g, '').slice(0, 16) })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 font-mono pr-12" placeholder="0000 0000 0000 0000" />
+                                                            <button type="button" onClick={startScanner} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-adorix-primary hover:bg-adorix-primary/10 rounded-lg transition-all focus:outline-none" title="Scan Card">
+                                                                <Camera className="w-5 h-5" />
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-2">
@@ -818,6 +882,31 @@ const ProfileContent = () => {
                         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] bg-adorix-dark text-white px-8 py-4 rounded-2xl font-black shadow-2xl border border-white/10 flex items-center gap-3">
                             <Check className="w-5 h-5 text-emerald-400" /> Settings Updated Successfully!
                         </motion.div>
+                    )}
+
+                    {isScanning && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={stopScanner} className="absolute inset-0 bg-adorix-dark/80 backdrop-blur-md cursor-pointer" />
+                            <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="relative w-full max-w-sm bg-white rounded-[2.5rem] shadow-2xl overflow-hidden z-10 p-2 border border-gray-100">
+                                <div className="p-4 bg-white text-adorix-dark font-black text-xl flex justify-between items-center rounded-t-[2rem]">
+                                    <span>Scan Card</span>
+                                    <button onClick={stopScanner} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X className="w-5 h-5" /></button>
+                                </div>
+                                <div className="relative mx-2 aspect-[3/4] bg-black rounded-3xl overflow-hidden shadow-inner">
+                                    <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover" />
+                                    <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 aspect-[1.586/1] border-2 border-white/50 rounded-2xl flex items-center justify-center shadow-[0_0_0_999px_rgba(0,0,0,0.6)]">
+                                        <div className="absolute top-0 w-full h-1 bg-adorix-primary/50 shadow-[0_0_15px_5px_rgba(37,99,235,0.4)] animate-[scan_2s_ease-in-out_infinite]" />
+                                        <p className="text-white/90 font-bold text-xs bg-black/60 px-4 py-2 rounded-full backdrop-blur-md">Position card within frame</p>
+                                    </div>
+                                    <div className="absolute inset-0 border-[6px] border-black/20 pointer-events-none rounded-3xl"></div>
+                                </div>
+                                <div className="p-4 mt-2">
+                                    <button onClick={handleScanCard} disabled={isProcessingImage} className="w-full py-4 bg-adorix-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-adorix-primary/30 hover:bg-adorix-dark transition-all flex items-center justify-center gap-2">
+                                        {isProcessingImage ? <><Loader2 className="w-5 h-5 animate-spin" /> Scanning Image...</> : 'Extract Card Number'}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </div>
                     )}
                 </AnimatePresence>
             </div>
