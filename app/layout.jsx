@@ -7,9 +7,6 @@ import Footer from '@/components/common/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
-const clerkJSUrl = process.env.NEXT_PUBLIC_CLERK_JS_URL || 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js'
-
-const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
 
 function getClerkFrontendApiFromPublishableKey(key) {
   if (!key) return undefined
@@ -25,9 +22,10 @@ function getClerkFrontendApiFromPublishableKey(key) {
 }
 
 const clerkFrontendApi = getClerkFrontendApiFromPublishableKey(clerkPublishableKey)
-const clerkJSUrl = clerkFrontendApi
-  ? `https://${clerkFrontendApi}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`
-  : undefined
+const clerkJSUrl = process.env.NEXT_PUBLIC_CLERK_JS_URL
+  || (clerkFrontendApi
+    ? `https://${clerkFrontendApi}/npm/@clerk/clerk-js@latest/dist/clerk.browser.js`
+    : 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js')
 
 export const metadata = {
   title: 'Adorix - Advanced Campaign Studio',
