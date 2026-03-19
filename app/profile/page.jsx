@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Suspense } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const ProfileContent = () => {
     const { user, isLoaded } = useUser();
@@ -240,6 +241,16 @@ const ProfileContent = () => {
         { label: 'Engagement', value: '92%', change: 'High Performance', icon: MousePointer2, color: 'purple' },
     ];
 
+    const performanceData = [
+        { name: 'Mon', engagement: 65, playTime: 1200 },
+        { name: 'Tue', engagement: 72, playTime: 1350 },
+        { name: 'Wed', engagement: 68, playTime: 1250 },
+        { name: 'Thu', engagement: 85, playTime: 1500 },
+        { name: 'Fri', engagement: 92, playTime: 1700 },
+        { name: 'Sat', engagement: 88, playTime: 1600 },
+        { name: 'Sun', engagement: 95, playTime: 1800 },
+    ];
+
     if (!isLoaded) return null;
 
     return (
@@ -339,28 +350,94 @@ const ProfileContent = () => {
                                 <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                                         {/* Analytics Column */}
-                                        <div className="lg:col-span-12">
-                                            <div className="flex items-baseline justify-between mb-10 px-2 h-8">
-                                                <h2 className="text-2xl font-black text-adorix-dark tracking-tight leading-none">Analytics</h2>
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none hidden sm:block">Performance Hub</p>
+                                        <div className="lg:col-span-12 space-y-8">
+                                            <div className="flex items-center justify-between px-2">
+                                                <div>
+                                                    <h2 className="text-2xl font-black text-adorix-dark tracking-tight leading-none mb-1">Analytics</h2>
+                                                    <p className="text-sm font-semibold text-gray-500 hidden sm:block">Track your campaign performance and overall engagement</p>
+                                                </div>
+                                                <div className="px-5 py-2.5 bg-gray-50 border border-gray-100 text-gray-600 text-[10px] font-black rounded-xl uppercase tracking-widest shadow-sm">
+                                                    Performance Hub
+                                                </div>
                                             </div>
 
+                                            {/* Top Stat Cards */}
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 {stats.map((stat, i) => (
-                                                    <div key={i} className="bg-white p-10 rounded-[2.5rem] border border-gray-100 shadow-sm transition-all group hover:shadow-xl hover:shadow-adorix-dark/5">
-                                                        <div className="flex items-center gap-6">
-                                                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
-                                                                }`}>
-                                                                <stat.icon className="w-7 h-7" />
+                                                    <div key={i} className="relative overflow-hidden bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl hover:shadow-adorix-dark/5">
+                                                        <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${stat.color === 'blue' ? 'bg-blue-300/30' :
+                                                                stat.color === 'emerald' ? 'bg-emerald-300/30' : 'bg-purple-300/30'
+                                                            }`} />
+                                                        <div className="relative z-10 flex flex-col gap-6">
+                                                            <div className="flex justify-between items-start">
+                                                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm border border-white/50 ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
+                                                                        stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                    }`}>
+                                                                    <stat.icon className="w-7 h-7" />
+                                                                </div>
+                                                                <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
+                                                                        stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                    }`}>
+                                                                    {stat.change}
+                                                                </span>
                                                             </div>
                                                             <div>
-                                                                <p className="text-gray-400 font-black text-[11px] uppercase tracking-widest mb-1">{stat.label}</p>
-                                                                <h3 className="text-3xl font-black text-adorix-dark tracking-tighter">{stat.value}</h3>
+                                                                <p className="text-gray-400 font-black text-[11px] uppercase tracking-widest mb-1.5">{stat.label}</p>
+                                                                <h3 className="text-[2.5rem] leading-none font-black text-adorix-dark tracking-tighter">
+                                                                    {stat.value}
+                                                                </h3>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 ))}
+                                            </div>
+
+                                            {/* Chart Section */}
+                                            <div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:shadow-adorix-dark/5 group">
+                                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                                                    <div>
+                                                        <h3 className="text-xl font-black text-adorix-dark">Engagement Overview</h3>
+                                                        <p className="text-sm font-semibold text-gray-400 mt-1">Play time and engagement rate over the last 7 days</p>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-4 items-center px-4 py-2 bg-gray-50 rounded-xl border border-gray-100">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2.5 h-2.5 rounded-full bg-blue-600 shadow-sm shadow-blue-500/50"></div>
+                                                            <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Play Time</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-sm shadow-purple-500/50"></div>
+                                                            <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Engagement</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="h-[320px] w-full mt-2">
+                                                    <ResponsiveContainer width="100%" height="100%">
+                                                        <AreaChart data={performanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                                            <defs>
+                                                                <linearGradient id="colorPlayTime" x1="0" y1="0" x2="0" y2="1">
+                                                                    <stop offset="5%" stopColor="#2563EB" stopOpacity={0.2} />
+                                                                    <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
+                                                                </linearGradient>
+                                                                <linearGradient id="colorEngagement" x1="0" y1="0" x2="0" y2="1">
+                                                                    <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.2} />
+                                                                    <stop offset="95%" stopColor="#8B5CF6" stopOpacity={0} />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#f3f4f6" />
+                                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9ca3af', fontWeight: 700 }} dy={10} />
+                                                            <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9ca3af', fontWeight: 700 }} />
+                                                            <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9ca3af', fontWeight: 700 }} />
+                                                            <Tooltip
+                                                                contentStyle={{ borderRadius: '20px', border: '1px solid #f3f4f6', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', padding: '16px' }}
+                                                                itemStyle={{ fontWeight: 800, fontSize: '14px' }}
+                                                                labelStyle={{ fontWeight: 800, color: '#4b5563', marginBottom: '8px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                                                                cursor={{ stroke: '#f3f4f6', strokeWidth: 2, strokeDasharray: '4 4' }}
+                                                            />
+                                                            <Area yAxisId="left" type="monotone" dataKey="playTime" name="Play Time" stroke="#2563EB" strokeWidth={3} fillOpacity={1} fill="url(#colorPlayTime)" activeDot={{ r: 6, strokeWidth: 0, fill: '#2563EB' }} />
+                                                            <Area yAxisId="right" type="monotone" dataKey="engagement" name="Engagement (%)" stroke="#8B5CF6" strokeWidth={3} fillOpacity={1} fill="url(#colorEngagement)" activeDot={{ r: 6, strokeWidth: 0, fill: '#8B5CF6' }} />
+                                                        </AreaChart>
+                                                    </ResponsiveContainer>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
