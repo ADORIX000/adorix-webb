@@ -122,15 +122,14 @@ const Login = () => {
         <form onSubmit={handleLogin} className="space-y-5" noValidate>
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               autoFocus
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-              placeholder="you@example.com"
+              className={`w-full px-4 py-3 bg-white border rounded-md focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+              placeholder="Email address"
             />
             <AnimatePresence>
               {errors.email && (
@@ -148,18 +147,17 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <Link to="/forgot-password" virtual-element="forgot-password" className="text-xs text-adorix-primary font-medium hover:underline">Forgot password?</Link>
-            </div>
             <input
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-              placeholder="••••••••"
+              className={`w-full px-4 py-3 bg-white border rounded-md focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+              placeholder="Password"
             />
+            <div className="flex justify-end mt-1.5 mb-1.5">
+              <Link to="/forgot-password" virtual-element="forgot-password" className="text-xs text-adorix-primary font-medium hover:underline">Forgot password?</Link>
+            </div>
             <AnimatePresence>
               {errors.password && (
                 <motion.p
