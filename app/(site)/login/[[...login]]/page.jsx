@@ -174,14 +174,6 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* Clerk Badge Mimic (for layout consistency) */}
-          <div className="text-center w-full bg-gray-50/50 py-3 rounded-xl border border-gray-50 mt-1">
-            <div className="flex items-center justify-center gap-1.5">
-              <span className="text-[11px] text-gray-500 font-medium">Secured by</span>
-              <span className="text-xs text-[#1F2B2D] font-bold tracking-tight">clerk</span>
-            </div>
-            <p className="text-[11px] text-[#E87B35] font-semibold mt-1">Development mode</p>
-          </div>
         </div>
       </div>
     </div>
