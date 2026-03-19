@@ -690,8 +690,8 @@ const ProfileContent = () => {
                                                     </div>
 
                                                     <div className="relative z-10 space-y-6">
-                                                        <div className="text-2xl md:text-3xl font-mono tracking-[0.2em] uppercase font-semibold text-white/90">
-                                                            {newCardDetails.number ? newCardDetails.number.replace(/(\d{4})/g, '$1 ').trim() : '•••• •••• •••• ••••'}
+                                                        <div className="text-xl md:text-2xl font-mono tracking-widest uppercase font-semibold text-white/90 whitespace-nowrap">
+                                                            {newCardDetails.number ? newCardDetails.number.replace(/(\d{4})(?=\d)/g, '$1 ') : '•••• •••• •••• ••••'}
                                                         </div>
                                                         <div className="flex justify-between items-end">
                                                             <div>
@@ -714,7 +714,7 @@ const ProfileContent = () => {
                                                     <div className="space-y-2">
                                                         <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Card Number</label>
                                                         <div className="relative">
-                                                            <input type="text" maxLength="16" required value={newCardDetails.number} onChange={e => setNewCardDetails({ ...newCardDetails, number: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 font-mono" placeholder="0000 0000 0000 0000" />
+                                                            <input type="text" maxLength="19" required value={newCardDetails.number.replace(/(\d{4})(?=\d)/g, '$1 ')} onChange={e => setNewCardDetails({ ...newCardDetails, number: e.target.value.replace(/\D/g, '').slice(0, 16) })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 font-mono" placeholder="0000 0000 0000 0000" />
                                                             <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                                         </div>
                                                     </div>
@@ -733,7 +733,7 @@ const ProfileContent = () => {
                                                         </div>
                                                         <div className="col-span-1 space-y-2">
                                                             <label className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center block">CVV</label>
-                                                            <input type="password" maxLength="4" required placeholder="•••" value={newCardDetails.cvv} onChange={e => setNewCardDetails({ ...newCardDetails, cvv: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 text-center font-mono" />
+                                                            <input type="password" maxLength="3" required placeholder="•••" value={newCardDetails.cvv} onChange={e => setNewCardDetails({ ...newCardDetails, cvv: e.target.value.replace(/\D/g, '') })} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 text-center font-mono" />
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-3 pt-4">
