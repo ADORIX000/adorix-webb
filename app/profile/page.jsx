@@ -564,35 +564,44 @@ const ProfileContent = () => {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                            {/* Column 1 */}
                                             <div className="space-y-8">
-                                                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2"><span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">1</span> Personal Details</h3>
-                                                <div className="space-y-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-xl bg-adorix-primary/10 text-adorix-primary flex items-center justify-center font-black text-sm border border-adorix-primary/20">1</div>
+                                                    <h3 className="text-lg font-black text-adorix-dark">Personal Details</h3>
+                                                </div>
+                                                <div className="space-y-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Full Name</label>
-                                                        <input type="text" value={accountInfo.fullName} onChange={(e) => setAccountInfo({ ...accountInfo, fullName: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" placeholder="Full Name" />
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Full Name</label>
+                                                        <input type="text" value={accountInfo.fullName} onChange={(e) => setAccountInfo({ ...accountInfo, fullName: e.target.value })} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 transition-all font-medium" placeholder="Full Name" />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Phone Number</label>
-                                                        <input type="tel" value={accountInfo.phoneNumber} onChange={(e) => setAccountInfo({ ...accountInfo, phoneNumber: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" placeholder="Phone" />
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Phone Number</label>
+                                                        <input type="tel" value={accountInfo.phoneNumber} onChange={(e) => setAccountInfo({ ...accountInfo, phoneNumber: e.target.value })} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 transition-all font-medium" placeholder="Phone" />
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* Column 2 */}
                                             <div className="space-y-8">
-                                                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2"><span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm">2</span> Professional Info</h3>
-                                                <div className="space-y-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-xl bg-adorix-primary/10 text-adorix-primary flex items-center justify-center font-black text-sm border border-adorix-primary/20">2</div>
+                                                    <h3 className="text-lg font-black text-adorix-dark">Professional Info</h3>
+                                                </div>
+                                                <div className="space-y-6">
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Company</label>
-                                                        <input type="text" value={accountInfo.company} onChange={(e) => setAccountInfo({ ...accountInfo, company: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Company</label>
+                                                        <input type="text" value={accountInfo.company} onChange={(e) => setAccountInfo({ ...accountInfo, company: e.target.value })} className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 transition-all font-medium" placeholder="E.g. Adorix Inc." />
                                                     </div>
                                                     <div className="space-y-2">
-                                                        <label className="text-sm font-bold text-gray-700">Bio</label>
-                                                        <textarea rows="3" value={accountInfo.bio} onChange={(e) => setAccountInfo({ ...accountInfo, bio: e.target.value })} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary resize-none" />
+                                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Bio</label>
+                                                        <textarea rows="3" value={accountInfo.bio} onChange={(e) => setAccountInfo({ ...accountInfo, bio: e.target.value })} className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary focus:ring-4 focus:ring-adorix-primary/10 transition-all font-medium resize-none leading-relaxed" placeholder="Tell us about yourself..." />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="pt-8 border-t border-gray-100 flex justify-end">
-                                            <button onClick={handleSaveAccountInfo} disabled={isSaving} className="px-8 py-3 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all flex items-center gap-2">
+                                            <button onClick={handleSaveAccountInfo} disabled={isSaving} className="px-8 py-3.5 bg-adorix-dark text-white rounded-xl font-black hover:bg-black transition-all flex items-center gap-2 shadow-lg shadow-adorix-dark/20">
                                                 {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                                                 Save Changes
                                             </button>
