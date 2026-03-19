@@ -343,9 +343,9 @@ const ProfileContent = () => {
     ];
 
     const stats = [
-        { label: 'Ad Play Time', value: '1,420', change: 'Total Plays', icon: PlayCircle, color: 'blue' },
+        { label: 'Ad Play Time', value: '1,420', change: 'Total Plays', icon: Activity, color: 'blue' },
         { label: 'Average Time', value: '42s', change: 'Per Session', icon: Timer, color: 'emerald' },
-        { label: 'Engagement', value: '92%', change: 'High Performance', icon: MousePointer2, color: 'purple' },
+        { label: 'Engagement', value: '92%', change: 'High Performance', icon: TrendingUp, color: 'purple' },
     ];
 
     const performanceData = [
@@ -477,13 +477,13 @@ const ProfileContent = () => {
                                                             }`} />
                                                         <div className="relative z-10 flex flex-col gap-6">
                                                             <div className="flex justify-between items-start">
-                                                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm border border-white/50 ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                    stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-md backdrop-blur-md border ${stat.color === 'blue' ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:bg-blue-500/20 dark:border-blue-500/30 dark:text-blue-400' :
+                                                                    stat.color === 'emerald' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:bg-emerald-500/20 dark:border-emerald-500/30 dark:text-emerald-400' : 'bg-purple-500/10 border-purple-500/20 text-purple-600 dark:bg-purple-500/20 dark:border-purple-500/30 dark:text-purple-400'
                                                                     }`}>
                                                                     <stat.icon className="w-7 h-7" />
                                                                 </div>
-                                                                <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                    stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest border shadow-sm ${stat.color === 'blue' ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:bg-blue-500/20 dark:border-blue-500/30 dark:text-blue-400' :
+                                                                    stat.color === 'emerald' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:bg-emerald-500/20 dark:border-emerald-500/30 dark:text-emerald-400' : 'bg-purple-500/10 border-purple-500/20 text-purple-600 dark:bg-purple-500/20 dark:border-purple-500/30 dark:text-purple-400'
                                                                     }`}>
                                                                     {stat.change}
                                                                 </span>
