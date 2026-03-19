@@ -84,6 +84,7 @@ const ProfileContent = () => {
     const [isAddingCard, setIsAddingCard] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const [isProcessingImage, setIsProcessingImage] = useState(false);
+    const [theme, setTheme] = useState('auto');
 
     const handleScanCard = async () => {
         if (!videoRef.current) return;
@@ -667,19 +668,41 @@ const ProfileContent = () => {
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                            {[
-                                                { label: 'Smart Notifications', sub: 'Choose updates to receive', icon: Bell, color: 'text-orange-500', bg: 'bg-orange-50' },
-                                                { label: 'Appearance', sub: 'Dark & Light modes', icon: Zap, color: 'text-yellow-500', bg: 'bg-yellow-50' },
-                                                { label: 'Language', sub: 'English (United Kingdom)', icon: Globe, color: 'text-blue-500', bg: 'bg-blue-50' }
-                                            ].map((item) => (
-                                                <div key={item.label} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary">
-                                                    <div className={`w-14 h-14 rounded-2xl ${item.bg} ${item.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                                                        <item.icon className="w-7 h-7" />
-                                                    </div>
-                                                    <h3 className="text-lg font-black text-adorix-dark mb-2">{item.label}</h3>
-                                                    <p className="text-sm text-gray-400 font-medium leading-relaxed">{item.sub}</p>
+                                            {/* Smart Notifications */}
+                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary flex flex-col">
+                                                <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                                    <Bell className="w-7 h-7" />
                                                 </div>
-                                            ))}
+                                                <h3 className="text-lg font-black text-adorix-dark mb-2">Smart Notifications</h3>
+                                                <p className="text-sm text-gray-400 font-medium leading-relaxed flex-1">Choose updates to receive</p>
+                                            </div>
+
+                                            {/* Appearance */}
+                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all border-t-4 border-t-transparent flex flex-col justify-between">
+                                                <div>
+                                                    <div className="w-14 h-14 rounded-2xl bg-yellow-50 text-yellow-500 flex items-center justify-center mb-6">
+                                                        <Zap className="w-7 h-7" />
+                                                    </div>
+                                                    <h3 className="text-lg font-black text-adorix-dark mb-2">Appearance</h3>
+                                                    <p className="text-sm text-gray-400 font-medium leading-relaxed mb-6">Change theme to Dark, Light or Auto</p>
+                                                </div>
+                                                <div className="flex bg-gray-50 p-1.5 rounded-xl justify-between border border-gray-100">
+                                                    {['light', 'dark', 'auto'].map(t => (
+                                                        <button key={t} onClick={() => setTheme(t)} className={`flex-1 py-2 font-bold text-xs capitalize rounded-lg transition-all ${theme === t ? 'bg-white text-adorix-dark shadow-md border border-gray-200/50' : 'text-gray-400 hover:text-gray-600'}`}>
+                                                            {t}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Language */}
+                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary flex flex-col">
+                                                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                                    <Globe className="w-7 h-7" />
+                                                </div>
+                                                <h3 className="text-lg font-black text-adorix-dark mb-2">Language</h3>
+                                                <p className="text-sm text-gray-400 font-medium leading-relaxed flex-1">English (United Kingdom)</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
