@@ -683,15 +683,6 @@ const ProfileContent = () => {
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                            {/* Smart Notifications */}
-                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary flex flex-col">
-                                                <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                                    <Bell className="w-7 h-7" />
-                                                </div>
-                                                <h3 className="text-lg font-black text-adorix-dark mb-2">Smart Notifications</h3>
-                                                <p className="text-sm text-gray-400 font-medium leading-relaxed flex-1">Choose updates to receive</p>
-                                            </div>
-
                                             {/* Appearance */}
                                             <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all border-t-4 border-t-transparent flex flex-col justify-between">
                                                 <div>
@@ -708,15 +699,6 @@ const ProfileContent = () => {
                                                         </button>
                                                     ))}
                                                 </div>
-                                            </div>
-
-                                            {/* Language */}
-                                            <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer border-t-4 border-t-transparent hover:border-t-adorix-primary flex flex-col">
-                                                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                                    <Globe className="w-7 h-7" />
-                                                </div>
-                                                <h3 className="text-lg font-black text-adorix-dark mb-2">Language</h3>
-                                                <p className="text-sm text-gray-400 font-medium leading-relaxed flex-1">English (United Kingdom)</p>
                                             </div>
                                         </div>
                                     </div>
@@ -751,20 +733,20 @@ const ProfileContent = () => {
                                             ) : (
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     {paymentCards.map((card, index) => (
-                                                        <div key={card.id} className="relative p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 flex items-center justify-between group overflow-hidden shadow-sm hover:shadow-md transition-all">
+                                                        <div key={card.id} className="relative p-6 bg-white rounded-2xl border border-gray-200 flex items-center justify-between group overflow-hidden shadow-sm hover:shadow-md transition-all">
                                                             <div className="flex items-center gap-4 relative z-10">
-                                                                <div className="w-16 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
-                                                                    <span className="font-black italic text-blue-900 text-sm">{card.type}</span>
+                                                                <div className="w-16 h-10 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+                                                                    <span className="font-black italic text-blue-900 dark:text-blue-400 text-sm">{card.type}</span>
                                                                 </div>
                                                                 <div>
                                                                     <p className="font-bold text-adorix-dark text-lg flex items-center gap-2">
                                                                         •••• {card.last4}
-                                                                        {index === 0 && <span className="bg-emerald-100 text-emerald-700 text-[10px] uppercase font-black px-2 py-0.5 rounded-full">Primary</span>}
+                                                                        {index === 0 && <span className="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[10px] uppercase font-black px-2 py-0.5 rounded-full">Primary</span>}
                                                                     </p>
                                                                     <p className="text-sm text-gray-500 font-medium mt-0.5">Expires {card.expiry}</p>
                                                                 </div>
                                                             </div>
-                                                            <button onClick={() => handleDeleteCard(card.id)} className="p-2.5 bg-white text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all shadow-sm border border-gray-100 opacity-0 group-hover:opacity-100 relative z-10" title="Delete Card">
+                                                            <button onClick={() => handleDeleteCard(card.id)} className="p-2.5 bg-gray-50 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/40 dark:hover:text-red-400 rounded-xl transition-all shadow-sm border border-gray-100 opacity-0 group-hover:opacity-100 relative z-10" title="Delete Card">
                                                                 <Trash2 className="w-5 h-5" />
                                                             </button>
                                                         </div>
