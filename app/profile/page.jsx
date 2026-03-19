@@ -366,17 +366,17 @@ const ProfileContent = () => {
                                                 {stats.map((stat, i) => (
                                                     <div key={i} className="relative overflow-hidden bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl hover:shadow-adorix-dark/5">
                                                         <div className={`absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${stat.color === 'blue' ? 'bg-blue-300/30' :
-                                                                stat.color === 'emerald' ? 'bg-emerald-300/30' : 'bg-purple-300/30'
+                                                            stat.color === 'emerald' ? 'bg-emerald-300/30' : 'bg-purple-300/30'
                                                             }`} />
                                                         <div className="relative z-10 flex flex-col gap-6">
                                                             <div className="flex justify-between items-start">
                                                                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm border border-white/50 ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                        stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                    stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
                                                                     }`}>
                                                                     <stat.icon className="w-7 h-7" />
                                                                 </div>
                                                                 <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest ${stat.color === 'blue' ? 'bg-blue-50 text-blue-600' :
-                                                                        stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
+                                                                    stat.color === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-purple-50 text-purple-600'
                                                                     }`}>
                                                                     {stat.change}
                                                                 </span>
@@ -527,15 +527,30 @@ const ProfileContent = () => {
                                             <div className="space-y-4">
                                                 <div className="space-y-2">
                                                     <label className="text-sm font-bold text-gray-700">Current Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
+                                                    <div className="relative">
+                                                        <input type={showPassword ? "text" : "password"} value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary pr-12" />
+                                                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                                            {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <label className="text-sm font-bold text-gray-700">New Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
+                                                    <div className="relative">
+                                                        <input type={showPassword ? "text" : "password"} value={passwords.new} onChange={(e) => setPasswords({ ...passwords, new: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary pr-12" />
+                                                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                                            {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <label className="text-sm font-bold text-gray-700">Confirm New Password</label>
-                                                    <input type={showPassword ? "text" : "password"} value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary" />
+                                                    <div className="relative">
+                                                        <input type={showPassword ? "text" : "password"} value={passwords.confirm} onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })} className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-adorix-primary pr-12" />
+                                                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                                                            {showPassword ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="flex justify-end pt-4">
@@ -545,22 +560,6 @@ const ProfileContent = () => {
                                                 </button>
                                             </div>
                                         </form>
-                                    </div>
-
-                                    {/* Additional Security Cards */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                                        {[
-                                            { label: 'Access Control', sub: 'Manage your credentials and 2FA', icon: Lock },
-                                            { label: 'Privacy Protocol', sub: 'Hide sensitive data from dashboard', icon: Eye }
-                                        ].map((item) => (
-                                            <div key={item.label} className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer">
-                                                <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center mb-4 group-hover:bg-adorix-light transition-colors">
-                                                    <item.icon className="w-6 h-6 text-adorix-dark" />
-                                                </div>
-                                                <h3 className="font-black text-adorix-dark mb-1">{item.label}</h3>
-                                                <p className="text-xs text-gray-400 font-medium">{item.sub}</p>
-                                            </div>
-                                        ))}
                                     </div>
                                 </motion.div>
                             )}
