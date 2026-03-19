@@ -374,32 +374,42 @@ const ProfileContent = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="relative bg-white rounded-[2rem] shadow-xl shadow-adorix-dark/5 border border-gray-100 z-10 overflow-visible"
                             >
-                                <div className="h-44 bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark relative overflow-hidden group rounded-t-[2rem]">
+                                <div className={`h-44 relative overflow-hidden group rounded-t-[2rem] transition-all ${coverImage ? 'bg-gradient-to-r from-adorix-dark via-gray-900 to-adorix-dark' : 'bg-gray-50 dark:bg-slate-800/50 border-b border-gray-100 dark:border-slate-800'}`}>
                                     {coverImage ? (
-                                        <img src={coverImage} alt="Cover" className="w-full h-full object-cover absolute inset-0 z-0" />
+                                        <>
+                                            <img src={coverImage} alt="Cover" className="w-full h-full object-cover absolute inset-0 z-0" />
+                                            {/* Elegant Cover Actions (Only on Hover when image exists) */}
+                                            <div className="absolute bottom-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                                <button
+                                                    onClick={() => !isUploadingCover && coverInputRef.current?.click()}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-gray-800 backdrop-blur-md rounded-full text-sm font-semibold transition-all shadow-lg border border-gray-100/50 hover:scale-105"
+                                                >
+                                                    {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
+                                                    <span>Change Cover</span>
+                                                </button>
+                                                <button
+                                                    onClick={handleRemoveCover}
+                                                    className="p-2.5 bg-white/90 hover:bg-red-50 text-gray-500 hover:text-red-500 backdrop-blur-md rounded-full transition-all shadow-lg border border-gray-100/50 hover:scale-105"
+                                                    title="Remove Cover"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        </>
                                     ) : (
-                                        <div className="absolute inset-0 opacity-20 z-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '24px 24px' }}></div>
+                                        <div onClick={() => !isUploadingCover && coverInputRef.current?.click()} className="absolute inset-0 z-10 flex flex-col items-center justify-center cursor-pointer group/upload">
+                                            <div className="absolute inset-4 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-2xl group-hover/upload:border-adorix-primary dark:group-hover/upload:border-adorix-primary transition-colors bg-white/50 dark:bg-slate-800/20 group-hover/upload:bg-adorix-primary/5"></div>
+                                            <div className="relative z-20 flex flex-col items-center gap-3">
+                                                <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-400 group-hover/upload:text-adorix-primary group-hover/upload:scale-110 transition-all">
+                                                    {isUploadingCover ? <Loader2 className="w-5 h-5 animate-spin" /> : <Upload className="w-5 h-5" />}
+                                                </div>
+                                                <div className="text-center">
+                                                    <p className="font-bold text-gray-700 dark:text-gray-300">Add a Cover Photo</p>
+                                                    <p className="text-xs font-medium text-gray-400 mt-0.5">Optimum size 1920x400px</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
-
-                                    {/* Elegant Cover Actions */}
-                                    <div className="absolute bottom-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                                        <button
-                                            onClick={() => !isUploadingCover && coverInputRef.current?.click()}
-                                            className="flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-gray-800 backdrop-blur-md rounded-full text-sm font-semibold transition-all shadow-lg border border-gray-100/50 hover:scale-105"
-                                        >
-                                            {isUploadingCover ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-                                            <span>{coverImage ? 'Change Cover' : 'Add Cover'}</span>
-                                        </button>
-                                        {coverImage && (
-                                            <button
-                                                onClick={handleRemoveCover}
-                                                className="p-2.5 bg-white/90 hover:bg-red-50 text-gray-500 hover:text-red-500 backdrop-blur-md rounded-full transition-all shadow-lg border border-gray-100/50 hover:scale-105"
-                                                title="Remove Cover"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        )}
-                                    </div>
                                     <input type="file" hidden ref={coverInputRef} accept="image/*" onChange={handleCoverUpload} />
                                 </div>
 
