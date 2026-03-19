@@ -6,6 +6,8 @@ import GradientWrapper from '@/components/layout/GradientWrapper'
 import Footer from '@/components/common/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
+const clerkJSUrl = process.env.NEXT_PUBLIC_CLERK_JS_URL || 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js'
 
 export const metadata = {
   title: 'Adorix - Advanced Campaign Studio',
@@ -14,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={clerkPublishableKey} clerkJSUrl={clerkJSUrl}>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className} suppressHydrationWarning>
           <GradientWrapper>
