@@ -55,6 +55,16 @@ body {
     color: #ffffff;
 }
 
+/* Utility: hide scrollbars while preserving touch/drag scrolling */
+.team-carousel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.team-carousel::-webkit-scrollbar {
+    display: none;
+}
+
 /* 4. Clerk Auth Components Overrides */
 [class*="cl-badge"],
 [class*="cl-Badge"],
