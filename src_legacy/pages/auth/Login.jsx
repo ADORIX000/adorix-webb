@@ -4,6 +4,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import API_URL from '../../config';
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Login = () => {
   const { login } = useAuth();
 
   const [form, setForm] = useState({ email: '', password: '', rememberMe: false });
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState(location.state?.error || '');
   const [loading, setLoading] = useState(false);
@@ -147,14 +149,24 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className={`w-full px-4 py-3 bg-white border rounded-md focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
-              placeholder="Password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className={`w-full px-4 pr-12 py-3 bg-white border rounded-md focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                placeholder="Password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
             <div className="flex justify-end mt-1.5 mb-1.5">
               <Link to="/forgot-password" virtual-element="forgot-password" className="text-xs text-adorix-primary font-medium hover:underline">Forgot password?</Link>
             </div>
