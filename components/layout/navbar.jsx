@@ -6,11 +6,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import Image from 'next/image';
-import { useUser, useAuth } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 
 const Navbar = () => {
-  const { isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
+  const { isSignedIn, signOut } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
