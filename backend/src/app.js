@@ -1,10 +1,28 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 // const connectDB = require('./config/db'); // Uncomment if your DB is connected here
 
 // connectDB(); // Uncomment if your DB is connected here
 
 const app = express();
+
+// Apply secure HTTP headers for API responses.
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), usb=(), accelerometer=(), gyroscope=()'
+  );
+  next();
+});
 
 
 // 1. Strict CORS Configuration
