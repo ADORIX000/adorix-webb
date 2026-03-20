@@ -96,12 +96,12 @@ const Footer = () => {
                 <div className="h-px w-full bg-white/10 mb-8"></div>
 
                 {/* Bottom Section */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-300">
                     <p>&copy; {new Date().getFullYear()} Adorix Inc. All rights reserved.</p>
                     <div className="flex gap-8">
-                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 hover:text-white transition-colors">Cookie Settings</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Terms of Service</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Cookie Settings</Link>
                     </div>
                 </div>
 

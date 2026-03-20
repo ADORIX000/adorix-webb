@@ -161,6 +161,8 @@ const TechStack = () => {
                             href={tech.url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={`Learn more about ${tech.name}`}
+                            title={`Learn more about ${tech.name}`}
                             className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 hover:scale-110 relative"
                             style={{
                                 transform: `translateY(${waveOffset}px)`,
@@ -180,6 +182,7 @@ const TechStack = () => {
                             <span className="hidden md:block absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/item:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                 {tech.name}
                             </span>
+                            <span className="sr-only">{tech.name}</span>
                         </a>
                     );
                 })}
