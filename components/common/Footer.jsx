@@ -32,17 +32,19 @@ const Footer = () => {
                             The advanced campaign studio for intelligent, interactive experiences.
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                            <a href="https://twitter.com" aria-label="Adorix on Twitter" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
                                 <Twitter className="w-5 h-5" />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                            <a href="https://www.linkedin.com" aria-label="Adorix on LinkedIn" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
                                 <Linkedin className="w-5 h-5" />
                             </a>
-                            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
+                            <a href="https://github.com" aria-label="Adorix on GitHub" className="w-11 h-11 rounded-full bg-white/5 flex items-center justify-center hover:bg-adorix-primary hover:text-white transition-colors">
                                 <Github className="w-5 h-5" />
                             </a>
                         </div>
                     </div>
+
+                    <h2 className="sr-only">Footer Navigation</h2>
 
                     {/* Product Links */}
                     <div>
@@ -94,12 +96,12 @@ const Footer = () => {
                 <div className="h-px w-full bg-white/10 mb-8"></div>
 
                 {/* Bottom Section */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-300">
                     <p>&copy; {new Date().getFullYear()} Adorix Inc. All rights reserved.</p>
                     <div className="flex gap-8">
-                        <Link href="/settings/policies" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/settings/policies" className="hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="/settings/policies" className="hover:text-white transition-colors">Cookie Settings</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Terms of Service</Link>
+                        <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Cookie Settings</Link>
                     </div>
                 </div>
 

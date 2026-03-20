@@ -70,7 +70,7 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   href={link.path}
-                  className={`transition-colors hover:text-adorix-primary relative group ${isActive ? 'text-adorix-primary font-bold' : ''}`}
+                  className={`inline-flex items-center min-h-11 px-1 transition-colors hover:text-adorix-primary relative group ${isActive ? 'text-adorix-primary font-bold' : ''}`}
                 >
                   {link.name}
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${isActive ? 'scale-x-100' : ''}`} />
@@ -86,14 +86,14 @@ const Navbar = () => {
               <>
                 <Link
                   href="/login"
-                  className={`transition-colors hover:text-adorix-primary relative group ${pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
+                  className={`inline-flex items-center min-h-11 px-1 transition-colors hover:text-adorix-primary relative group ${pathname === '/login' ? 'text-adorix-primary font-bold' : ''}`}
                 >
                   Log In
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/login' ? 'scale-x-100' : ''}`} />
                 </Link>
                 <Link
                   href="/signup"
-                  className={`transition-colors hover:text-adorix-primary relative group ${pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
+                  className={`inline-flex items-center min-h-11 px-1 transition-colors hover:text-adorix-primary relative group ${pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
                 >
                   Sign Up
                   <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/signup' ? 'scale-x-100' : ''}`} />
@@ -111,7 +111,7 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={() => signOut({ redirectUrl: 'https://adorixit.com/' })}
-                  className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors font-semibold"
+                  className="inline-flex items-center gap-2 min-h-11 px-1 text-red-500 hover:text-red-600 transition-colors font-semibold"
                 >
                   <LogOut size={18} />
                   Logout
@@ -122,8 +122,10 @@ const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden text-gray-600"
+            className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-gray-700"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            title={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>

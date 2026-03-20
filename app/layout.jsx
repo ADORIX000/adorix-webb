@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
         <body className={inter.className} suppressHydrationWarning>
           <GradientWrapper>
             <AuthenticatedNavbar />
-            {children}
+            <main id="main-content">{children}</main>
             <Footer />
           </GradientWrapper>
         </body>
