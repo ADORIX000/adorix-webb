@@ -66,7 +66,7 @@ export default function LoginPage() {
           <h1 className="text-[22px] font-bold text-[#1F2B2D] tracking-tight text-center">
             Sign in to ADORIX
           </h1>
-          <p className="text-sm text-gray-400 font-normal mt-0.5 text-center">
+          <p className="text-sm text-gray-600 font-normal mt-0.5 text-center">
             Welcome back! Please sign in to continue
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">
           <div className="flex-1 h-px bg-gray-100" />
-          <span className="text-gray-400 text-xs px-3">or</span>
+          <span className="text-gray-600 text-xs px-3">or</span>
           <div className="flex-1 h-px bg-gray-100" />
         </div>
 
@@ -140,7 +140,7 @@ export default function LoginPage() {
               </button>
             </div>
             <div className="text-right mt-1.5">
-              <Link href="/forgot-password" className="text-[#0D8A9E] text-xs font-semibold hover:text-[#085a66]">
+              <Link href="/forgot-password" className="inline-flex items-center min-h-8 px-1 text-[#0D8A9E] text-sm font-semibold hover:text-[#085a66]">
                 Forgot password?
               </Link>
             </div>
@@ -168,8 +168,8 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col items-center justify-center gap-4">
           <div className="flex items-center gap-1.5">
-            <span className="text-sm text-gray-400">Don't have an account?</span>
-            <Link href="/signup" className="text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
+            <span className="text-sm text-gray-600">Don't have an account?</span>
+            <Link href="/signup" className="inline-flex items-center min-h-8 px-1 text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
               Sign up
             </Link>
           </div>

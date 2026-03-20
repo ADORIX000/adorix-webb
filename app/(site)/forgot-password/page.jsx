@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
                         <h1 className="text-[22px] font-bold text-[#1F2B2D] tracking-tight text-center">
                             New Password
                         </h1>
-                        <p className="text-sm text-gray-400 font-normal mt-0.5 text-center">
+                        <p className="text-sm text-gray-600 font-normal mt-0.5 text-center">
                             A reset code was sent to <b>{emailAddress}</b>.
                         </p>
                     </div>
@@ -145,7 +145,7 @@ export default function ForgotPasswordPage() {
 
                     {/* Footer */}
                     <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col items-center justify-center gap-4">
-                        <Link href="/login" className="text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
+                        <Link href="/login" className="inline-flex items-center min-h-8 px-1 text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
                             Return to sign in
                         </Link>
 
@@ -172,7 +172,7 @@ export default function ForgotPasswordPage() {
                     <h1 className="text-[22px] font-bold text-[#1F2B2D] tracking-tight text-center">
                         Forgot Password
                     </h1>
-                    <p className="text-sm text-gray-400 font-normal mt-0.5 text-center">
+                    <p className="text-sm text-gray-600 font-normal mt-0.5 text-center">
                         Enter your email to receive the reset code.
                     </p>
                 </div>
@@ -221,7 +221,7 @@ export default function ForgotPasswordPage() {
 
                 {/* Footer */}
                 <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col items-center justify-center gap-4">
-                    <Link href="/login" className="text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
+                    <Link href="/login" className="inline-flex items-center min-h-8 px-1 text-sm font-semibold text-[#0D8A9E] hover:text-[#085a66]">
                         Back to sign in
                     </Link>
 

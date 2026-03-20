@@ -115,7 +115,7 @@ export default function SignupPage() {
           <h1 className="text-[22px] font-bold text-[#1F2B2D] tracking-tight text-center">
             Create account
           </h1>
-          <p className="text-sm text-gray-400 font-normal mt-0.5 text-center">
+          <p className="text-sm text-gray-600 font-normal mt-0.5 text-center">
             Join the ad revolution today.
           </p>
         </div>
@@ -152,7 +152,7 @@ export default function SignupPage() {
         {/* Divider */}
         <div className="flex items-center gap-3 my-4">
           <div className="flex-1 h-px bg-gray-100" />
-          <span className="text-gray-400 text-xs px-3">or</span>
+          <span className="text-gray-600 text-xs px-3">or</span>
           <div className="flex-1 h-px bg-gray-100" />
         </div>
 
