@@ -1,6 +1,5 @@
 'use client';
 
-
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -37,7 +36,6 @@ const Navbar = () => {
   ];
 
   const isHomeActive = pathname === '/home' || pathname === '/';
-
   const visibleLinks = navLinks.filter(link => !link.protected || isSignedIn);
 
   return (
@@ -78,7 +76,6 @@ const Navbar = () => {
               );
             })}
           </div>
-
 
           {/* Auth Buttons */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
