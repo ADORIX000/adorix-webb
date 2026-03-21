@@ -67,10 +67,64 @@ router.post('/create', async (req, res) => {
  * @route POST /api/payments/notify
  * @desc Webhook endpoint for PayHere server-to-server notifications
  */
-router.post('/notify', (req, res) => {
-    // Starter scaffold for webhook implementation
-    // Future validation: Once signature is verified, transition the row status to 'PAID'
-    res.status(200).send('Webhook endpoint prepared.');
+router.post('/notify', async (req, res) => {
+    try {
+        const {
+            merchant_id,
+            order_id,
+            payment_id,
+            payhere_amount,
+            payhere_currency,
+            status_code,
+            md5sig
+        } = req.body;
+
+        const isValid = payhereService.verifyWebhookSignature(
+            merchant_id,
+            order_id,
+            payhere_amount,
+            payhere_currency,
+            status_code,
+            md5sig
+        );
+
+        if (!isValid) {
+            console.error(`Invalid PayHere webhook signature for order: ${order_id}`);
+            return res.status(400).send('Invalid signature');
+        }
+
+        let paymentStatus = 'PENDING';
+        if (status_code === '2') {
+            paymentStatus = 'PAID';
+        } else if (status_code === '0') {
+            paymentStatus = 'PENDING';
+        } else if (status_code === '-1') {
+            paymentStatus = 'CANCELLED';
+        } else if (status_code === '-2') {
+            paymentStatus = 'FAILED';
+        } else if (status_code === '-3') {
+            paymentStatus = 'FAILED'; // Charged back
+        }
+
+        const { error } = await supabase
+            .from('payments')
+            .update({
+                payhere_payment_id: payment_id,
+                status: paymentStatus,
+                raw_callback: req.body
+            })
+            .eq('order_id', order_id);
+
+        if (error) {
+            console.error('Failed to update payment status:', error);
+            return res.status(500).send('Database error');
+        }
+
+        return res.status(200).send('OK');
+    } catch (err) {
+        console.error('Webhook processing error:', err);
+        return res.status(500).send('Internal server error');
+    }
 });
 
 module.exports = router;
