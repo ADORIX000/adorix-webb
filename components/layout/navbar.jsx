@@ -29,7 +29,7 @@ const Navbar = () => {
   }, [pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/home', protected: false },
+    { name: 'Home', path: '/', protected: false },
     { name: 'Dashboard', path: '/dashboard', protected: true },
     { name: 'Campaign Studio', path: '/campaign-studio', protected: true },
     { name: 'Pricing', path: '/pricing', protected: false },
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group">
             <Image
               src="/icon.png"
               alt="Adorix Logo"
@@ -65,7 +65,7 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
             {visibleLinks.map((link) => {
-              const isActive = link.path === '/home' ? isHomeActive : pathname === link.path;
+              const isActive = link.name === 'Home' ? isHomeActive : pathname === link.path;
               return (
                 <Link
                   key={link.path}
@@ -136,7 +136,7 @@ const Navbar = () => {
       <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
           {visibleLinks.map((link) => {
-            const isActive = link.path === '/home' ? isHomeActive : pathname === link.path;
+            const isActive = link.name === 'Home' ? isHomeActive : pathname === link.path;
             return (
               <Link
                 key={link.path}
