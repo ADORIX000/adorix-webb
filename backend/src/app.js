@@ -1,34 +1,38 @@
-const express = require("express");
-const cors = require("cors");
-const helmet = require("helmet");
-const morgan = require("morgan");
+const express = require('express');
+const cors = require('cors');
+// const connectDB = require('./config/db'); // Uncomment if your DB is connected here
 
-const authRoutes = require("./routes/auth.routes");
-const userRoutes = require("./routes/user.routes");
+// connectDB(); // Uncomment if your DB is connected here
 
 const app = express();
 
-app.use(helmet());
-app.use(cors({
+
+// 1. Strict CORS Configuration
+const corsOptions = {
   origin: [
     "http://localhost:5173",
     "http://localhost:3000",
     "https://adorixit.com",
-    "https://www.adorixit.com"
+    "https://www.adorixit.com",
+    "https://dashboard.adorixit.com"
   ],
-  credentials: true
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true,
+  optionsSuccessStatus: 200 // Fixes legacy browser issues
+};
+
+// 2. Apply CORS middleware BEFORE any routes
+app.use(cors(corsOptions));
+
+// 3. (Optional) Explicitly handle OPTIONS if needed, but cors() usually covers it
+// app.options('*', cors(corsOptions));
+
+// 4. Body parser
 app.use(express.json());
-app.use(morgan("dev"));
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-
-app.get("/api/health", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Backend is running successfully",
-  });
-});
+// 5. Routes
+app.use('/api/contact', require('./routes/contact.routes'));
+// app.use('/api/auth', require('./routes/auth.routes')); // Add your other routes here
 
 module.exports = app;

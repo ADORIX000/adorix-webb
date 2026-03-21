@@ -5,9 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
 // Pages
-import Home from './pages/pagesonNav/Home';
-import Features from './pages/pagesonNav/Features';
-import Contact from './pages/pagesonNav/Contact';
+import { Navigate } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import Verification from './pages/auth/Verification';
@@ -15,7 +13,6 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import Dashboard from './pages/pagesonNav/Dashboard';
 import CampaignStudio from './pages/pagesonNav/CampaignStudio';
 import Profile from './pages/pagesonNav/Profile';
-import Pricing from './pages/pagesonNav/payment/Pricing';
 import PaymentMethod from './pages/pagesonNav/payment/PaymentMethod';
 import UpgradePlan from './pages/pagesonNav/payment/UpgradePlan';
 import Checkout from './pages/pagesonNav/payment/Checkout';
@@ -34,11 +31,8 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route element={<MainLayout />}>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/features" element={<Features />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/pricing" element={<Pricing />} />
+            {/* Public Routes - Redirect to Login */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<Login />} />

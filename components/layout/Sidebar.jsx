@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard,
@@ -31,10 +32,15 @@ const Sidebar = () => {
     return (
         <div className="w-64 h-screen bg-white border-r border-gray-100 flex flex-col fixed left-0 top-0 z-50">
 
-            {/* Brand */}
             <div className="p-8">
-                <Link href="/" className="flex items-center gap-3 group">
-                    <img src="/icon.png" alt="Adorix Logo" className="w-8 h-8 rounded-lg group-hover:scale-110 transition-transform duration-200" />
+                <Link href="/dashboard" className="flex items-center gap-3 group">
+                    <Image
+                        src="/icon.png"
+                        alt="Adorix Logo"
+                        width={32}
+                        height={32}
+                        className="rounded-lg group-hover:scale-110 transition-transform"
+                    />
                     <span className="text-xl font-bold text-adorix-dark tracking-tight">ADORIX</span>
                 </Link>
             </div>

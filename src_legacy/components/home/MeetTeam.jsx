@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Linkedin, Twitter, Github } from 'lucide-react';
 
@@ -28,6 +28,31 @@ const TeamMember = ({ name, role, image, delay }) => (
 );
 
 const MeetTeam = () => {
+    const teamCarouselRef = useRef(null);
+    const dotCount = 7;
+    const [activeDot, setActiveDot] = useState(0);
+
+    const updateActiveDot = () => {
+        const carousel = teamCarouselRef.current;
+        if (!carousel) {
+            return;
+        }
+
+        const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+        if (maxScroll <= 0) {
+            setActiveDot(0);
+            return;
+        }
+
+        const scrollProgress = carousel.scrollLeft / maxScroll;
+        const nextDot = Math.round(scrollProgress * (dotCount - 1));
+        setActiveDot(Math.max(0, Math.min(dotCount - 1, nextDot)));
+    };
+
+    useEffect(() => {
+        updateActiveDot();
+    }, []);
+
     const team = [
         {
             name: "Deeghayu Arandara",
@@ -83,9 +108,24 @@ const MeetTeam = () => {
                 </motion.p>
             </div>
 
-            <div className="flex sm:grid overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-8 sm:pb-0 scrollbar-hide">
+            <div
+                ref={teamCarouselRef}
+                onScroll={updateActiveDot}
+                className="team-carousel flex sm:grid overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-8 sm:pb-0"
+            >
                 {team.map((member, index) => (
                     <TeamMember key={index} {...member} delay={index * 0.1} />
+                ))}
+            </div>
+
+            <div className="sm:hidden flex items-center justify-center gap-3 mt-2" aria-hidden="true">
+                {Array.from({ length: dotCount }).map((_, index) => (
+                    <span
+                        key={index}
+                        className={`h-2 w-2 rounded-full transition-colors duration-300 ${
+                            index === activeDot ? 'bg-adorix-primary' : 'bg-adorix-primary/25'
+                        }`}
+                    />
                 ))}
             </div>
         </section>

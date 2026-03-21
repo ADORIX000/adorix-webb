@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Hyper-Premium Advanced Animation Components (High Visibility v2.2) ---
@@ -77,19 +77,24 @@ const SupersonicStream = ({ isPaused }) => (
 
             {/* Advanced Speed Lines with Parallax */}
             <g>
-                {[...Array(8)].map((_, i) => (
-                    <motion.line
-                        key={i}
-                        x1="120" x2="-20"
-                        y1={20 + i * 8} y2={20 + i * 8}
-                        stroke="var(--adorix-primary)"
-                        strokeWidth={0.5 + Math.random()}
-                        strokeDasharray="20 40"
-                        opacity={0.2 + Math.random() * 0.3}
-                        animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
-                        transition={{ duration: 0.8 + Math.random() * 0.5, repeat: Infinity, ease: "linear" }}
-                    />
-                ))}
+                {[...Array(8)].map((_, i) => {
+                    const randomWidth = [0.8, 1.2, 0.6, 1.4, 0.9, 1.1, 0.7, 1.3][i];
+                    const randomOpacity = [0.3, 0.45, 0.25, 0.4, 0.35, 0.5, 0.3, 0.4][i];
+                    const randomDuration = [1.0, 1.2, 0.9, 1.3, 1.1, 1.0, 1.2, 0.8][i];
+                    return (
+                        <motion.line
+                            key={i}
+                            x1="120" x2="-20"
+                            y1={20 + i * 8} y2={20 + i * 8}
+                            stroke="var(--adorix-primary)"
+                            strokeWidth={randomWidth}
+                            strokeDasharray="20 40"
+                            opacity={randomOpacity}
+                            animate={!isPaused ? { x: [-150, 150] } : { x: 0 }}
+                            transition={{ duration: randomDuration, repeat: Infinity, ease: "linear" }}
+                        />
+                    );
+                })}
             </g>
 
             {/* Simplified but Dynamic Browser Window */}
@@ -125,23 +130,29 @@ const SupersonicStream = ({ isPaused }) => (
             </motion.g>
 
             {/* High-speed streak particles */}
-            {[...Array(6)].map((_, i) => (
-                <motion.rect
-                    key={`p-${i}`}
-                    width={10 + Math.random() * 20}
-                    height="0.8"
-                    fill="var(--adorix-accent)"
-                    opacity="0.4"
-                    animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
-                    transition={{
-                        duration: 0.5 + Math.random() * 0.5,
-                        repeat: Infinity,
-                        delay: Math.random(),
-                        ease: "linear"
-                    }}
-                    y={15 + Math.random() * 70}
-                />
-            ))}
+            {[...Array(6)].map((_, i) => {
+                const randomWidth = [15, 25, 12, 30, 18, 22][i];
+                const randomDuration = [0.6, 0.8, 0.5, 0.9, 0.7, 0.6][i];
+                const randomDelay = [0.1, 0.3, 0.5, 0.2, 0.4, 0.6][i];
+                const randomY = [25, 45, 65, 35, 55, 75][i];
+                return (
+                    <motion.rect
+                        key={`p-${i}`}
+                        width={randomWidth}
+                        height="0.8"
+                        fill="var(--adorix-accent)"
+                        opacity="0.4"
+                        animate={!isPaused ? { x: [150, -100] } : { x: 50 }}
+                        transition={{
+                            duration: randomDuration,
+                            repeat: Infinity,
+                            delay: randomDelay,
+                            ease: "linear"
+                        }}
+                        y={randomY}
+                    />
+                );
+            })}
         </svg>
     </div>
 );
@@ -601,11 +612,6 @@ const FeatureCard = ({ animation: Animation, title, description, cardClassName =
 };
 
 const FeatureCards = () => {
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
     const features = [
         {
             animation: HolographicScope, // 1
@@ -638,8 +644,6 @@ const FeatureCards = () => {
             description: 'Experience blazing-fast ad delivery with our optimized infrastructure. Your campaigns load instantly, every time.',
         },
     ];
-
-    if (!mounted) return <section className="py-24 px-6 bg-gray-50/50" />;
 
     return (
         <section className="py-24 px-6 bg-gray-50/50 overflow-hidden">

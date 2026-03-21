@@ -1,25 +1,33 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+'use client';
 
-const TypingText = ({ text, className, delay = 0, speed = 0.03, startDelay = 0, triggerOnce = true }) => {
-    return (
-        <span className={className}>
-            {text.split("").map((char, index) => (
-                <motion.span
-                    key={index}
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: triggerOnce }}
-                    transition={{
-                        duration: 0.05,
-                        delay: startDelay + delay + index * speed
-                    }}
-                >
-                    {char}
-                </motion.span>
-            ))}
-        </span>
-    );
-};
+import { useEffect, useState } from 'react';
 
-export default TypingText;
+/**
+ * TypingText – animates characters one by one.
+ * @param {string}  text       - The text to type out.
+ * @param {number}  speed      - Seconds between each character (default 0.05).
+ * @param {number}  startDelay - Seconds to wait before starting (default 0).
+ */
+export default function TypingText({ text = '', speed = 0.05, startDelay = 0 }) {
+    const [displayed, setDisplayed] = useState('');
+
+    useEffect(() => {
+        setDisplayed('');
+        let timeout;
+
+        timeout = setTimeout(() => {
+            let i = 0;
+            const interval = setInterval(() => {
+                setDisplayed(text.slice(0, i + 1));
+                i++;
+                if (i >= text.length) clearInterval(interval);
+            }, speed * 1000);
+
+            return () => clearInterval(interval);
+        }, startDelay * 1000);
+
+        return () => clearTimeout(timeout);
+    }, [text, speed, startDelay]);
+
+    return <span>{displayed}</span>;
+}

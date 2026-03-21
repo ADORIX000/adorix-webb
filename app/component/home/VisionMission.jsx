@@ -1,16 +1,9 @@
 "use client";
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Eye, Target } from 'lucide-react';
 
 const VisionMission = () => {
-    const [mounted, setMounted] = useState(false);
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
-
     const cardData = [
         {
             title: "Our Vision",
@@ -21,8 +14,6 @@ const VisionMission = () => {
             content: "To pioneer the next generation of interactive intelligence—transforming raw physiological data into meaningful brand dialogues through ethical, high-fidelity AI vision."
         }
     ];
-
-    if (!mounted) return <section className="py-24 px-6 max-w-4xl mx-auto" />;
 
     return (
         <section className="py-24 px-6 max-w-4xl mx-auto z-10 relative">

@@ -1,8 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Check, Star, Zap, Sparkles, Shield } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
-import TypingText from '../../../components/home/TypingText';
+import TypingText from '@/components/home/TypingText';
 
 const PricingCard = ({
   title,
@@ -12,7 +16,9 @@ const PricingCard = ({
   savings,
   features,
   icon: Icon,
-  recommended
+  recommended,
+  isSignedIn,
+  router
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -74,20 +80,28 @@ const PricingCard = ({
         ))}
       </ul>
 
-      <Link
-        to={`/upgrade/${title.toLowerCase()}`}
+      <button
+        onClick={() => {
+          if (isSignedIn) {
+            router.push('/accs');
+          } else {
+            router.push('/signup');
+          }
+        }}
         className={`block text-center w-full py-4 rounded-2xl font-bold transition-all ${recommended
           ? 'bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20'
           : 'bg-gray-100 text-gray-900 hover:bg-adorix-light hover:text-adorix-dark'
           }`}
       >
         Get Started with {title}
-      </Link>
+      </button>
     </div>
   );
 };
 
 const Pricing = () => {
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
   const plans = [
     {
       title: 'Plus',
@@ -144,6 +158,8 @@ const Pricing = () => {
     }
   ];
 
+  if (!isLoaded) return null;
+
   return (
     <div className="pt-32 pb-20 px-6 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -156,13 +172,11 @@ const Pricing = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl md:text-7xl font-black text-adorix-dark mb-6 tracking-tight">
-              {/* Sequential typing preserved */}
               <TypingText text="Kiosk Plans for " speed={0.05} />
               <span className="text-adorix-primary">
                 <TypingText text="Growers" speed={0.05} delay={0.85} />
               </span>
             </h1>
-            {/* Sub-text sentence has been removed */}
           </motion.div>
         </div>
 
@@ -176,7 +190,7 @@ const Pricing = () => {
               transition={{ delay: index * 0.1 + 0.3 }}
               className="h-full"
             >
-              <PricingCard {...plan} />
+              <PricingCard {...plan} isSignedIn={isSignedIn} router={router} />
             </motion.div>
           ))}
         </div>

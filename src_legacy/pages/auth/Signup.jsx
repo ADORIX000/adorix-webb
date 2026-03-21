@@ -4,31 +4,25 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import API_URL from '../../config';
+import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
 
   const [form, setForm] = useState({
-    name: '',
     email: location.state?.email || '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [infoMessage, setInfoMessage] = useState(location.state?.info || '');
   const [loading, setLoading] = useState(false);
 
-  const passwordRequirements = [
-    { label: '8+ characters', test: (pwd) => pwd.length >= 8 },
-    { label: 'Letter', test: (pwd) => /[a-zA-Z]/.test(pwd) },
-    { label: 'Number', test: (pwd) => /[0-9]/.test(pwd) },
-    { label: 'Symbol', test: (pwd) => /[^a-zA-Z0-9]/.test(pwd) },
-  ];
-
   const validate = () => {
     const newErrors = {};
-    if (!form.name.trim()) newErrors.name = 'Full name is required.';
     if (!form.email.trim()) {
       newErrors.email = 'Email is required.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
@@ -36,25 +30,10 @@ const Signup = () => {
     }
     if (!form.password) {
       newErrors.password = 'Password is required.';
-    } else {
-      const failed = passwordRequirements.filter(req => !req.test(form.password));
-      if (failed.length > 0) newErrors.password = 'Password does not meet all security requirements.';
+    } else if (form.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters.';
     }
     return newErrors;
-  };
-
-  const suggestPassword = () => {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const nums = "0123456789";
-    const symbols = "!@#$%^&*()_+~";
-    let pwd = chars[Math.floor(Math.random() * chars.length)] +
-      nums[Math.floor(Math.random() * nums.length)] +
-      symbols[Math.floor(Math.random() * symbols.length)];
-    const all = chars + nums + symbols;
-    for (let i = 0; i < 9; i++) pwd += all[Math.floor(Math.random() * all.length)];
-    pwd = pwd.split('').sort(() => 0.5 - Math.random()).join('');
-    setForm({ ...form, password: pwd });
-    if (errors.password) setErrors({ ...errors, password: '' });
   };
 
   const handleChange = (e) => {
@@ -78,7 +57,7 @@ const Signup = () => {
       const response = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
+        body: JSON.stringify({ name: "User", email: form.email, password: form.password }),
       });
 
       const data = await response.json();
@@ -88,7 +67,6 @@ const Signup = () => {
         return;
       }
 
-      // Automatically log the user in after signup
       login(data.user, data.token);
       navigate('/', { replace: true });
     } catch (err) {
@@ -107,10 +85,17 @@ const Signup = () => {
   });
 
   return (
-    <div className="pt-28 pb-24 flex justify-center items-center min-h-[80vh]">
-      <div className="bg-white p-10 rounded-2xl shadow-xl border border-gray-100 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-adorix-dark mb-2">Create account</h2>
-        <p className="text-gray-500 mb-8">Join the ad revolution today.</p>
+    <div className="flex items-center justify-center px-4 py-20 min-h-screen">
+      <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.07)] border border-gray-100 p-8">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-[22px] font-bold text-[#1F2B2D] tracking-tight text-center">
+            Create account
+          </h1>
+          <p className="text-sm text-gray-400 font-normal mt-0.5 text-center">
+            Join the ad revolution today.
+          </p>
+        </div>
 
         {/* Info Message Banner */}
         <AnimatePresence>
@@ -119,7 +104,7 @@ const Signup = () => {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="mb-5 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-600 text-sm font-medium"
+              className="mb-4 text-xs text-blue-600 text-center bg-blue-50 p-2 rounded-lg border border-blue-100"
             >
               {infoMessage}
             </motion.div>
@@ -133,45 +118,45 @@ const Signup = () => {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="mb-5 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm font-medium"
+              className="mb-4 text-xs text-red-500 text-center bg-red-50 p-2 rounded-lg border border-red-100"
             >
               {serverError}
             </motion.div>
           )}
         </AnimatePresence>
 
-        <form onSubmit={handleSignup} className="space-y-5" noValidate>
-          {/* Full Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              autoFocus
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-              placeholder="John Doe"
-            />
-            <AnimatePresence>
-              {errors.name && (
-                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 4 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
-                  {errors.name}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
+        {/* Social Button */}
+        <button
+          onClick={() => googleSignup()}
+          type="button"
+          className="w-full h-10 border border-gray-200 rounded-lg text-[#1F2B2D] flex items-center justify-center gap-2 text-sm font-medium hover:bg-gray-50 transition-colors"
+        >
+          <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+          </svg>
+          Continue with Google
+        </button>
 
+        {/* Divider */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-gray-100" />
+          <span className="text-gray-400 text-xs px-3">or</span>
+          <div className="flex-1 h-px bg-gray-100" />
+        </div>
+
+        <form onSubmit={handleSignup} noValidate>
           {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <div className="mb-4">
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-              placeholder="you@example.com"
+              className={`w-full h-11 px-4 bg-white border rounded-md text-sm text-[#1F2B2D] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0D8A9E]/30 focus:border-[#0D8A9E] transition-all ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+              placeholder="Email address"
             />
             <AnimatePresence>
               {errors.email && (
@@ -183,87 +168,67 @@ const Signup = () => {
           </div>
 
           {/* Password */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <button type="button" onClick={suggestPassword} className="text-xs text-adorix-primary font-semibold hover:underline">
-                Suggest Strong Password
+          <div className="mb-4">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className={`w-full h-11 px-4 pr-12 bg-white border rounded-md text-sm text-[#1F2B2D] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0D8A9E]/30 focus:border-[#0D8A9E] transition-all ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
+                placeholder="Password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1F2B2D] transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-adorix-primary focus:outline-none transition ${errors.password ? 'border-red-400 bg-red-50' : 'border-gray-300'}`}
-              placeholder="Secure your account"
-            />
-
-            {/* Real-time Requirement Checklist */}
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              {passwordRequirements.map((req, idx) => {
-                const isMet = req.test(form.password);
-                return (
-                  <div key={idx} className="flex items-center gap-1.5">
-                    <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center transition ${isMet ? 'bg-green-500' : 'bg-gray-200'}`}>
-                      {isMet && <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M5 13l4 4L19 7" /></svg>}
-                    </div>
-                    <span className={`text-[10px] font-medium transition ${isMet ? 'text-green-600' : 'text-gray-400'}`}>{req.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-
-            {errors.password && (
-              <AnimatePresence>
-                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 8 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
+            <AnimatePresence>
+              {errors.password && (
+                <motion.p initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto', marginTop: 4 }} exit={{ opacity: 0, height: 0 }} className="text-red-500 text-xs overflow-hidden">
                   {errors.password}
                 </motion.p>
-              </AnimatePresence>
-            )}
+              )}
+            </AnimatePresence>
           </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 pt-1">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-sm text-gray-400 font-medium">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          {/* Google Sign Up */}
-          <button
-            type="button"
-            onClick={() => googleSignup()}
-            className="w-full flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3 px-4 hover:bg-gray-50 active:bg-gray-100 transition font-semibold text-gray-700 bg-white shadow-sm"
-          >
-            <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            Continue with Google
-          </button>
 
           {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-adorix-dark hover:bg-adorix-primary text-white font-bold py-3 rounded-lg transition shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full h-10 bg-[#0D8A9E] hover:bg-[#0a7a8d] active:bg-[#085a66] text-white text-sm font-semibold rounded-lg transition-all duration-150 shadow-none mt-2 flex items-center justify-center gap-1.5 disabled:opacity-75 disabled:cursor-not-allowed"
           >
             {loading ? (
+              <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Creating account...
+                Sign up
+                <span className="text-xs">▸</span>
               </>
-            ) : 'Create Account'}
+            )}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Already have an account?{' '}
-          <Link to="/login" className="text-adorix-primary font-semibold hover:underline">Sign in</Link>
-        </p>
+        {/* Footer (Removed Don't have an account part) */}
+        <div className="mt-5 pt-4 border-t border-gray-100 flex flex-col items-center justify-center gap-4">
+
+          {/* Clerk Badge Mimic */}
+          <div className="text-center w-full bg-gray-50/50 py-3 rounded-xl border border-gray-50 mt-1">
+            <div className="flex items-center justify-center gap-1.5">
+              <span className="text-[11px] text-gray-500 font-medium">Secured by</span>
+              <span className="text-xs text-[#1F2B2D] font-bold tracking-tight">clerk</span>
+            </div>
+            <p className="text-[11px] text-[#E87B35] font-semibold mt-1">Development mode</p>
+          </div>
+        </div>
+
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
-'use client';
-
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 
 const Logos = {
@@ -111,9 +110,11 @@ const TechStack = () => {
     const containerRef = useRef(null);
     const [scrollY, setScrollY] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    const [isHydrated, setIsHydrated] = useState(false);
+
     useEffect(() => {
-        setMounted(true);
+        setIsHydrated(true);
+
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 1024); // lg breakpoint
         };
@@ -138,8 +139,6 @@ const TechStack = () => {
         };
     }, []);
 
-    if (!mounted) return <div className="w-full pt-10 pb-20" />;
-
     return (
         <div ref={containerRef} className="w-full pt-10 pb-20 overflow-hidden relative">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-24 text-gray-800 animate-fade-in-up px-4">
@@ -151,8 +150,10 @@ const TechStack = () => {
                 : 'flex flex-wrap justify-center items-center gap-6'
                 }`}>
                 {TECH_STACK.map((tech, index) => {
-                    // Calculate wave offset for each item - ONLY on desktop
-                    const waveOffset = isMobile ? 0 : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
+                    // Keep first paint deterministic for SSR hydration, then animate on client.
+                    const waveOffset = !isHydrated || isMobile
+                        ? 0
+                        : Math.sin((scrollY * Math.PI * 2) + (index * 0.5)) * 40;
 
                     return (
                         <a
@@ -160,6 +161,8 @@ const TechStack = () => {
                             href={tech.url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            aria-label={`Learn more about ${tech.name}`}
+                            title={`Learn more about ${tech.name}`}
                             className="flex flex-col items-center gap-2 cursor-pointer group/item transition-all duration-300 hover:scale-110 relative"
                             style={{
                                 transform: `translateY(${waveOffset}px)`,
@@ -179,6 +182,7 @@ const TechStack = () => {
                             <span className="hidden md:block absolute -bottom-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1 rounded opacity-0 group-hover/item:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                                 {tech.name}
                             </span>
+                            <span className="sr-only">{tech.name}</span>
                         </a>
                     );
                 })}
