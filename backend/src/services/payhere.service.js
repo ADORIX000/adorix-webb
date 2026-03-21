@@ -33,6 +33,15 @@ class PayHereService {
         return crypto.createHash('md5').update(hashString).digest('hex').toUpperCase();
     }
 
+    verifyWebhookSignature(merchantId, orderId, payhereAmount, payhereCurrency, statusCode, receivedMd5sig) {
+        const hashedSecret = crypto.createHash('md5').update(this.secret).digest('hex').toUpperCase();
+        
+        const hashString = `${merchantId}${orderId}${payhereAmount}${payhereCurrency}${statusCode}${hashedSecret}`;
+        const generatedSig = crypto.createHash('md5').update(hashString).digest('hex').toUpperCase();
+
+        return generatedSig === receivedMd5sig;
+    }
+
     buildCheckoutPayload(orderId, amount, currency, itemTitle, customerName, customerEmail) {
         const nameParts = customerName.split(' ');
         const firstName = nameParts[0] || 'Customer';
