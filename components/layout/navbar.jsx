@@ -49,8 +49,8 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-2 group">
-            <span className="bg-adorix-dark text-white w-8 h-8 flex items-center justify-center rounded-lg group-hover:bg-adorix-primary transition-colors">A</span>
+          <Link href="/" className="text-2xl font-bold tracking-tight text-adorix-dark flex items-center gap-3 group">
+            <img src="/icon.png" alt="Adorix Logo" className="w-8 h-8 rounded-lg group-hover:scale-110 transition-transform duration-200" />
             ADORIX
           </Link>
 
@@ -81,9 +81,10 @@ const Navbar = () => {
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-adorix-dark text-white px-6 py-2 rounded-full hover:bg-adorix-primary transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+                  className={`transition-colors hover:text-adorix-primary relative group ${pathname === '/signup' ? 'text-adorix-primary font-bold' : ''}`}
                 >
                   Sign Up
+                  <span className={`absolute -bottom-1 left-0 w-full h-0.5 bg-adorix-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left ${pathname === '/signup' ? 'scale-x-100' : ''}`} />
                 </Link>
               </>
             ) : (
@@ -139,7 +140,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   href="/signup"
-                  className="w-full bg-adorix-dark text-white text-center py-4 rounded-xl text-xl font-bold hover:bg-adorix-primary transition-colors"
+                  className="text-2xl font-bold text-gray-800 hover:text-adorix-primary transition-colors"
                 >
                   Sign Up
                 </Link>
