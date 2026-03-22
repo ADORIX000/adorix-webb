@@ -1,48 +1,31 @@
-"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Linkedin, Twitter, Github } from 'lucide-react';
 
-const TeamMember = ({ name, role, image, delay }) => {
-    const [imgError, setImgError] = useState(false);
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay, duration: 0.5 }}
-            className="flex-shrink-0 w-[80vw] sm:w-auto bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center snap-center"
-        >
-            <div className="relative mb-6 inline-block">
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-adorix-light group-hover:border-adorix-primary bg-gray-50 flex items-center justify-center transition-colors duration-500 mx-auto">
-                    {!imgError ? (
-                        <img 
-                            src={image} 
-                            alt={name} 
-                            onError={() => setImgError(true)}
-                            className="w-full h-full object-cover" 
-                        />
-                    ) : (
-                        <span className="text-3xl font-black text-adorix-dark tracking-wider">
-                            {initials}
-                        </span>
-                    )}
-                </div>
-                <div className="absolute -bottom-2 -right-2 bg-adorix-primary text-white p-2 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500">
-                    <Linkedin className="w-4 h-4" />
-                </div>
+const TeamMember = ({ name, role, image, delay }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay, duration: 0.5 }}
+        className="flex-shrink-0 w-[80vw] sm:w-auto bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center snap-center"
+    >
+        <div className="relative mb-6 inline-block">
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-adorix-light group-hover:border-adorix-primary transition-colors duration-500 mx-auto">
+                <img src={image} alt={name} className="w-full h-full object-cover" />
             </div>
-            <h3 className="text-xl font-bold text-adorix-dark mb-1">{name}</h3>
-            <p className="text-adorix-primary font-medium text-sm mb-4">{role}</p>
-            <div className="flex justify-center gap-4">
-                <Github className="w-5 h-5 text-gray-400 hover:text-adorix-dark cursor-pointer transition-colors" />
-                <Twitter className="w-5 h-5 text-gray-400 hover:text-adorix-accent cursor-pointer transition-colors" />
+            <div className="absolute -bottom-2 -right-2 bg-adorix-primary text-white p-2 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500">
+                <Linkedin className="w-4 h-4" />
             </div>
-        </motion.div>
-    );
-};
+        </div>
+        <h3 className="text-xl font-bold text-adorix-dark mb-1">{name}</h3>
+        <p className="text-adorix-primary font-medium text-sm mb-4">{role}</p>
+        <div className="flex justify-center gap-4">
+            <Github className="w-5 h-5 text-gray-400 hover:text-adorix-dark cursor-pointer transition-colors" />
+            <Twitter className="w-5 h-5 text-gray-400 hover:text-adorix-accent cursor-pointer transition-colors" />
+        </div>
+    </motion.div>
+);
 
 const MeetTeam = () => {
     const teamCarouselRef = useRef(null);
@@ -139,9 +122,8 @@ const MeetTeam = () => {
                 {Array.from({ length: dotCount }).map((_, index) => (
                     <span
                         key={index}
-                        className={`h-2 w-2 rounded-full transition-colors duration-300 ${
-                            index === activeDot ? 'bg-adorix-primary' : 'bg-adorix-primary/25'
-                        }`}
+                        className={`h-2 w-2 rounded-full transition-colors duration-300 ${index === activeDot ? 'bg-adorix-primary' : 'bg-adorix-primary/25'
+                            }`}
                     />
                 ))}
             </div>
