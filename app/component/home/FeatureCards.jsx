@@ -646,7 +646,7 @@ const FeatureCards = () => {
     ];
 
     return (
-        <section className="py-24 px-6 bg-gray-50/50 overflow-hidden">
+        <section className="py-16 md:py-24 px-6 bg-gray-50/50 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-20">
                     <motion.h2

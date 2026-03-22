@@ -16,7 +16,7 @@ const VisionMission = () => {
     ];
 
     return (
-        <section className="py-24 px-6 max-w-4xl mx-auto z-10 relative">
+        <section className="py-16 md:py-24 px-6 max-w-4xl mx-auto z-10 relative">
             <div className="flex flex-col gap-10">
                 {cardData.map((item, index) => (
                     <motion.div

@@ -109,7 +109,7 @@ const Home = () => {
           />
 
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Ready to capture real attention?</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8">Ready to capture real attention?</h2>
             <Link href="/signup" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
               Deploy Your First Campaign
             </Link>
