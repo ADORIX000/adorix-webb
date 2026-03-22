@@ -29,7 +29,7 @@ const TeamMember = ({ name, role, image, delay }) => (
 
 const MeetTeam = () => {
     const teamCarouselRef = useRef(null);
-    const dotCount = 7;
+    const dotCount = 6;
     const [activeDot, setActiveDot] = useState(0);
 
     const updateActiveDot = () => {

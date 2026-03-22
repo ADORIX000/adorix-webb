@@ -29,7 +29,7 @@ const VisionMission = () => {
                             ease: [0.175, 0.885, 0.32, 1.275], // Custom spring-like easing
                             delay: index * 0.15 // Staggered appearance
                         }}
-                        className="relative bg-white/10 backdrop-blur-md p-10 md:p-14 rounded-[2.5rem] shadow-sm transition-all duration-300 hover:shadow-xl hover:bg-white flex flex-col items-center text-center gap-6 group overflow-hidden"
+                        className="relative bg-white/10 backdrop-blur-md p-6 sm:p-10 md:p-14 rounded-[2.5rem] shadow-sm transition-all duration-300 hover:shadow-xl hover:bg-white flex flex-col items-center text-center gap-4 md:gap-6 group overflow-hidden"
                     >
                         {/* Animated Border Lining */}
                         <svg className="absolute inset-0 w-full h-full pointer-events-none rounded-[2.5rem]" preserveAspectRatio="none">
@@ -52,12 +52,12 @@ const VisionMission = () => {
 
                         {/* Content */}
                         <div className="flex flex-col items-center w-full relative z-10">
-                            <div className="relative inline-block mb-6">
-                                <h2 className="text-4xl font-bold text-adorix-dark cursor-default">
+                            <div className="relative inline-block mb-4 md:mb-6">
+                                <h2 className="text-3xl md:text-4xl font-bold text-adorix-dark cursor-default">
                                     {item.title}
                                 </h2>
                             </div>
-                            <p className="text-gray-600 text-lg leading-relaxed max-w-2xl">
+                            <p className="text-gray-600 text-base md:text-lg leading-relaxed max-w-2xl">
                                 {item.content}
                             </p>
                         </div>

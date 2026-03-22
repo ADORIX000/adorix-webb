@@ -596,11 +596,11 @@ const FeatureCard = ({ animation: Animation, title, description, cardClassName =
             </div>
 
             {/* Content Area - Premium Click-to-Reveal Overlay */}
-            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-6 md:p-8 text-center space-y-4 bg-white/90 backdrop-blur-3xl transition-all duration-300 ease-out ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <h3 className="text-2xl md:text-2xl font-black text-gray-900 tracking-tight leading-tight">
+            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center space-y-3 bg-white/95 backdrop-blur-3xl transition-all duration-300 ease-out ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <h3 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-tight">
                     {title}
                 </h3>
-                <p className="text-gray-700 md:text-gray-800 leading-relaxed text-lg md:text-base font-bold max-w-[300px]">
+                <p className="text-gray-700 leading-relaxed text-sm md:text-base font-medium max-w-[280px]">
                     {description}
                 </p>
             </div>
@@ -664,15 +664,15 @@ const FeatureCards = () => {
 
                 </div>
 
-                {/* Grid Layout: 4 columns on large screens, with the bottom row centered */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {/* Grid Layout: Adaptive 1 -> 2 -> 3 -> 4 columns */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
                     {features.map((feature, index) => (
                         <FeatureCard
                             key={index}
                             animation={feature.animation}
                             title={feature.title}
                             description={feature.description}
-                            cardClassName={`min-h-[400px] md:min-h-0 md:aspect-[4/5]${index === 4 ? ' lg:col-start-2' : ''}`}
+                            cardClassName={`min-h-[350px] md:min-h-0 md:aspect-[4/5]${index === 4 ? ' xl:col-start-2' : ''}`}
                         />
                     ))}
                 </div>
