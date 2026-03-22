@@ -269,11 +269,11 @@ const Dashboard = () => {
                                     Live
                                 </div>
                             </div>
-                            <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
+                            <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1 overflow-x-auto scrollbar-hide max-w-full">
                                 {ranges.map(r => (
                                     <button
                                         key={r} onClick={() => setSelectedRange(r)}
-                                        className={`px-3 py-1 text-xs font-medium rounded-md transition ${selectedRange === r ? 'bg-white text-adorix-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                                        className={`px-3 py-1 text-xs font-medium rounded-md transition whitespace-nowrap flex-shrink-0 ${selectedRange === r ? 'bg-white text-adorix-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                                     >{r}</button>
                                 ))}
                             </div>
