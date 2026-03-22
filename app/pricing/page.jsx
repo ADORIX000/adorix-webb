@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Check, Star, Zap, Sparkles, Shield } from 'lucide-react';
+import { Check, Star, Zap, Sparkles, Shield, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
@@ -18,9 +18,71 @@ const PricingCard = ({
   icon: Icon,
   recommended,
   isSignedIn,
+  user,
   router
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    if (!isSignedIn || !user) {
+      router.push('/signup');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const itemId = `plan_${title.toLowerCase()}`;
+      const amount = Number(offerPrice.replace(/,/g, ''));
+      const customerName = user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Customer';
+      
+      const payload = {
+        user_id: user.id,
+        amount: amount,
+        item_type: 'Subscription',
+        item_id: itemId,
+        customer_name: customerName,
+        customer_email: user.primaryEmailAddress?.emailAddress || ''
+      };
+
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${API_URL}/api/payments/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.checkoutUrl && data.payload) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = data.checkoutUrl;
+
+        Object.keys(data.payload).forEach(key => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = data.payload[key];
+          form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        console.error('Invalid payment response:', data);
+        alert('Payment initiation failed. Please try again.');
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('An error occurred during payment initiation.');
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div
@@ -81,26 +143,28 @@ const PricingCard = ({
       </ul>
 
       <button
-        onClick={() => {
-          if (isSignedIn) {
-            router.push('/accs');
-          } else {
-            router.push('/signup');
-          }
-        }}
-        className={`block text-center w-full py-4 rounded-2xl font-bold transition-all ${recommended
+        onClick={handleSubscribe}
+        disabled={isLoading}
+        className={`block text-center w-full py-4 rounded-2xl font-bold transition-all flex justify-center items-center gap-2 ${recommended
           ? 'bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20'
           : 'bg-gray-100 text-gray-900 hover:bg-adorix-light hover:text-adorix-dark'
           }`}
       >
-        Get Started with {title}
+        {isLoading ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Processing...
+          </>
+        ) : (
+          `Get Started with ${title}`
+        )}
       </button>
     </div>
   );
 };
 
 const Pricing = () => {
-  const { isSignedIn, isLoaded } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
   const plans = [
     {
@@ -190,7 +254,7 @@ const Pricing = () => {
               transition={{ delay: index * 0.1 + 0.3 }}
               className="h-full"
             >
-              <PricingCard {...plan} isSignedIn={isSignedIn} router={router} />
+              <PricingCard {...plan} isSignedIn={isSignedIn} user={user} router={router} />
             </motion.div>
           ))}
         </div>
