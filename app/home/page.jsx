@@ -15,12 +15,13 @@ const Home = () => {
     <div className="relative w-full overflow-hidden">
 
       {/* HERO SECTION */}
-      <section className="relative pt-48 pb-20 px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-8">
+      <section className="relative pt-32 md:pt-48 pb-16 md:pb-20 px-4 sm:px-6 max-w-5xl mx-auto z-10 text-center flex flex-col items-center gap-6 md:gap-8">
 
         {/* Heading */}
-        <h1 className="text-6xl md:text-8xl font-bold text-gray-900 leading-[1.1] tracking-tight">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 leading-[1.1] md:leading-[1.1] tracking-tight px-2">
           <TypingText text="Ads that" speed={0.05} />
-          <br />
+          <br className="hidden sm:block" />
+          <span className="sm:hidden"> </span>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
             <TypingText text="look back at you." startDelay={0.5} speed={0.05} />
           </span>
@@ -31,7 +32,7 @@ const Home = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium"
+          className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium px-2 sm:px-0"
         >
           Adorix transforms static screens into intelligent agents.
           Track real attention, interact with voice, and serve personalized content in real-time.
@@ -42,12 +43,12 @@ const Home = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-5 justify-center items-center mt-4"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center mt-4 md:mt-6 w-full sm:w-auto px-4 sm:px-0"
         >
-          <Link href="/signup" className="px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
+          <Link href="/signup" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
             Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
           </Link>
-          <Link href="/login" className="px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
+          <Link href="/login" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
             View Live Demo
           </Link>
         </motion.div>
