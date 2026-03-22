@@ -220,7 +220,7 @@ ${specs}
                                 <h3 className="font-bold text-adorix-dark mb-4 border-b border-gray-100 pb-2">Campaign Settings</h3>
                                 <div className="space-y-4">
                                     <input type="text" placeholder="Campaign Name" value={campaignName} onChange={(e) => setCampaignName(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary transition" />
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <select value={gender} onChange={(e) => setGender(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-gray-600 font-medium">
                                             <option value="">Target Gender</option>
                                             <option value="Male">Male Only</option>
@@ -240,12 +240,12 @@ ${specs}
                                     </div>
                                     <textarea placeholder="General Description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-20 resize-none text-sm transition"></textarea>
                                     
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <textarea placeholder="Key Features" value={features} onChange={(e) => setFeatures(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none text-sm transition"></textarea>
                                         <textarea placeholder="Colors / Models" value={colors} onChange={(e) => setColors(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary h-24 resize-none text-sm transition"></textarea>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <input type="text" placeholder="Price / Offers" value={price} onChange={(e) => setPrice(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-sm transition" />
                                         <input type="text" placeholder="Technical Specs" value={specs} onChange={(e) => setSpecs(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-sm transition" />
                                     </div>
