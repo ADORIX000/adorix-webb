@@ -4,13 +4,14 @@ const contentSecurityPolicy = `
     base-uri 'self';
     object-src 'none';
     frame-ancestors 'self';
-    form-action 'self';
+    form-action 'self' https://sandbox.payhere.lk https://www.payhere.lk;
     img-src 'self' data: blob: https:;
     font-src 'self' data: https:;
     style-src 'self' 'unsafe-inline' https:;
-    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com;
     connect-src 'self' https: wss: http://localhost:5000;
-    frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
+    frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com;
+    worker-src 'self' blob:;
     upgrade-insecure-requests;
 `
     .replace(/\n/g, '')
