@@ -114,7 +114,7 @@ const PricingCard = ({
         <div className="flex items-center gap-2 mb-1">
           <span className="text-gray-400 line-through text-lg font-medium">LKR {oldPrice}</span>
           <div className="flex items-baseline">
-            <span className="text-adorix-dark text-3xl font-black ml-2">Rs {offerPrice}</span>
+            <span className="text-adorix-dark text-3xl font-black ml-2">LKR {offerPrice}</span>
             <span className="text-gray-500 font-bold ml-1">/mo</span>
           </div>
         </div>
@@ -123,7 +123,7 @@ const PricingCard = ({
 
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
-            <Zap className="w-3 h-3" /> Save up to Rs {savings} with offer
+            <Zap className="w-3 h-3" /> Save up to LKR {savings} with offer
           </div>
           <p className="text-[11px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
             LKR {afterPrice}/month after
