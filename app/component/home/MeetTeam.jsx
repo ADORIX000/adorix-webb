@@ -8,33 +8,39 @@ const TeamMember = ({ name, role, image, delay, linkedin, github }) => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ delay, duration: 0.5 }}
-        className="flex-shrink-0 w-[80vw] sm:w-auto bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center snap-center"
+        className="flex-shrink-0 w-[80vw] sm:w-auto bg-white/70 backdrop-blur-xl p-8 rounded-[2.5rem] border border-adorix-primary/5 hover:border-adorix-primary/30 transition-all duration-500 group text-center snap-center relative"
     >
         <div className="relative mb-6 inline-block">
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-adorix-light group-hover:border-adorix-primary transition-colors duration-500 mx-auto">
                 <img src={image} alt={name} className="w-full h-full object-cover" />
             </div>
-            {linkedin ? (
-                <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`LinkedIn for ${name}`} className="absolute -bottom-2 -right-2 bg-adorix-primary text-white p-2 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 hover:bg-adorix-secondary z-10">
+            {linkedin && (
+                <a 
+                    href={linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label={`LinkedIn Profile for ${name}`} 
+                    className="absolute -bottom-2 -right-2 bg-adorix-primary text-white p-2.5 rounded-full scale-0 group-hover:scale-100 transition-all duration-500 hover:bg-adorix-secondary hover:shadow-lg hover:-translate-y-1 z-20 flex items-center justify-center shadow-md"
+                >
                     <Linkedin className="w-4 h-4" />
                 </a>
-            ) : (
-                <div className="absolute -bottom-2 -right-2 bg-adorix-primary text-white p-2 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500">
-                    <Linkedin className="w-4 h-4" />
-                </div>
             )}
         </div>
         <h3 className="text-xl font-bold text-adorix-dark mb-1">{name}</h3>
         <p className="text-adorix-primary font-medium text-sm mb-4">{role}</p>
-        <div className="flex justify-center gap-4">
-            {github ? (
-                <a href={github} target="_blank" rel="noopener noreferrer" aria-label={`GitHub for ${name}`}>
-                    <Github className="w-5 h-5 text-gray-400 hover:text-adorix-dark cursor-pointer transition-colors" />
+        
+        <div className="flex justify-center gap-5 mt-2">
+            {github && (
+                <a 
+                    href={github} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    aria-label={`GitHub Profile for ${name}`}
+                    className="flex items-center justify-center p-2 rounded-full text-gray-400 hover:text-adorix-dark hover:bg-gray-100 transition-all cursor-pointer shadow-sm hover:shadow"
+                >
+                    <Github className="w-5 h-5" />
                 </a>
-            ) : (
-                <Github className="w-5 h-5 text-gray-400 hover:text-adorix-dark cursor-pointer transition-colors" />
             )}
-            <Twitter className="w-5 h-5 text-gray-400 hover:text-adorix-accent cursor-pointer transition-colors" />
         </div>
     </motion.div>
 );
