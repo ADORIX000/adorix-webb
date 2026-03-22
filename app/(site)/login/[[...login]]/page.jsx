@@ -1,11 +1,13 @@
 "use client";
 
 import { SignIn } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 
 export default function LoginPage() {
   return (
     <div className="flex items-center justify-center px-4 py-20 min-h-screen bg-[#E5F9F8]">
       <SignIn
+        ui={ui}
         appearance={{
           variables: {
             colorPrimary: "#0D8A9E",
