@@ -46,10 +46,10 @@ const Navbar = () => {
           : 'h-24 bg-transparent border-b border-transparent'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
             <Image
               src="/icon.png"
               alt="Adorix Logo"
@@ -61,7 +61,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
+          <div className="hidden lg:flex items-center justify-center flex-1 gap-6 xl:gap-8 font-medium text-sm text-gray-600 px-4">
             {visibleLinks.map((link) => {
               const isActive = link.name === 'Home' ? isHomeActive : pathname === link.path;
               return (
@@ -78,7 +78,7 @@ const Navbar = () => {
           </div>
 
           {/* Auth Buttons */}
-          <div className="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-600">
+          <div className="hidden lg:flex items-center justify-end gap-6 xl:gap-8 font-medium text-sm text-gray-600 flex-shrink-0">
             {!isSignedIn ? (
               <>
                 <Link
@@ -119,7 +119,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-gray-700"
+            className="lg:hidden inline-flex items-center justify-center w-11 h-11 text-gray-700 hover:text-adorix-primary transition-colors flex-shrink-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             title={mobileMenuOpen ? 'Close menu' : 'Open menu'}
@@ -130,8 +130,8 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Menu Overlay */}
-      <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
+      <div className={`fixed inset-0 z-40 bg-white transform transition-transform duration-300 lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} overflow-y-auto`}>
+        <div className="flex flex-col items-center min-h-full gap-8 p-6 pt-32 pb-12">
           {visibleLinks.map((link) => {
             const isActive = link.name === 'Home' ? isHomeActive : pathname === link.path;
             return (
