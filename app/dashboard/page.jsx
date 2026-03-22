@@ -14,6 +14,77 @@ import {
 
 const COLORS = ['#12B2C1', '#0D8A9E', '#8B5CF6', '#F59E0B', '#10B981', '#1F2B2D'];
 
+// ==========================================
+// DEMO / MOCK MODE CONFIGURATION
+// Set to 'false' to restore real API data.
+// ==========================================
+const USE_MOCK_ANALYTICS = true;
+
+const MOCK_DATA = {
+    'Today': {
+        stats: [
+            { label: 'Total Impressions', val: '12,480', icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', border: 'border-l-adorix-primary', sub: '+12.4% vs yesterday' },
+            { label: 'Live Visitors', val: '184', icon: Activity, accent: 'bg-red-50 text-red-500', border: 'border-l-red-400', sub: '+8.1% in last 5m', live: true },
+            { label: 'Engagement Rate', val: '6.8%', icon: Zap, accent: 'bg-amber-50 text-amber-500', border: 'border-l-amber-400', sub: '+2.3% interaction growth' },
+            { label: 'Avg. Duration', val: '1m 42s', icon: Clock, accent: 'bg-violet-50 text-violet-500', border: 'border-l-violet-400', sub: '+12s session increase' },
+        ],
+        chart: [
+            { time: '00:00', viewers: 150, interactions: 10 },
+            { time: '04:00', viewers: 80, interactions: 5 },
+            { time: '08:00', viewers: 420, interactions: 35 },
+            { time: '10:00', viewers: 1850, interactions: 160 },
+            { time: '14:00', viewers: 2100, interactions: 240 },
+            { time: '18:00', viewers: 3600, interactions: 410 },
+            { time: '22:00', viewers: 1450, interactions: 120 },
+        ]
+    },
+    '7 Days': {
+        stats: [
+            { label: 'Total Impressions', val: '84,320', icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', border: 'border-l-adorix-primary', sub: '+5.4% vs last week' },
+            { label: 'Live Visitors', val: '184', icon: Activity, accent: 'bg-red-50 text-red-500', border: 'border-l-red-400', sub: 'Active right now', live: true },
+            { label: 'Engagement Rate', val: '7.1%', icon: Zap, accent: 'bg-amber-50 text-amber-500', border: 'border-l-amber-400', sub: '+1.1% interaction growth' },
+            { label: 'Avg. Duration', val: '1m 46s', icon: Clock, accent: 'bg-violet-50 text-violet-500', border: 'border-l-violet-400', sub: 'Per session average' },
+        ],
+        chart: [
+            { time: 'Mon', viewers: 9500, interactions: 650 },
+            { time: 'Tue', viewers: 11200, interactions: 800 },
+            { time: 'Wed', viewers: 10800, interactions: 750 },
+            { time: 'Thu', viewers: 13400, interactions: 950 },
+            { time: 'Fri', viewers: 15200, interactions: 1100 },
+            { time: 'Sat', viewers: 18500, interactions: 1300 },
+            { time: 'Sun', viewers: 16400, interactions: 1150 },
+        ]
+    },
+    '30 Days': {
+        stats: [
+            { label: 'Total Impressions', val: '342,190', icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', border: 'border-l-adorix-primary', sub: '+18.2% vs last month' },
+            { label: 'Live Visitors', val: '184', icon: Activity, accent: 'bg-red-50 text-red-500', border: 'border-l-red-400', sub: 'Active right now', live: true },
+            { label: 'Engagement Rate', val: '6.5%', icon: Zap, accent: 'bg-amber-50 text-amber-500', border: 'border-l-amber-400', sub: 'Consistent engagement' },
+            { label: 'Avg. Duration', val: '1m 39s', icon: Clock, accent: 'bg-violet-50 text-violet-500', border: 'border-l-violet-400', sub: 'Per session average' },
+        ],
+        chart: [
+            { time: 'Week 1', viewers: 65000, interactions: 4200 },
+            { time: 'Week 2', viewers: 72000, interactions: 4800 },
+            { time: 'Week 3', viewers: 88000, interactions: 5900 },
+            { time: 'Week 4', viewers: 117000, interactions: 7800 },
+        ]
+    },
+    'All Time': {
+        stats: [
+            { label: 'Total Impressions', val: '1,450,900', icon: Eye, accent: 'bg-adorix-primary/10 text-adorix-primary', border: 'border-l-adorix-primary', sub: 'Lifetime views' },
+            { label: 'Live Visitors', val: '184', icon: Activity, accent: 'bg-red-50 text-red-500', border: 'border-l-red-400', sub: 'Active right now', live: true },
+            { label: 'Engagement Rate', val: '6.9%', icon: Zap, accent: 'bg-amber-50 text-amber-500', border: 'border-l-amber-400', sub: 'Historical average' },
+            { label: 'Avg. Duration', val: '1m 40s', icon: Clock, accent: 'bg-violet-50 text-violet-500', border: 'border-l-violet-400', sub: 'Per session average' },
+        ],
+        chart: [
+            { time: 'Q1', viewers: 250000, interactions: 15000 },
+            { time: 'Q2', viewers: 310000, interactions: 19000 },
+            { time: 'Q3', viewers: 390000, interactions: 25000 },
+            { time: 'Q4', viewers: 500000, interactions: 35000 },
+        ]
+    }
+};
+
 const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
     return (
@@ -40,7 +111,13 @@ const Dashboard = () => {
 
     // 1. Fetch Initial Data & Setup Real-time
     useEffect(() => {
-        if (!isLoaded || !user || !supabase) return;
+        // Always run the clock
+        const clockInterval = setInterval(() => setCurrentTime(new Date()), 1000);
+
+        // If mock mode is on, or user isn't loaded, skip real database queries
+        if (!isLoaded || !user || !supabase || USE_MOCK_ANALYTICS) {
+            return () => clearInterval(clockInterval);
+        }
 
         const fetchAnalytics = async () => {
             const { data, error } = await supabase
@@ -50,7 +127,8 @@ const Dashboard = () => {
                 .order('created_at', { ascending: true });
 
             if (error) {
-                console.error("Error fetching analytics:", error);
+                // Warning instead of error to prevent Next.js from aggressively showing the dev error overlay
+                console.warn("Warning fetching analytics:", error);
             } else {
                 setAnalytics(data || []);
             }
@@ -75,8 +153,6 @@ const Dashboard = () => {
                 }
             )
             .subscribe();
-
-        const clockInterval = setInterval(() => setCurrentTime(new Date()), 1000);
 
         return () => {
             supabase.removeChannel(channel);
@@ -124,7 +200,10 @@ const Dashboard = () => {
         return { chartData, ageData };
     }, [analytics]);
 
-    const STATS = [
+    const activeMockData = MOCK_DATA[selectedRange] || MOCK_DATA['Today'];
+    const displayChartData = USE_MOCK_ANALYTICS ? activeMockData.chart : processedData.chartData;
+
+    const STATS = USE_MOCK_ANALYTICS ? activeMockData.stats : [
         { 
             label: 'Total Impressions', 
             val: analytics.length.toLocaleString(), 
@@ -200,9 +279,9 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className="h-48 sm:h-72">
-                            {processedData.chartData.length > 0 ? (
+                            {displayChartData.length > 0 ? (
                                 <ResponsiveContainer width="100%" height="100%">
-                                    <AreaChart data={processedData.chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                                    <AreaChart data={displayChartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                                         <defs>
                                             <linearGradient id="gViewer" x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="5%" stopColor="#12B2C1" stopOpacity={0.25} />
