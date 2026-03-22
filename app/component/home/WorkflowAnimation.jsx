@@ -226,8 +226,8 @@ export default function WorkflowAnimation() {
         <style jsx>{`
             @media (max-width: 640px) {
                 .transform { 
-                    --scale-factor: 0.55; 
-                    --margin-adjust: -248px; /* (1 - 0.55) * 550 */
+                    --scale-factor: 0.40; 
+                    --margin-adjust: -330px; /* (1 - 0.40) * 550 */
                 }
             }
             @media (min-width: 641px) and (max-width: 1024px) {
