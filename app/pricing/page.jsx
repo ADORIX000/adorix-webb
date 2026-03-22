@@ -170,10 +170,10 @@ const Pricing = () => {
     {
       title: 'Plus',
       icon: Sparkles,
-      oldPrice: '250',
-      offerPrice: '62',
-      afterPrice: '250',
-      savings: '564',
+      oldPrice: '10,000',
+      offerPrice: '5,000',
+      afterPrice: '10,000',
+      savings: '15,000',
       features: [
         '1 Kiosk Device',
         'Basic Analytics Dashboard',
@@ -186,10 +186,10 @@ const Pricing = () => {
     {
       title: 'Pro',
       icon: Zap,
-      oldPrice: '575',
-      offerPrice: '150',
-      afterPrice: '575',
-      savings: '1,275',
+      oldPrice: '20,000',
+      offerPrice: '10,000',
+      afterPrice: '20,000',
+      savings: '30,000',
       recommended: true,
       features: [
         'Up to 5 Kiosk Devices',
@@ -205,10 +205,10 @@ const Pricing = () => {
     {
       title: 'Enterprise',
       icon: Shield,
-      oldPrice: '875',
-      offerPrice: '225',
-      afterPrice: '875',
-      savings: '1,950',
+      oldPrice: '40,000',
+      offerPrice: '20,000',
+      afterPrice: '40,000',
+      savings: '60,000',
       features: [
         'Unlimited Kiosk Devices',
         'Custom AI Model Training',
