@@ -94,7 +94,7 @@ export default function TestAnalytics() {
     if (!isLoaded) return <div className="p-10 font-mono">Loading user context...</div>;
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-32 pb-16 px-6">
+        <div className="min-h-screen bg-slate-50 pt-24 pb-16 px-6">
             <div className="max-w-xl mx-auto bg-white rounded-2xl shadow-xl p-8 border border-slate-100">
                 <div className="mb-8 text-center">
                     <h1 className="text-3xl font-extrabold text-slate-900">Analytics Simulator</h1>
