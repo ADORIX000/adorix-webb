@@ -225,7 +225,7 @@ const Pricing = () => {
   if (!isLoaded) return null;
 
   return (
-    <div className="pt-32 pb-20 px-6 min-h-screen">
+    <div className="pt-32 md:pt-48 pb-16 md:pb-20 px-6 min-h-screen">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}

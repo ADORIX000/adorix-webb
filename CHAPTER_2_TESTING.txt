@@ -1,0 +1,64 @@
+# CHAPTER 2: TESTING
+
+## 2.1 Chapter Introduction
+The testing phase is a critical component of the Adorix development lifecycle. This chapter outlines the methodologies used to ensure that the platform is robust, secure, and user-friendly. The objective of testing was to verify that the integrated SaaS Dashboard, Authentication (Clerk), Database (Supabase), and OCR (Tesseract) modules operate as intended across various environments while maintaining high-performance standards.
+
+## 2.2 Testing Criteria
+Testing criteria were selected to ensure comprehensive coverage of Adorix’s functional and non-functional requirements. The application was evaluated against the following standards:
+*   Functionality: Verification of core features such as secure Auth, Dashboard modules, analytics, and messaging.
+*   Security: Validation of access control, session persistence, and API endpoint protection.
+*   Data Integrity & Reliability: Ensuring correct data structures and graceful failure handling for empty datasets.
+*   Performance: Checking page load stability and the responsiveness of data-heavy modules.
+*   Usability: Evaluating the clarity of navigation, filters, and user feedback systems.
+*   Compatibility: Ensuring a device-agnostic experience across modern browsers and mobile screens.
+
+## 2.3 Testing Functional Requirements
+Functional requirement testing focused on validating each major feature of **Adorix** against the system specification. 
+
+| Functional Area | What Was Tested | Tested Method | Result |
+| :--- | :--- | :--- | :--- |
+| **Authentication** | Login validation, Social OAuth, Session persistence | Clerk Management + Browser Session Audit | Passed |
+| **User Onboarding** | Account signup + automatic redirect to Dashboard | End-to-End signup flow simulation | Passed |
+| **SaaS Dashboard** | Real-time data fetching + Recharts visualization | Unit Test (Vitest) + Mock Data rendering | Passed |
+| **Contact Module** | Multi-field validation + Nodemailer delivery | Integration test + SMTP server verification | Passed |
+| **OCR Analytics** | Image-to-text conversion (Tesseract.js) | Accuracy Audit + JSON Response check | Passed |
+| **Billing & Pricing** | Pricing card selection + Plan info display | UI routing test + LocalStorage state check | Passed |
+| **User Profile** | Metadata updates + Profile image persistence | Supabase Database Integrity check | Passed |
+
+*Table 2.1: Functional Requirement Testing Matrix*
+
+## 2.4 Testing Non-Functional Requirements
+While functional testing focuses on "What the system does," non-functional testing focuses on "How the system performs."
+
+| Non-Functional Area | What Was Tested | Test Method | Result |
+| :--- | :--- | :--- | :--- |
+| Performance | Page load stability + Asset optimization | Google Lighthouse audit | Passed |
+| Security | Role-based access (Protected Routes) | Manual URL tampering (Access Attempt) | Passed |
+| Responsiveness | Mobile, Tablet, and Desktop breakpoints | Chrome DevTools device simulation | Passed |
+| Reliability | API error handling (404/500 scenarios) | Mock network failure testing | Passed |
+| Usability | Navigation clarity + Framer Motion smoothness | User-path walk-through + FPS monitor | Passed |
+
+Table 2.2: Non-Functional Requirement Testing Summary
+
+## 2.5 Unit Testing
+Unit testing was performed on modular components to ensure that small blocks of code—such as buttons, navigation links, and data formatters—perform correctly in isolation. By testing components like the Navbar.jsx and AuthenticatedNavbar.jsx, we ensured that routing logic works regardless of the user's login state.
+
+[Proof: Insert Screenshot of a specific component code or a Green 'Tests Passed' terminal window here]
+
+## 2.6 Performance Testing
+Performance was monitored using Google Lighthouse. The goal was to achieve a score above 90 for SEO and Accessibility while keeping the Largest Contentful Paint (LCP) under 2.5 seconds. The use of Next.js Image Optimization played a key role in reducing image loading times across the dashboard.
+
+[Proof: Insert Screenshot of Google Lighthouse Audit result circles here]
+
+## 2.7 Usability Testing
+Usability was evaluated through a heuristic assessment. We focused on the platform’s Glassmorphism design and Teal-Mint color scheme to ensure visual clarity. The inclusion of Framer Motion animations provided micro-interactions that guided the user smoothly through the platform's multi-step processes.
+
+[Proof: Insert Screenshot showing the smooth navigation or hover effects on the Dashboard here]
+
+## 2.8 Compatibility Testing
+To ensure Adorix is globally accessible, we tested the platform on Chrome, Firefox, Safari, and Microsoft Edge. Additionally, the responsive design was checked on multiple mobile device sizes (iPhone SE to iPad Air) to verify that the Tailwind CSS Grid layout adapts correctly to small viewports.
+
+[Proof: Insert Screenshot of the website in Mobile View (Responsive Mode) here]
+
+## 2.9 Chapter Summary
+In summary, the testing phase confirmed that Adorix meets all functional goals while maintaining a high standard for speed, security, and usability. The system proved to be stable under pressure, and all core features—from authentication to analytics—passed the verification process.

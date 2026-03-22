@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Linkedin, Twitter, Github } from 'lucide-react';
@@ -30,7 +29,7 @@ const TeamMember = ({ name, role, image, delay }) => (
 
 const MeetTeam = () => {
     const teamCarouselRef = useRef(null);
-    const dotCount = 7;
+    const dotCount = 6;
     const [activeDot, setActiveDot] = useState(0);
 
     const updateActiveDot = () => {
@@ -88,7 +87,7 @@ const MeetTeam = () => {
     ];
 
     return (
-        <section className="py-24 px-6 max-w-7xl mx-auto z-10 relative">
+        <section className="py-16 md:py-24 px-6 max-w-7xl mx-auto z-10 relative">
             <div className="text-center mb-16">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
@@ -123,9 +122,8 @@ const MeetTeam = () => {
                 {Array.from({ length: dotCount }).map((_, index) => (
                     <span
                         key={index}
-                        className={`h-2 w-2 rounded-full transition-colors duration-300 ${
-                            index === activeDot ? 'bg-adorix-primary' : 'bg-adorix-primary/25'
-                        }`}
+                        className={`h-2 w-2 rounded-full transition-colors duration-300 ${index === activeDot ? 'bg-adorix-primary' : 'bg-adorix-primary/25'
+                            }`}
                     />
                 ))}
             </div>

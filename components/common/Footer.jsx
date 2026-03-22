@@ -14,10 +14,10 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-6">
 
                 {/* Top Section: Logo, Links */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
 
                     {/* Brand & Socials */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 sm:col-span-2 lg:col-span-2">
                         <Link href="/" className="text-3xl font-bold tracking-tight text-white flex items-center gap-2 group">
                             <Image
                                 src="/icon.png"
@@ -96,9 +96,9 @@ const Footer = () => {
                 <div className="h-px w-full bg-white/10 mb-8"></div>
 
                 {/* Bottom Section */}
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-300">
+                <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-6 text-xs text-gray-300">
                     <p>&copy; {new Date().getFullYear()} Adorix Inc. All rights reserved.</p>
-                    <div className="flex gap-8">
+                    <div className="flex flex-wrap justify-center gap-4 md:gap-8">
                         <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Privacy Policy</Link>
                         <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Terms of Service</Link>
                         <Link href="/settings/policies" className="inline-flex items-center min-h-10 text-gray-200 hover:text-white transition-colors">Cookie Settings</Link>
