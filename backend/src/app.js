@@ -53,6 +53,6 @@ app.use(express.urlencoded({ extended: true })); // Required for PayHere webhook
 // 5. Routes
 app.use('/api/contact', require('./routes/contact.routes'));
 app.use('/api/payments', require('./routes/payment.route'));
-// app.use('/api/auth', require('./routes/auth.routes')); // Add your other routes here
+app.use('/api/auth', require('./routes/auth.routes')); 
 
 module.exports = app;

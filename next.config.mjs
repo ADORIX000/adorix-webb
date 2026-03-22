@@ -9,7 +9,7 @@ const contentSecurityPolicy = `
     font-src 'self' data: https:;
     style-src 'self' 'unsafe-inline' https:;
     script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
-    connect-src 'self' https: wss:;
+    connect-src 'self' https: wss: http://localhost:5000;
     frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
     upgrade-insecure-requests;
 `
