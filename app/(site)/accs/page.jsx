@@ -25,7 +25,13 @@ const Accs = () => {
         setLoading(true);
         setError('');
         try {
-            const res = await fetch('/api/send-otp', { method: 'POST' });
+            const email = user?.primaryEmailAddress?.emailAddress;
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const res = await fetch(`${backendUrl}/api/auth/send-otp`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Failed to send OTP');
             setSent(true);
@@ -48,10 +54,12 @@ const Accs = () => {
         setLoading(true);
         setError('');
         try {
-            const res = await fetch('/api/verify-otp', {
+            const email = user?.primaryEmailAddress?.emailAddress;
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const res = await fetch(`${backendUrl}/api/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code }),
+                body: JSON.stringify({ email, code }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Verification failed');

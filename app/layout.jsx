@@ -34,7 +34,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider publishableKey={clerkPublishableKey} clerkJSUrl={clerkJSUrl}>
+    <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head>
           <script

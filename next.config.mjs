@@ -4,13 +4,14 @@ const contentSecurityPolicy = `
     base-uri 'self';
     object-src 'none';
     frame-ancestors 'self';
-    form-action 'self';
+    form-action 'self' https://sandbox.payhere.lk https://www.payhere.lk;
     img-src 'self' data: blob: https:;
     font-src 'self' data: https:;
     style-src 'self' 'unsafe-inline' https:;
-    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
-    connect-src 'self' https: wss:;
-    frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com;
+    connect-src 'self' https: wss: http://localhost:5000;
+    frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com;
+    worker-src 'self' blob:;
     upgrade-insecure-requests;
 `
     .replace(/\n/g, '')
@@ -61,22 +62,9 @@ const nextConfig = {
                 headers: [
                     { key: "Access-Control-Allow-Credentials", value: "true" },
                     { key: "Access-Control-Allow-Origin", value: "https://dashboard.adorixit.com" },
-                    { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT" },
-                    { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
-                ]
-            },
-            {
-                // global security headers
-                source: "/:path*",
-                headers: [
-                    { key: "X-Frame-Options", value: "DENY" },
-                    { key: "X-Content-Type-Options", value: "nosniff" },
-                    { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-                    { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-                    {
-                        key: "Content-Security-Policy",
-                        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://clerk.adorixit.com https://img.clerk.com https://*.clerk.accounts.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://img.clerk.com https://ui-avatars.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://clerk.adorixit.com https://*.clerk.accounts.dev; frame-src 'self' https://challenges.cloudflare.com https://clerk.adorixit.com https://*.clerk.accounts.dev; worker-src 'self' blob:; form-action 'self' https://sandbox.payhere.lk https://www.payhere.lk;"
-                    }
+                    { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT,OPTIONS" },
+                    { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization" },
+                    { key: "Vary", value: "Origin" },
                 ]
             }
         ]

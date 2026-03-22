@@ -48,9 +48,11 @@ app.use(cors(corsOptions));
 
 // 4. Body parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Required for PayHere webhook compatibility
 
 // 5. Routes
 app.use('/api/contact', require('./routes/contact.routes'));
-// app.use('/api/auth', require('./routes/auth.routes')); // Add your other routes here
+app.use('/api/payments', require('./routes/payment.route'));
+app.use('/api/auth', require('./routes/auth.routes')); 
 
 module.exports = app;
