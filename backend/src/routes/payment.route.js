@@ -18,7 +18,7 @@ router.post('/create', async (req, res) => {
             });
         }
 
-        const currency = 'LKR';
+        const currency = 'USD';
         const order_id = payhereService.generateOrderId();
 
         const { error } = await supabase

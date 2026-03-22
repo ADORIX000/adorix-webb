@@ -112,23 +112,29 @@ const PricingCard = ({
 
       <div className="mb-10 min-h-[120px]">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-gray-400 line-through text-lg font-medium">LKR {oldPrice}</span>
+          {oldPrice && (
+            <span className="text-gray-400 line-through text-lg font-medium">USD {oldPrice}</span>
+          )}
           <div className="flex items-baseline">
-            <span className="text-adorix-dark text-3xl font-black ml-2">LKR {offerPrice}</span>
+            <span className="text-adorix-dark text-3xl font-black ml-2">USD {offerPrice}</span>
             <span className="text-gray-500 font-bold ml-1">/mo</span>
           </div>
         </div>
 
         <p className="text-gray-500 text-sm font-medium mb-3">for 3 months</p>
 
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
-            <Zap className="w-3 h-3" /> Save up to LKR {savings} with offer
+        {savings && (
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
+              <Zap className="w-3 h-3" /> Save up to USD {savings} with offer
+            </div>
           </div>
+        )}
+        {afterPrice && (
           <p className="text-[11px] text-gray-400 mt-2 font-medium uppercase tracking-wider">
-            LKR {afterPrice}/month after
+            USD {afterPrice}/month after
           </p>
-        </div>
+        )}
       </div>
 
       <ul className="space-y-4 mb-10 flex-1">
@@ -170,10 +176,7 @@ const Pricing = () => {
     {
       title: 'Plus',
       icon: Sparkles,
-      oldPrice: '10,000',
-      offerPrice: '5,000',
-      afterPrice: '10,000',
-      savings: '15,000',
+      offerPrice: '299',
       features: [
         '1 Kiosk Device',
         'Basic Analytics Dashboard',
@@ -186,10 +189,7 @@ const Pricing = () => {
     {
       title: 'Pro',
       icon: Zap,
-      oldPrice: '20,000',
-      offerPrice: '10,000',
-      afterPrice: '20,000',
-      savings: '30,000',
+      offerPrice: '579',
       recommended: true,
       features: [
         'Up to 5 Kiosk Devices',
@@ -205,10 +205,7 @@ const Pricing = () => {
     {
       title: 'Enterprise',
       icon: Shield,
-      oldPrice: '40,000',
-      offerPrice: '20,000',
-      afterPrice: '40,000',
-      savings: '60,000',
+      offerPrice: '899',
       features: [
         'Unlimited Kiosk Devices',
         'Custom AI Model Training',
