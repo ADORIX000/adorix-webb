@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
             }}
           />
         </head>
-        <body className={inter.className} suppressHydrationWarning>
+        <body className={`${inter.className} overflow-x-hidden w-full`} suppressHydrationWarning>
           <GradientWrapper>
             <AuthenticatedNavbar />
             <main id="main-content">{children}</main>
