@@ -34,23 +34,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                try {
-                  if (localStorage.getItem('adorix-theme') === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch (_) {}
-              `,
-            }}
-          />
-        </head>
+    <html lang="en" suppressHydrationWarning>
+      <head suppressHydrationWarning>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('adorix-theme');if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark')}catch(e){}})()`
+          }}
+        />
+      </head>
+      <ClerkProvider>
         <body className={`${inter.className} overflow-x-hidden w-full`} suppressHydrationWarning>
           <GradientWrapper>
             <AuthenticatedNavbar />
@@ -58,7 +51,7 @@ export default function RootLayout({ children }) {
             <Footer />
           </GradientWrapper>
         </body>
-      </html>
-    </ClerkProvider>
+      </ClerkProvider>
+    </html>
   )
 }
