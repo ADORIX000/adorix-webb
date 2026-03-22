@@ -36,6 +36,21 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider publishableKey={clerkPublishableKey} clerkJSUrl={clerkJSUrl}>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  if (localStorage.getItem('adorix-theme') === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (_) {}
+              `,
+            }}
+          />
+        </head>
         <body className={inter.className} suppressHydrationWarning>
           <GradientWrapper>
             <AuthenticatedNavbar />
