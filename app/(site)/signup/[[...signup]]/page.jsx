@@ -4,6 +4,8 @@ export default function SignupPage() {
   return (
     <div className="flex items-center justify-center px-4 py-20 min-h-screen">
       <SignUp
+        routing="path"
+        path="/signup"
         appearance={{
           variables: {
             colorPrimary: "#0D8A9E",
