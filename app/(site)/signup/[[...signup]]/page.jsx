@@ -1,8 +1,10 @@
+"use client";
+
 import { SignUp } from "@clerk/nextjs";
 
 export default function SignupPage() {
   return (
-    <div className="flex items-center justify-center px-4 py-20 min-h-screen">
+    <div className="flex items-center justify-center px-4 py-20 min-h-screen bg-[#E5F9F8]">
       <SignUp
         appearance={{
           variables: {
@@ -63,6 +65,8 @@ export default function SignupPage() {
               "text-[#0D8A9E] hover:text-[#085a66] text-sm",
           },
         }}
+        signInUrl="/login"
+        fallbackRedirectUrl="/"
       />
     </div>
   );

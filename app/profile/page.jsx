@@ -84,7 +84,16 @@ const ProfileContent = () => {
     const [isAddingCard, setIsAddingCard] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const [isProcessingImage, setIsProcessingImage] = useState(false);
-    const [theme, setTheme] = useState('auto');
+    const [theme, setTheme] = useState('light');
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const storedTheme = localStorage.getItem('adorix-theme');
+        if (storedTheme) {
+            setTheme(storedTheme);
+        }
+    }, []);
 
     const handleScanCard = async () => {
         if (!videoRef.current) return;
@@ -203,19 +212,16 @@ const ProfileContent = () => {
     }, [user]);
 
     useEffect(() => {
+        if (!mounted) return;
         const root = document.documentElement;
         if (theme === 'dark') {
             root.classList.add('dark');
+            localStorage.setItem('adorix-theme', 'dark');
         } else if (theme === 'light') {
             root.classList.remove('dark');
-        } else {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                root.classList.add('dark');
-            } else {
-                root.classList.remove('dark');
-            }
+            localStorage.setItem('adorix-theme', 'light');
         }
-    }, [theme]);
+    }, [theme, mounted]);
 
     // Handlers
     const handleSaveProfile = async () => {
@@ -714,7 +720,7 @@ const ProfileContent = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex bg-gray-50 dark:bg-slate-800/50 p-1.5 rounded-xl justify-between border border-gray-100 dark:border-slate-700/50 w-full md:w-[350px]">
-                                                    {['light', 'dark', 'auto'].map(t => (
+                                                    {['light', 'dark'].map(t => (
                                                         <button key={t} onClick={() => setTheme(t)} className={`flex-1 py-2.5 font-bold text-sm capitalize rounded-lg transition-all ${theme === t ? 'bg-white text-adorix-dark shadow-md shadow-gray-200/50 border border-gray-200/50 dark:bg-slate-700 dark:shadow-none dark:border-slate-600 dark:text-white' : 'text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'}`}>
                                                             {t}
                                                         </button>
