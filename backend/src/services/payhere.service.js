@@ -8,15 +8,21 @@ const crypto = require('crypto');
  */
 class PayHereService {
     constructor() {
-        this.merchantId = process.env.PAYHERE_MERCHANT_ID;
-        this.secret = process.env.PAYHERE_MERCHANT_SECRET;
+        this.merchantId = (process.env.PAYHERE_MERCHANT_ID || '').trim();
+        this.secret = (process.env.PAYHERE_MERCHANT_SECRET || '').trim();
         this.isSandbox = process.env.PAYHERE_SANDBOX === 'true';
+        
+        console.log('--- PAYHERE CREDENTIAL VERIFICATION ---');
+        console.log('Merchant ID:', this.merchantId);
+        console.log('Merchant Secret (RAW):', `"${this.secret}"`);
+        console.log('Is Sandbox:', this.isSandbox);
+        console.log('---------------------------------------');
     }
 
     generateOrderId() {
         const timestamp = Date.now();
-        const rand = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        return `ORD-${timestamp}-${rand}`;
+        const rand = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        return `ORD${timestamp}${rand}`;
     }
 
     getCheckoutUrl() {
@@ -30,9 +36,20 @@ class PayHereService {
         const hashedSecret = crypto.createHash('md5').update(this.secret).digest('hex').toUpperCase();
 
         const hashString = `${this.merchantId}${orderId}${formattedAmount}${currency}${hashedSecret}`;
-        return crypto.createHash('md5').update(hashString).digest('hex').toUpperCase();
-    }
+        const finalHash = crypto.createHash('md5').update(hashString).digest('hex').toUpperCase();
 
+        console.log('--- PAYHERE HASH DEBUG ---');
+        console.log('1. Merchant ID:', this.merchantId);
+        console.log('2. Order ID:', orderId);
+        console.log('3. Formatted Amount:', formattedAmount);
+        console.log('4. Currency:', currency);
+        console.log('5. Hashed Secret (MD5):', hashedSecret);
+        console.log('6. Hash String (Masked):', `${this.merchantId}${orderId}${formattedAmount}${currency}[SECRET_MD5]`);
+        console.log('7. Final Hash:', finalHash);
+        console.log('--------------------------');
+
+        return finalHash;
+    }
     verifyWebhookSignature(merchantId, orderId, payhereAmount, payhereCurrency, statusCode, receivedMd5sig) {
         const hashedSecret = crypto.createHash('md5').update(this.secret).digest('hex').toUpperCase();
         
