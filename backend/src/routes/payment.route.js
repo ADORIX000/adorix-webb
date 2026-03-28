@@ -22,7 +22,7 @@ router.post('/create', async (req, res) => {
             });
         }
 
-        const currency = 'LKR';
+        const currency = 'USD';
         const order_id = payhereService.generateOrderId();
         console.log('Generated Order ID:', order_id);
 
