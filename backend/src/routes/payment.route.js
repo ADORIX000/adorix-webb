@@ -11,7 +11,11 @@ router.post('/create', async (req, res) => {
     try {
         const { user_id, amount, item_type, item_id, customer_name, customer_email } = req.body;
 
+        console.log('--- Payment Creation Started ---');
+        console.log('Request Payload:', { user_id, amount, item_id, customer_email });
+
         if (!user_id || !amount || !customer_name || !customer_email) {
+            console.warn('Validation Failed: Missing required fields');
             return res.status(400).json({ 
                 success: false, 
                 error: 'Missing required initialization fields: user_id, amount, customer_name, or customer_email.' 
@@ -20,6 +24,7 @@ router.post('/create', async (req, res) => {
 
         const currency = 'LKR';
         const order_id = payhereService.generateOrderId();
+        console.log('Generated Order ID:', order_id);
 
         const { error } = await supabase
             .from('payments')
@@ -37,9 +42,10 @@ router.post('/create', async (req, res) => {
             });
 
         if (error) {
-            console.error('Database insertion failed:', error);
+            console.error('Supabase Error:', error);
             return res.status(500).json({ success: false, error: 'Failed to create payment record.' });
         }
+        console.log('Order record saved to Supabase (Pending)');
 
         const payload = payhereService.buildCheckoutPayload(
             order_id,
@@ -49,6 +55,7 @@ router.post('/create', async (req, res) => {
             customer_name,
             customer_email
         );
+        console.log('PayHere Payload Generated Successfully');
 
         return res.status(200).json({
             success: true,
