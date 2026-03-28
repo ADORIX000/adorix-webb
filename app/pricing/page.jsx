@@ -46,7 +46,12 @@ const PricingCard = ({
         customer_email: user.primaryEmailAddress?.emailAddress || ''
       };
 
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      console.log('--- Payment Initiation Started ---');
+      console.log('Backend Payload:', payload);
+
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
+      console.log('Fetching from API URL:', `${API_URL}/api/payments/create`);
+
       const response = await fetch(`${API_URL}/api/payments/create`, {
         method: 'POST',
         headers: {
@@ -56,25 +61,32 @@ const PricingCard = ({
       });
 
       const data = await response.json();
+      console.log('Backend Response Data:', data);
 
       if (response.ok && data.checkoutUrl && data.payload) {
+        console.log('Payment data valid. Constructing PayHere form...');
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = data.checkoutUrl;
 
+        const debugPayload = {};
         Object.keys(data.payload).forEach(key => {
           const input = document.createElement('input');
           input.type = 'hidden';
           input.name = key;
           input.value = data.payload[key];
           form.appendChild(input);
+          debugPayload[key] = data.payload[key];
         });
 
+        console.log('Final PayHere Form Payload:', debugPayload);
+
+        console.log('Form created. Redirecting to PayHere checkout...');
         document.body.appendChild(form);
         form.submit();
       } else {
-        console.error('Invalid payment response:', data);
-        alert('Payment initiation failed. Please try again.');
+        console.error('Invalid payment response or error:', data);
+        alert('Payment initiation failed. Please check console for details.');
         setIsLoading(false);
       }
     } catch (error) {

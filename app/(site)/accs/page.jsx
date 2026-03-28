@@ -26,7 +26,7 @@ const Accs = () => {
         setError('');
         try {
             const email = user?.primaryEmailAddress?.emailAddress;
-            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
             const res = await fetch(`${backendUrl}/api/auth/send-otp`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -55,7 +55,7 @@ const Accs = () => {
         setError('');
         try {
             const email = user?.primaryEmailAddress?.emailAddress;
-            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+            const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
             const res = await fetch(`${backendUrl}/api/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
