@@ -11,10 +11,9 @@ const contentSecurityPolicy = [
   "font-src 'self' data: https:",
   "style-src 'self' 'unsafe-inline' https:",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com",
-  "connect-src 'self' https: wss: http://localhost:5000",
+  "connect-src 'self' https: wss: http://localhost:5000 http://127.0.0.1:5000",
   "frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com",
   "worker-src 'self' blob:",
-  "upgrade-insecure-requests",
 ].join('; ');
 
 function applySecurityHeaders(response, pathname) {
