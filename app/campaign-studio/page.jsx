@@ -95,7 +95,8 @@ const CampaignStudio = () => {
             let normalizedAge = ageRange.toLowerCase();
             if (normalizedAge === '60-above') normalizedAge = 'above-60';
             
-            const fileName = `${normalizedAge}_${gender.toLowerCase()}.mp4`;
+            const extension = rawFile.name.split('.').pop().toLowerCase();
+            const fileName = `${normalizedAge}_${gender.toLowerCase()}.${extension}`;
             const filePath = fileName;
 
             const { data: uploadData, error: uploadError } = await supabase.storage
@@ -182,7 +183,7 @@ ${specs}
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         {/* Form Section */}
                         <div className="lg:col-span-7 space-y-6">
-                            <input type="file" ref={fileInputRef} onChange={onFileChange} className="hidden" accept="video/mp4" />
+                            <input type="file" ref={fileInputRef} onChange={onFileChange} className="hidden" accept="video/mp4,image/jpeg,image/png,image/webp" />
                             
                             {/* Upload Area */}
                             <div
@@ -209,8 +210,8 @@ ${specs}
                                 ) : (
                                     <>
                                         <h3 className="text-lg font-bold text-adorix-dark tracking-tight">Upload Creative</h3>
-                                        <p className="text-gray-400 text-sm mt-1 mb-6">Drag and drop MP4 video advertisement</p>
-                                        <button className="bg-adorix-dark text-white px-8 py-2.5 rounded-xl font-bold hover:bg-adorix-primary transition-all shadow-lg">Select Video</button>
+                                        <p className="text-gray-400 text-sm mt-1 mb-6">Drag and drop image or video advertisement</p>
+                                        <button className="bg-adorix-dark text-white px-8 py-2.5 rounded-xl font-bold hover:bg-adorix-primary transition-all shadow-lg">Select Media</button>
                                     </>
                                 )}
                             </div>
@@ -280,7 +281,11 @@ ${specs}
                                     <div className="w-full h-full bg-gray-900 flex items-center justify-center relative z-20">
                                         {previewUrl ? (
                                             <div className="w-full h-full relative">
-                                                <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                                {rawFile?.type.startsWith('video/') ? (
+                                                    <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                                ) : (
+                                                    <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
+                                                )}
                                                 
                                                 {/* Live Indicator Overlay */}
                                                 <div className="absolute top-4 left-4 z-40 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
