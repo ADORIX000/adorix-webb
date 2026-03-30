@@ -37,7 +37,7 @@ const BlogDetail = () => {
                         className="text-4xl md:text-6xl font-black text-adorix-dark mb-10 leading-[1.1] tracking-tighter"
                     >
                         How ADORIX Combines Personalization, Voice AI, and <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent italic">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-adorix-primary to-adorix-accent">
                             Real-Time Advertising?
                         </span>
                     </motion.h1>
@@ -71,79 +71,60 @@ const BlogDetail = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="prose prose-lg prose-adorix max-w-none text-gray-600 font-medium leading-relaxed"
+                    className="prose prose-xl prose-adorix max-w-none text-gray-600 font-medium leading-relaxed"
                 >
-                    <p className="text-xl text-adorix-dark font-bold leading-relaxed mb-10">
-                        Traditional digital signage is static. It plays the same content for everyone, cannot understand who is standing in front of it, and offers no way for users to interact. ADORIX was built to solve that limitation.
+                    <p className="text-2xl md:text-3xl text-adorix-dark font-black leading-tight mb-12 tracking-tighter">
+                        Traditional digital signage is static. ADORIX changes this by turning passive displays into intelligent kiosks that understand and respond to users in real time.
                     </p>
 
-                    <p className="mb-8">
-                        At the heart of the project is a two-repository architecture. The <strong>adorix-project</strong> repository powers the kiosk itself, handling computer vision, wake-word detection, speech recognition, text-to-speech, and the real-time interaction flow. The <strong>adorix-webb</strong> repository acts as the cloud-based management platform, allowing businesses to upload campaigns, manage ad content, and monitor analytics through a centralized dashboard. Together, these two parts create a full smart advertising ecosystem rather than just a standalone kiosk demo.
+                    <p className="mb-10 text-lg md:text-xl">
+                        At the heart of ADORIX is a dual-system setup. Our <strong>kiosk system</strong> handles the "brain" tasks: seeing users with computer vision and talking to them using Voice AI. Meanwhile, our <strong>web platform</strong> acts as the command center, letting businesses manage ads and track performance from anywhere.
                     </p>
 
-                    <h2 className="text-3xl font-black text-adorix-dark mt-16 mb-8 tracking-tighter flex items-center gap-3">
-                        <CornerRightDown className="text-adorix-primary" />
-                        The 3-State Architecture
+                    <h2 className="text-4xl font-black text-adorix-dark mt-20 mb-10 tracking-tighter">
+                        How it Works
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                         {[
-                            { step: "01", title: "Idle Ad Loop", desc: "Generic ads play while monitoring for nearby users." },
-                            { step: "02", title: "Personalized Mode", desc: "Face detection & demographics trigger relevant content." },
-                            { step: "03", title: "Assistant Mode", desc: "Interactive 'Hey Adorix' voice conversation loop." }
+                            { title: "Watch", desc: "Generic ads play until a person walks by." },
+                            { title: "Personalize", desc: "AI detects demographics to show targeted content." },
+                            { title: "Interact", desc: "Users can ask questions using 'Hey Adorix'." }
                         ].map((item, i) => (
-                            <div key={i} className="bg-white/40 p-6 rounded-3xl border border-white/60 relative overflow-hidden group hover:border-adorix-primary/20 transition-colors">
-                                <span className="text-4xl font-black text-adorix-primary/10 absolute -top-2 -right-2">
-                                    {item.step}
-                                </span>
-                                <h3 className="text-lg font-black text-adorix-dark mb-2">{item.title}</h3>
-                                <p className="text-sm text-gray-500 leading-snug">{item.desc}</p>
+                            <div key={i} className="bg-adorix-primary/5 p-8 rounded-[2rem] border border-adorix-primary/10">
+                                <h3 className="text-xl font-black text-adorix-dark mb-3">{item.title}</h3>
+                                <p className="text-base text-gray-500 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
 
-                    <p className="mb-8">
-                        The kiosk intelligence is powered by a combination of OpenCV, DeepFace, Picovoice Porcupine, SpeechRecognition, pyttsx3, and TinyLlama. OpenCV and DeepFace are used for stable face detection and age-gender estimation, while Picovoice enables offline wake-word detection. SpeechRecognition captures user queries, pyttsx3 handles spoken responses, and TinyLlama supports flexible product question answering when direct matches are not enough.
+                    <p className="mb-10 text-lg md:text-xl">
+                        The kiosk's intelligence comes from advanced AI tools. It uses **Face Detection** to understand who is watching and **Speech Recognition** to have natural conversations. This allows it to answer product questions and provide help instantly, making the shopping experience much more engaging.
                     </p>
 
-
-
-                    <p className="mb-8">
-                        On the frontend side, the kiosk interface was designed to make interaction clear and engaging. It uses a React-based UI with real-time WebSocket updates to show the current system state, including subtitles, product cards, microphone prompts, and animated avatar states such as wakeup, listening, and talking. These visual cues are important because they help users understand what the kiosk is doing at every stage of the interaction.
+                    <p className="mb-12 text-lg md:text-xl">
+                        On the screen, users see a simple and friendly interface. Real-time updates show subtitles and animated avatars so passengers always know the kiosk is listening. This clear feedback is key to making the AI feel natural and easy to use.
                     </p>
 
-                    <blockquote className="my-16 p-8 bg-gradient-to-br from-adorix-dark via-adorix-dark/95 to-adorix-dark/90 rounded-[2.5rem] border-l-8 border-adorix-primary shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
-                             <Sparkles size={120} className="text-white" />
-                        </div>
-                        <p className="text-2xl md:text-3xl font-black text-white italic leading-tight mb-4 relative z-10">
-                            "ADORIX is not only an interactive device, but also a scalable platform for managing smart advertising across multiple locations."
+                    <blockquote className="my-20 p-10">
+                        <p className="text-xl md:text-2xl font-bold text-adorix-dark leading-relaxed">
+                            "ADORIX isn't just a screen—it's a smart assistant that brings the personalization of online shopping to the real world."
                         </p>
-                        <cite className="text-adorix-primary font-bold text-sm uppercase tracking-widest relative z-10">
-                            — Adorix Engineering Philosophy
-                        </cite>
                     </blockquote>
 
-                    <p className="mb-8 font-bold text-adorix-dark italic border-l-4 border-adorix-accent/30 pl-6 py-2">
-                        A major engineering focus of the project was reliability. The system includes safeguards such as temporal consensus logic for noisy vision predictions, silence timeouts for abandoned interactions, local ad caching for offline operation, and safe return-to-idle behavior.
+                    <p className="mb-12 text-lg md:text-xl">
+                        By combining personalized ads, voice interaction, and cloud management, ADORIX shows the future of retail. It’s a complete ecosystem designed to make every interaction more meaningful and effective.
                     </p>
 
-                    <p className="mb-12">
-                        Overall, ADORIX demonstrates how static signage can evolve into a more intelligent and engaging retail experience. By combining personalized advertising, voice interaction, real-time UI feedback, and cloud-based campaign management, the project shows how AI can be applied not only to display content, but to create meaningful customer interaction at the point of engagement.
-                    </p>
-
-                    {/* Share Section */}
-                    <div className="mt-20 pt-10 border-t border-gray-100 flex items-center justify-between">
-                        <div className="flex gap-2">
-                             {['AI', 'Retail', 'Architecture'].map(tag => (
-                                 <span key={tag} className="px-4 py-1.5 bg-gray-100 rounded-full text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                    {/* Footer Tags */}
+                    <div className="mt-24 pt-12 border-t border-gray-100 flex items-center justify-between">
+                        <div className="flex gap-3">
+                             {['AI', 'Smart Retail', 'Innovation'].map(tag => (
+                                 <span key={tag} className="px-5 py-2 bg-gray-50 rounded-full text-xs font-black text-gray-400 uppercase tracking-widest">
                                      #{tag}
                                  </span>
                              ))}
                         </div>
-                        <button className="inline-flex items-center gap-2 text-adorix-primary font-black text-xs uppercase tracking-widest hover:opacity-70 transition-opacity">
-                            <Share2 size={16} /> Share Article
-                        </button>
                     </div>
                 </motion.article>
             </div>
