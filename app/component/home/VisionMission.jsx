@@ -7,11 +7,11 @@ const VisionMission = () => {
     const cardData = [
         {
             title: "Our Vision",
-            content: "To breathe life into the digital frontier, creating a world where every screen is a sentient partner that understands, anticipates, and respects the human gaze."
+            content: "To make in-store advertising smart, human-friendly, and interactive by delivering the right message to the right customer at the right time."
         },
         {
             title: "Our Mission",
-            content: "To pioneer the next generation of interactive intelligence—transforming raw physiological data into meaningful brand dialogues through ethical, high-fidelity AI vision."
+            content: "To build a reliable AI kiosk that combines audience detection, personalized ads, and voice assistance to improve customer engagement and shopping decisions."
         }
     ];
 
