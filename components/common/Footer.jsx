@@ -73,6 +73,7 @@ const Footer = () => {
                         <h3 className="font-bold text-lg mb-6">Resources</h3>
                         <ul className="space-y-4 text-gray-400 text-sm">
                             {/* Always show company essentials */}
+                            <li><Link href="/blog" className="hover:text-adorix-primary transition-colors">Blogs</Link></li>
                             <li><Link href="/contact" className="hover:text-adorix-primary transition-colors">Contact Us</Link></li>
 
                             {/* Redirecting to Profile Settings as requested */}
