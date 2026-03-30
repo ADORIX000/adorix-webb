@@ -163,10 +163,7 @@ const PricingCard = ({
       <button
         onClick={handleSubscribe}
         disabled={isLoading}
-        className={`block text-center w-full py-4 rounded-2xl font-bold transition-all flex justify-center items-center gap-2 ${recommended
-          ? 'bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20'
-          : 'bg-gray-100 text-gray-900 hover:bg-adorix-light hover:text-adorix-dark'
-          }`}
+        className="block text-center w-full py-4 rounded-2xl font-bold transition-all flex justify-center items-center gap-2 bg-adorix-dark text-white hover:bg-adorix-primary shadow-lg shadow-adorix-dark/20"
       >
         {isLoading ? (
           <>
