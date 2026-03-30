@@ -19,12 +19,10 @@ const generateInitialData = () =>
   }));
 
 const AGE_RANGE_DATA = [
-  { name: '10–15', value: 12, color: '#F59E0B' },
-  { name: '16–29', value: 34, color: '#12B2C1' },
-  { name: '30–39', value: 24, color: '#8B5CF6' },
-  { name: '40–49', value: 16, color: '#0D8A9E' },
-  { name: '50–59', value: 9, color: '#23717B' },
-  { name: '60+', value: 5, color: '#1F2B2D' },
+  { name: 'Under 20', value: 25, color: '#F59E0B' },
+  { name: '20-40', value: 45, color: '#12B2C1' },
+  { name: '40-60', value: 20, color: '#8B5CF6' },
+  { name: 'Above 60', value: 10, color: '#0D8A9E' },
 ];
 
 const PERF_METRICS = [
@@ -265,7 +263,7 @@ const Dashboard = () => {
               {[
                 { label: 'Best Day', val: 'Saturday' },
                 { label: 'Peak Hour', val: '3–5 PM' },
-                { label: 'Top Group', val: '16–29 yrs' },
+                { label: 'Top Group', val: '20–40 yrs' },
               ].map(b => (
                 <div key={b.label} className="bg-gray-50 px-4 py-2.5 rounded-lg">
                   <p className="text-xs text-gray-400">{b.label}</p>

@@ -130,12 +130,10 @@ const CampaignStudio = () => {
                   </select>
                   <select className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none">
                     <option value="">Select Age Range</option>
-                    <option>10-15</option>
-                    <option>16-29</option>
-                    <option>30-39</option>
-                    <option>40-49</option>
-                    <option>50-59</option>
-                    <option>60-above</option>
+                    <option>Under 20</option>
+                    <option>20-40</option>
+                    <option>40-60</option>
+                    <option>Above 60</option>
                   </select>
                 </div>
 
