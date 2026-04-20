@@ -31,12 +31,18 @@ const CampaignStudio = () => {
 
     const handleFileSelect = (selectedFile) => {
         if (selectedFile) {
+            const isVideo = selectedFile.type.startsWith('video/') || selectedFile.name.toLowerCase().endsWith('.mp4');
+            const fileType = isVideo ? 'video/mp4' : selectedFile.type;
+
             setRawFile(selectedFile);
             setFile({
                 name: selectedFile.name,
                 size: (selectedFile.size / (1024 * 1024)).toFixed(1) + " MB",
-                type: selectedFile.type
+                type: fileType
             });
+            
+            // Revoke old URL to avoid memory leaks
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
             const url = URL.createObjectURL(selectedFile);
             setPreviewUrl(url);
         }
@@ -280,9 +286,9 @@ ${specs}
                                     <div className="absolute inset-0 pointer-events-none z-30 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-50"></div>
                                     <div className="w-full h-full bg-gray-900 flex items-center justify-center relative z-20">
                                         {previewUrl ? (
-                                            <div className="w-full h-full relative">
-                                                {rawFile?.type.startsWith('video/') ? (
-                                                    <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                            <div className="w-full h-full relative" key={previewUrl}>
+                                                {file?.type?.startsWith('video/') ? (
+                                                    <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline preload="auto" />
                                                 ) : (
                                                     <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
                                                 )}
