@@ -45,10 +45,10 @@ const Home = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center mt-4 md:mt-6 w-full sm:w-auto px-4 sm:px-0"
         >
-          <Link href="/signup" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
+          <Link href="/campaign-studio" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-black transition flex items-center gap-2 group shadow-lg hover:shadow-xl hover:-translate-y-1 duration-200">
             Get Started <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
           </Link>
-          <Link href="/login" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
+          <Link href="/campaign-studio" className="w-full sm:w-auto justify-center px-8 md:px-10 py-4 bg-white text-gray-900 border border-gray-200 rounded-full font-bold hover:bg-gray-50 transition hover:border-gray-300 hover:shadow-md hover:-translate-y-1 duration-200">
             View Live Demo
           </Link>
         </motion.div>
@@ -110,7 +110,7 @@ const Home = () => {
 
           <div className="relative z-10">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-8">Ready to capture real attention?</h2>
-            <Link href="/signup" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
+            <Link href="/campaign-studio" className="inline-block bg-adorix-primary hover:bg-adorix-secondary text-white px-12 py-5 rounded-full font-bold text-lg transition shadow-[0_0_30px_rgba(13,138,158,0.3)] hover:shadow-[0_0_50px_rgba(13,138,158,0.5)] transform hover:-translate-y-1">
               Deploy Your First Campaign
             </Link>
             <p className="mt-8 text-gray-300 text-sm">No credit card required for demo.</p>
