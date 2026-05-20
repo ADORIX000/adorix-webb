@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Upload, Monitor, CheckCircle, Play, FileText, X, Loader2, Mic } from 'lucide-react';
@@ -28,9 +28,18 @@ const CampaignStudio = () => {
     const [specs, setSpecs] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState(null); // 'success', 'error'
+    const videoRef = useRef(null);
+
+    // Sync play for preview
+    useEffect(() => {
+        if (videoRef.current && previewUrl) {
+            videoRef.current.play().catch(e => console.warn("Video auto-play blocked or failed:", e));
+        }
+    }, [previewUrl]);
 
     const handleFileSelect = (selectedFile) => {
         if (selectedFile) {
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
             setRawFile(selectedFile);
             setFile({
                 name: selectedFile.name,
@@ -92,8 +101,7 @@ const CampaignStudio = () => {
         setUploadStatus(null);
 
         try {
-            let normalizedAge = ageRange.toLowerCase();
-            if (normalizedAge === '60-above') normalizedAge = 'above-60';
+            let normalizedAge = ageRange.toLowerCase().replace(' ', '-');
             
             const fileName = `${normalizedAge}_${gender.toLowerCase()}.mp4`;
             const filePath = fileName;
@@ -229,12 +237,10 @@ ${specs}
                                         </select>
                                         <select value={ageRange} onChange={(e) => setAgeRange(e.target.value)} className="w-full bg-adorix-light/50 border border-adorix-primary/20 rounded-lg p-3 outline-none focus:border-adorix-primary text-gray-600 font-medium">
                                             <option value="">Age Range</option>
-                                            <option value="10-15">10-15 Years</option>
-                                            <option value="16-29">16-29 Years</option>
-                                            <option value="30-39">30-39 Years</option>
-                                            <option value="40-49">40-49 Years</option>
-                                            <option value="50-59">50-59 Years</option>
-                                            <option value="60-above">Above 60</option>
+                                            <option value="Under 20">Under 20</option>
+                                            <option value="20-40">20-40</option>
+                                            <option value="40-60">40-60</option>
+                                            <option value="Above 60">Above 60</option>
                                             <option value="All">All Ages</option>
                                         </select>
                                     </div>
@@ -276,11 +282,20 @@ ${specs}
                             
                             <div className="relative flex flex-col items-center">
                                 <div className="relative z-20 border-[10px] border-[#1F2B2D] bg-[#0A0F11] rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] w-[280px] h-[500px] overflow-hidden group">
-                                    <div className="absolute inset-0 pointer-events-none z-30 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-50"></div>
+                                    <div className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-50"></div>
                                     <div className="w-full h-full bg-gray-900 flex items-center justify-center relative z-20">
                                         {previewUrl ? (
                                             <div className="w-full h-full relative">
-                                                <video src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                                <video 
+                                                    ref={videoRef}
+                                                    key={previewUrl} 
+                                                    src={previewUrl} 
+                                                    className="w-full h-full object-cover" 
+                                                    autoPlay 
+                                                    loop 
+                                                    muted 
+                                                    playsInline 
+                                                />
                                                 
                                                 {/* Live Indicator Overlay */}
                                                 <div className="absolute top-4 left-4 z-40 flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
@@ -333,6 +348,16 @@ ${specs}
                         </div>
                         
                         <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tighter">Campaign Sent!</h2>
+                        
+                        {previewUrl && (
+                            <div className="w-40 h-64 mx-auto mb-6 rounded-2xl overflow-hidden border-4 border-adorix-dark shadow-xl relative group">
+                                <video key={previewUrl} src={previewUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-2">
+                                    <span className="text-[10px] text-white font-bold tracking-widest uppercase">Kiosk Live View</span>
+                                </div>
+                            </div>
+                        )}
+
                         <p className="text-gray-500 font-semibold mb-10 leading-relaxed text-lg px-2">
                             Your advertisement is now in review and will be live on Adorix kiosks shortly.
                         </p>

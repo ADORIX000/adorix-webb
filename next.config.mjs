@@ -12,6 +12,7 @@ const contentSecurityPolicy = `
     connect-src 'self' https: wss: http://localhost:5000 http://127.0.0.1:5000;
     frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://*.clerk.dev https://challenges.cloudflare.com;
     worker-src 'self' blob:;
+    media-src 'self' blob:;
 `
     .replace(/\n/g, '')
     .replace(/\s{2,}/g, ' ')
